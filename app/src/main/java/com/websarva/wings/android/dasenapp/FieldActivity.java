@@ -4,13 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-
-public class FieldActivity extends AppCompatActivity {
+public class FieldActivity extends BaseBannerActivity {
     //各ポジションのテキスト
     private TextView position1;
     private TextView position2;
@@ -28,9 +23,10 @@ public class FieldActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_field);
-        setAdsense();
+        setAdView(findViewById(R.id.ad_view_container_on_field));
+        super.onCreate(savedInstanceState);
+
         bindLayout();
         setPlayerCount();
         hideDh();
@@ -40,14 +36,6 @@ public class FieldActivity extends AppCompatActivity {
     //戻るボタン
     public void onClickBack(View view) {
         finish();
-    }
-
-    private void setAdsense() {
-        //広告処理
-        MobileAds.initialize(this, "ca-app-pub-6298264304843789~9524433477");
-        AdView mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
     }
 
     private void bindLayout() {
