@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.android.gms:play-services-ads-lite:17.0.0@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/play-services-ads-lite-17.0.0.aar/04829a4b5f911751fbb858084f376a21/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/play-services-ads-lite-17.0.0.aar/04829a4b5f911751fbb858084f376a21/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/play-services-ads-lite-17.0.0.aar/04829a4b5f911751fbb858084f376a21/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/48df2c80b4f9698802e214dc821cb963/play-services-ads-lite-17.0.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/48df2c80b4f9698802e214dc821cb963/play-services-ads-lite-17.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/48df2c80b4f9698802e214dc821cb963/play-services-ads-lite-17.0.0/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

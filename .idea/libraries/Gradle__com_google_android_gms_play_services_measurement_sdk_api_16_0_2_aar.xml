@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.android.gms:play-services-measurement-sdk-api:16.0.2@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/play-services-measurement-sdk-api-16.0.2.aar/9c09199da122ae314f1b31eee869c5af/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/play-services-measurement-sdk-api-16.0.2.aar/9c09199da122ae314f1b31eee869c5af/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/play-services-measurement-sdk-api-16.0.2.aar/9c09199da122ae314f1b31eee869c5af/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e8d3073312b8ab175e17875d32038bba/play-services-measurement-sdk-api-16.0.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e8d3073312b8ab175e17875d32038bba/play-services-measurement-sdk-api-16.0.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e8d3073312b8ab175e17875d32038bba/play-services-measurement-sdk-api-16.0.2/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
