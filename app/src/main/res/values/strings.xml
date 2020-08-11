@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">〜野球スタメンアプリ〜</string>
+    <string name="first">１番</string>
+    <string name="second">２番</string>
+    <string name="third">３番</string>
+    <string name="fourth">４番</string>
+    <string name="fifth">５番</string>
+    <string name="sixth">６番</string>
+    <string name="seventh">７番</string>
+    <string name="eighth">８番</string>
+    <string name="ninth">９番</string>
+    <string name="pitcher">P</string>
+    <string name="pitcher_text">(投)</string>
+    <string name="unselected">-----</string>
+    <string name="current_num">----</string>
+    <string name="position">----</string>
+    <string name="save">登録</string>
+    <string name="clear">クリア</string>
+    <string name="title">~Starting Member~</string>
+    <string name="subtitle">~Starting Member~（サブ）</string>
+    <string-array name="positions">
+        <item>----</item>
+        <item>(投)</item>
+        <item>(捕)</item>
+        <item>(一)</item>
+        <item>(二)</item>
+        <item>(三)</item>
+        <item>(遊)</item>
+        <item>(左)</item>
+        <item>(中)</item>
+        <item>(右)</item>
+    </string-array>
+    <string-array name="positions_dh">
+        <item>----</item>
+        <item>(捕)</item>
+        <item>(一)</item>
+        <item>(二)</item>
+        <item>(三)</item>
+        <item>(遊)</item>
+        <item>(左)</item>
+        <item>(中)</item>
+        <item>(右)</item>
+        <item>(DH)</item>
+    </string-array>
+    <string-array name="positions_all">
+        <item>----</item>
+        <item>(投)</item>
+        <item>(捕)</item>
+        <item>(一)</item>
+        <item>(二)</item>
+        <item>(三)</item>
+        <item>(遊)</item>
+        <item>(左)</item>
+        <item>(中)</item>
+        <item>(右)</item>
+        <item>(DH)</item>
+    </string-array>
+
+    <string name="order">ノーマル</string>
+    <string name="subOrder">DH</string>
+    <string name="field">フィールド表示</string>
+    <string name="back">戻る</string>
+    <string name="cancel">キャンセル</string>
+    <string name="replace">入れ替え</string>
+    <string name="replace_title">入れ替える２つの打順を選んでください</string>
+</resources>
