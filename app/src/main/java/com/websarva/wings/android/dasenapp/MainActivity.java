@@ -15,14 +15,10 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseBannerActivity {
     //選択した打順
     TextView tvSelectNum;
     //入力欄
@@ -54,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
     //ここからmain
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setAdsense();
+        setAdView(findViewById(R.id.ad_view_container_on_order));
+        super.onCreate(savedInstanceState);
 
         databaseUsing = new DatabaseUsing(this);
         for (int version = 1; version < 3; version++) {
@@ -68,14 +64,6 @@ public class MainActivity extends AppCompatActivity {
         setOrderFragment();
     }
 
-    private void setAdsense() {
-        //広告処理
-        MobileAds.initialize(this, "ca-app-pub-6298264304843789~9524433477");
-        //広告ビュー
-        AdView mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-    }
 
     private void bindLayout() {
         //上記のグローバルフィールド紐付け
