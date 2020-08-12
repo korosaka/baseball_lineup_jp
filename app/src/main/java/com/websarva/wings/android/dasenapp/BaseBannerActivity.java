@@ -18,7 +18,7 @@ public class BaseBannerActivity extends AppCompatActivity {
 
     private AdView adView;
     private FrameLayout adViewContainer;
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
+    private static final String AD_UNIT_ID = "ca-app-pub-6298264304843789/6273376185";
 
     protected void setAdView(FrameLayout container) {
         adViewContainer = container;
