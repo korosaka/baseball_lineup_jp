@@ -62,6 +62,7 @@ public class MainActivity extends BaseBannerActivity {
         bindLayout();
         setEdit();
         setOrderFragment();
+        if (!PrivacyPolicyFragment.isPolicyAgreed(this)) showPrivacyPolicy();
     }
 
 
@@ -108,6 +109,11 @@ public class MainActivity extends BaseBannerActivity {
         transaction.show(normalLineupFragment);
         transaction.hide(dhLineupFragment);
         transaction.commit();
+    }
+
+    private void showPrivacyPolicy() {
+        PrivacyPolicyFragment policyFragment = PrivacyPolicyFragment.newInstance(FixedWords.AGREE);
+        policyFragment.show(getSupportFragmentManager(), FixedWords.PRIVACY_POLICY);
     }
 
     //以下１〜９番の打順ボタン処理⬇

@@ -28,10 +28,10 @@ public class PrivacyPolicyFragment extends DialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
-    // TODO
-//    public static Boolean isPolicyAgreed(Context context) {
-//
-//    }
+
+    public static Boolean isPolicyAgreed(Context context) {
+        return new MySharedPreferences(context).getBoolean(FixedWords.AGREE);
+    }
 
     @NonNull
     @Override
@@ -77,8 +77,9 @@ public class PrivacyPolicyFragment extends DialogFragment {
             default:
         }
     }
+
     private void addButtonListener(Dialog dialog, String buttonType) {
-        agreeButton.setOnClickListener(new View.OnClickListener(){
+        agreeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (buttonType.equals(FixedWords.AGREE)) agreePolicy();
                 dialog.dismiss();
@@ -86,8 +87,7 @@ public class PrivacyPolicyFragment extends DialogFragment {
         });
     }
 
-    // TODO
     private void agreePolicy() {
-
+        new MySharedPreferences(Objects.requireNonNull(getContext())).storeBoolean(true, FixedWords.AGREE);
     }
 }

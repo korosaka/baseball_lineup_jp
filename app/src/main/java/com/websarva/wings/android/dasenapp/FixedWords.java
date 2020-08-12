@@ -13,11 +13,13 @@ public class FixedWords {
     public static final int ALL14 = 7;
     public static final int ALL15 = 8;
 
-    public static final String PITCHER = "(投)" ;
+    public static final String PITCHER = "(投)";
 
     public static final String PRIVACY_POLICY = "privacyPolicy";
     public static final String BUTTON_TYPE = "buttonType";
     public static final String AGREE = "agree";
     public static final String CLOSE = "close";
+
+    public static final String DATA_STORE = "dataStore";
 
 }
