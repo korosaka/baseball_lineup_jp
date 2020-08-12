@@ -395,6 +395,10 @@ public class MainActivity extends BaseBannerActivity {
                 showOrder(FixedWords.DH);
                 setSpinner(getResources().getStringArray(R.array.positions_dh));
                 break;
+            case R.id.policy:
+                PrivacyPolicyFragment policyFragment = PrivacyPolicyFragment.newInstance(FixedWords.CLOSE);
+                policyFragment.show(getSupportFragmentManager(), FixedWords.PRIVACY_POLICY);
+                break;
         }
         setLayoutDefault();
         if (isReplacing) cancelReplacing();

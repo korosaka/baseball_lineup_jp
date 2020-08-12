@@ -9,4 +9,8 @@
         android:id="@+id/dh"
         app:showAsAction="never"
         android:title="@string/subOrder" />
+    <item
+        android:id="@+id/policy"
+        android:title="@string/privacy_policy"
+        app:showAsAction="never" />
 </menu>

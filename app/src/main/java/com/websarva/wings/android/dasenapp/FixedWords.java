@@ -15,4 +15,9 @@ public class FixedWords {
 
     public static final String PITCHER = "(投)" ;
 
+    public static final String PRIVACY_POLICY = "privacyPolicy";
+    public static final String BUTTON_TYPE = "buttonType";
+    public static final String AGREE = "agree";
+    public static final String CLOSE = "close";
+
 }

@@ -56,6 +56,14 @@
         <item>(DH)</item>
     </string-array>
 
+    <string name="privacy_policy">プライバシーポリシー</string>
+    <string name="policy_title">個人情報保護について</string>
+    <string name="policy_message1">＜広告について＞</string>
+    <string name="policy_message2">本アプリでは、広告配信ツールとしてAdMob(Google Inc.)を使用しており、AdMobがご利用者の情報を自動取得する場合がございます。取得する情報、利用目的、第三者への提供等につきましては、以下の広告配信事業者のアプリケーション・プライバシーポリシーのリンクよりご確認ください。</string>
+    <string name="google_policy"><a href="https://policies.google.com/technologies/ads?hl=ja">Google広告に関するポリシー</a></string>
+    <string name="agree">同意する</string>
+    <string name="close">閉じる</string>
+
     <string name="order">ノーマル</string>
     <string name="subOrder">DH</string>
     <string name="field">フィールド表示</string>
@@ -63,4 +71,6 @@
     <string name="cancel">キャンセル</string>
     <string name="replace">入れ替え</string>
     <string name="replace_title">入れ替える２つの打順を選んでください</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
