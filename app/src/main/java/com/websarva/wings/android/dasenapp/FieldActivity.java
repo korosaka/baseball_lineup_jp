@@ -42,6 +42,15 @@ public class FieldActivity extends BaseAdActivity {
 
     //戻るボタン
     public void onClickBack(View view) {
+        backToOrder();
+    }
+
+    @Override
+    void keyBackFunction() {
+        backToOrder();
+    }
+
+    private void backToOrder() {
         if (shouldShowInterstitial()) showInterstitialAd();
         else finish();
     }
