@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 
-public class FieldActivity extends BaseBannerActivity {
+public class FieldActivity extends BaseAdActivity {
     //各ポジションのテキスト
     private TextView position1;
     private TextView position2;
@@ -20,22 +20,34 @@ public class FieldActivity extends BaseBannerActivity {
 
     private int playerNumber = 0;
     private int maxDh = 0;
+    private static int displayCount = 0;
+    private static final int INTERSTITIAL_AD_FREQUENCY = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_field);
         setAdView(findViewById(R.id.ad_view_container_on_field));
         super.onCreate(savedInstanceState);
-
+        prepareInterstitialAd();
         bindLayout();
         setPlayerCount();
         hideDh();
         setPlayers();
     }
 
+    private void prepareInterstitialAd() {
+        displayCount++;
+        if (shouldShowInterstitial()) loadInterstitialAd();
+    }
+
     //戻るボタン
     public void onClickBack(View view) {
-        finish();
+        if (shouldShowInterstitial()) showInterstitialAd();
+        else finish();
+    }
+
+    private Boolean shouldShowInterstitial() {
+        return displayCount % INTERSTITIAL_AD_FREQUENCY == 0;
     }
 
     private void bindLayout() {

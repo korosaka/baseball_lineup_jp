@@ -18,7 +18,7 @@ import android.widget.TextView;
 import androidx.fragment.app.FragmentTransaction;
 
 
-public class MainActivity extends BaseBannerActivity {
+public class MainActivity extends BaseAdActivity {
     //選択した打順
     TextView tvSelectNum;
     //入力欄
