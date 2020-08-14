@@ -69,12 +69,12 @@ public class DhLineupFragment extends Fragment {
     }
 
     private void setLayout() {
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 10; i++) {
             names[i].setText(CachedPlayerNamesInfo.instance.getNameDh(i));
             changeTextSize(names[i]);
+            if (i == 9) return;
             positions[i].setText(CachedPlayerPositionsInfo.instance.getPositionDh(i));
         }
-        names[9].setText(CachedPlayerNamesInfo.instance.getNameDh(9));
     }
 
     public void changeData(int num, String name, String position) {
