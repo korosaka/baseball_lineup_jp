@@ -503,9 +503,8 @@ public class MainActivity extends BaseAdActivity {
     }
 
     private void finishApp() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_CustomButtonDialog);
         builder.setMessage(getResources().getString(R.string.ask_finish_app));
-        // TODO text color
         builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
