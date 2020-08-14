@@ -98,7 +98,18 @@ public class DhLineupFragment extends Fragment {
 
     private void changeTextSize(TextView textView) {
         int lengthOfText = textView.length();
-        if (lengthOfText > 5) textView.setTextSize(24);
-        else textView.setTextSize(28);
+        int textSize;
+        switch (lengthOfText) {
+            case 6:
+                textSize = 24;
+                break;
+            case 7:
+                textSize = 20;
+                break;
+            default:
+                textSize = 28;
+                break;
+        }
+        textView.setTextSize(textSize);
     }
 }
