@@ -8,4 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--alert dialog-->
+    <style name="Theme_CustomButtonDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="buttonBarPositiveButtonStyle">@style/CustomPositiveButtonStyle</item>
+    </style>
+
+    <style name="CustomPositiveButtonStyle" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:textColor">#ff007f</item>
+    </style>
 </resources>

@@ -7,18 +7,23 @@ import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
-public class BaseBannerActivity extends AppCompatActivity {
+abstract class BaseAdActivity extends BaseActivity {
 
     private AdView adView;
     private FrameLayout adViewContainer;
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
+    private static final String BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
+
+    private InterstitialAd mInterstitialAd;
+    private static final String INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
 
     protected void setAdView(FrameLayout container) {
         adViewContainer = container;
@@ -42,7 +47,7 @@ public class BaseBannerActivity extends AppCompatActivity {
             }
         });
         adView = new AdView(this);
-        adView.setAdUnitId(AD_UNIT_ID);
+        adView.setAdUnitId(BANNER_AD_UNIT_ID);
         adViewContainer.addView(adView);
         loadBanner();
     }
@@ -69,5 +74,30 @@ public class BaseBannerActivity extends AppCompatActivity {
         AdSize adSize = getAdSize();
         adView.setAdSize(adSize);
         adView.loadAd(adRequest);
+    }
+
+    /**
+     * reference
+     * https://developers.google.com/admob/android/interstitial
+     */
+    protected void loadInterstitialAd() {
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(INTERSTITIAL_AD_UNIT_ID);
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClicked() {
+                finish();
+            }
+
+            @Override
+            public void onAdClosed() {
+                finish();
+            }
+        });
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+    }
+
+    protected void showInterstitialAd() {
+        if (mInterstitialAd.isLoaded()) mInterstitialAd.show();
     }
 }

@@ -1,6 +1,7 @@
 package com.websarva.wings.android.dasenapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,10 +16,11 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentTransaction;
 
 
-public class MainActivity extends BaseBannerActivity {
+public class MainActivity extends BaseAdActivity {
     //選択した打順
     TextView tvSelectNum;
     //入力欄
@@ -493,5 +495,22 @@ public class MainActivity extends BaseBannerActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerResource);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+    }
+
+    @Override
+    void keyBackFunction() {
+        finishApp();
+    }
+
+    private void finishApp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_CustomButtonDialog);
+        builder.setMessage(getResources().getString(R.string.ask_finish_app));
+        builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finish();
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.cancel), null);
+        builder.show();
     }
 }

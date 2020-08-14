@@ -63,7 +63,8 @@
     <string name="google_policy"><a href="https://policies.google.com/technologies/ads?hl=ja">Google広告に関するポリシー</a></string>
     <string name="agree">同意する</string>
     <string name="close">閉じる</string>
-
+    <string name="ask_finish_app">アプリを終了しますか？</string>
+    <string name="yes">はい</string>
     <string name="order">ノーマル</string>
     <string name="subOrder">DH</string>
     <string name="field">フィールド表示</string>
