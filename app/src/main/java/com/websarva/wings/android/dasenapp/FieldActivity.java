@@ -172,7 +172,18 @@ public class FieldActivity extends BaseAdActivity {
         if (dhPitcher) textView.setText(playerName + " (P)");
         else textView.setText(playerName + " (" + (num + 1) + ")");
 
-        if (playerName.length() > 5) textView.setTextSize(14);
-        else textView.setTextSize(16);
+        int textSize;
+        switch (playerName.length()) {
+            case 6:
+                textSize = 14;
+                break;
+            case 7:
+                textSize = 12;
+                break;
+            default:
+                textSize = 16;
+                break;
+        }
+        textView.setTextSize(textSize);
     }
 }
