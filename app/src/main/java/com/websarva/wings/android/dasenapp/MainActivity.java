@@ -383,6 +383,11 @@ public class MainActivity extends BaseAdActivity {
         if (isReplacing) cancelReplacing();
     }
 
+    public void onClickShare(View view) {
+        Sharing mSharing = new Sharing(getApplicationContext(), this, findViewById(R.id.lineup_container));
+        mSharing.share();
+    }
+
 
     //オプションメニュー追加
     @Override
