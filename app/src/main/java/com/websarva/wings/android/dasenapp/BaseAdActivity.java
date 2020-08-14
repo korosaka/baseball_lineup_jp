@@ -46,10 +46,15 @@ abstract class BaseAdActivity extends BaseActivity {
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
+        customAdView();
+        loadBanner();
+    }
+
+    private void customAdView() {
         adView = new AdView(this);
         adView.setAdUnitId(BANNER_AD_UNIT_ID);
+        adView.setAdSize(getAdSize());
         adViewContainer.addView(adView);
-        loadBanner();
     }
 
     /**
@@ -67,12 +72,10 @@ abstract class BaseAdActivity extends BaseActivity {
         return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
     }
 
-    private void loadBanner() {
+    protected void loadBanner() {
         AdRequest adRequest =
                 new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                         .build();
-        AdSize adSize = getAdSize();
-        adView.setAdSize(adSize);
         adView.loadAd(adRequest);
     }
 

@@ -67,6 +67,12 @@ public class MainActivity extends BaseAdActivity {
         if (!PrivacyPolicyFragment.isPolicyAgreed(this)) showPrivacyPolicy();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        loadBanner();
+    }
+
 
     private void bindLayout() {
         //上記のグローバルフィールド紐付け
