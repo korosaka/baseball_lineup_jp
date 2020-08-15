@@ -45,6 +45,11 @@ public class FieldActivity extends BaseAdActivity {
         backToOrder();
     }
 
+    public void onClickShareField(View view) {
+        Sharing mSharing = new Sharing(getApplicationContext(), this, findViewById(R.id.field_container));
+        mSharing.share();
+    }
+
     @Override
     void keyBackFunction() {
         backToOrder();
