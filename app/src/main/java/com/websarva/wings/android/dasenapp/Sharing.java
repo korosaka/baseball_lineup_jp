@@ -42,7 +42,7 @@ public class Sharing {
         return returnedBitmap;
     }
 
-    private Uri saveImage(Bitmap bitmap) {
+    private String saveImage(Bitmap bitmap) {
         String fileName = "order.jpg";
         String errorMassage = "エラー発生";
         try {
@@ -58,11 +58,11 @@ public class Sharing {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.close();
 
-            return Uri.parse(directory + "/" + fileName);
+            return directory + "/" + fileName;
         } catch (Exception e) {
             Toast.makeText(mContext, errorMassage, Toast.LENGTH_SHORT).show();
         }
-        return Uri.parse(FixedWords.EMPTY);
+        return FixedWords.EMPTY;
     }
 
     private void shareCompat(Uri imagePath) {
@@ -91,6 +91,7 @@ public class Sharing {
 
     public void share() {
         Bitmap bitmap = takeScreenShot(mView);
-        shareCompat(saveImage(bitmap));
+        String uriString = saveImage(bitmap);
+        if (!uriString.equals(FixedWords.EMPTY)) shareCompat(Uri.parse(uriString));
     }
 }
