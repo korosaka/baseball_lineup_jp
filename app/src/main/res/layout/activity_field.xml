@@ -58,22 +58,42 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.05" />
 
-            <TextView
-                android:id="@+id/center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/unselected"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/center_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:text="@string/no_order"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/outfielder_name_background"
+                    android:padding="5dp"
+                    android:text="@string/unselected"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.03" />
@@ -87,13 +107,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="start">
+                    android:gravity="start"
+                    android:paddingLeft="20dp">
+
+                    <TextView
+                        android:id="@+id/left_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:text="@string/no_order"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/left"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/outfielder_name_background"
+                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -104,13 +136,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="end">
+                    android:gravity="end"
+                    android:paddingRight="20dp">
+
+                    <TextView
+                        android:id="@+id/right_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:text="@string/no_order"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/right"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
+                        android:background="@drawable/outfielder_name_background"
+                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -118,7 +162,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.06" />
@@ -135,9 +179,21 @@
                     android:gravity="center">
 
                     <TextView
-                        android:id="@+id/shortStop"
+                        android:id="@+id/short_stop_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:text="@string/no_order"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/short_stop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/infielder_name_background"
+                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -151,9 +207,21 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/second_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:text="@string/no_order"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
                         android:id="@+id/second"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/infielder_name_background"
+                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -161,7 +229,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.04" />
@@ -175,13 +243,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="start">
+                    android:gravity="start"
+                    android:paddingLeft="20dp">
+
+                    <TextView
+                        android:id="@+id/third_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:text="@string/no_order"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/third"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/infielder_name_background"
+                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -192,32 +272,63 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
+                    android:paddingRight="20dp"
                     android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/first_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:text="@string/no_order"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/first"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
                         android:text="@string/unselected"
+                        android:background="@drawable/infielder_name_background"
+                        android:padding="5dp"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/pitcher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="0dp"
-                android:text="@string/unselected"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/pitcher_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:text="@string/no_order"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/pitcher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/pitcher_name_background"
+                    android:padding="5dp"
+                    android:text="@string/unselected"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.1" />
@@ -231,12 +342,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="start">
+                    android:gravity="start"
+                    android:paddingLeft="3dp">
+
+                    <TextView
+                        android:id="@+id/dh4_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:text="@string/no_order"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dh4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/dh_name_background"
+                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -247,12 +371,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
+                    android:paddingRight="3dp"
                     android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/dh1_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:text="@string/no_order"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dh1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/dh_name_background"
+                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -269,12 +406,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="start">
+                    android:gravity="start"
+                    android:paddingLeft="3dp">
+
+                    <TextView
+                        android:id="@+id/dh5_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:text="@string/no_order"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dh5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/dh_name_background"
+                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -285,12 +435,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
+                    android:paddingRight="3dp"
                     android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/dh2_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:text="@string/no_order"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dh2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/dh_name_background"
+                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -307,12 +470,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="start">
+                    android:gravity="start"
+                    android:paddingLeft="3dp">
+
+                    <TextView
+                        android:id="@+id/dh6_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:text="@string/no_order"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dh6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/dh_name_background"
+                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -323,12 +499,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
+                    android:paddingRight="3dp"
                     android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/dh3_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:text="@string/no_order"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dh3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/dh_name_background"
+                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -336,22 +525,42 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.04" />
 
-            <TextView
-                android:id="@+id/catcher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/unselected"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/catcher_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:text="@string/no_order"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/catcher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/catcher_name_background"
+                    android:padding="5dp"
+                    android:text="@string/unselected"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.08" />
