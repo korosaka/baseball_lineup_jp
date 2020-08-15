@@ -138,6 +138,11 @@
                 android:onClick="onClickField"
                 android:text="@string/field"
                 android:textStyle="bold" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickShareOrder"
+                android:text="share"/>
 
         </LinearLayout>
     </ScrollView>
