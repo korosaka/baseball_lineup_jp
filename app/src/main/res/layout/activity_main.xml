@@ -59,7 +59,7 @@
                         android:id="@+id/clear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/clear_button_background"
+                        android:background="@drawable/disable_button_background"
                         android:enabled="false"
                         android:onClick="onClickClear"
                         android:textSize="16sp"
@@ -83,7 +83,7 @@
                         android:onClick="onClickCancel"
                         android:text="@string/cancel"
                         android:textSize="16sp"
-                        android:background="@drawable/cancel_button_background"
+                        android:background="@drawable/disable_button_background"
                         android:textStyle="bold" />
 
                     <Button
@@ -94,7 +94,7 @@
                         android:layout_marginRight="5dp"
                         android:layout_weight="1.0"
                         android:enabled="false"
-                        android:background="@drawable/record_button_background"
+                        android:background="@drawable/disable_button_background"
                         android:onClick="onClickSave"
                         android:text="@string/save"
                         android:textSize="20sp"
