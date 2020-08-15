@@ -3,6 +3,7 @@ package com.websarva.wings.android.dasenapp;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -384,6 +385,7 @@ public class MainActivity extends BaseAdActivity {
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
         // タイトルが『２つボタンクリック』になる
         title.setText(R.string.replace_title);
+        title.setTextColor(Color.parseColor("#ff3300"));
 
     }
 
@@ -444,6 +446,7 @@ public class MainActivity extends BaseAdActivity {
         if (isFirstReplaceClicked) cancelFirstClick(firstClicked);
         isReplacing = false;
         title.setText(R.string.title);
+        title.setTextColor(Color.parseColor("#ffffff"));
         replace.setEnabled(true);
         replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
         cancel.setEnabled(false);
