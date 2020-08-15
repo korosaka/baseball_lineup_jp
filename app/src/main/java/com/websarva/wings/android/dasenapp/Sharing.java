@@ -59,7 +59,6 @@ public class Sharing {
             fos.close();
 
             return Uri.parse(directory + "/" + fileName);
-//            return Uri.parse("$directory/$fileName");
         } catch (Exception e) {
             Toast.makeText(mContext, errorMassage, Toast.LENGTH_SHORT).show();
         }
@@ -71,12 +70,23 @@ public class Sharing {
         int meaningLessNum = 1;
         ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(mActivity);
         builder.setChooserTitle(FixedWords.EMPTY)
-                .setText(FixedWords.EMPTY)
+                .setText(getTweetMessage())
                 .setStream(imagePath)
                 .setType(dataType);
 
         Intent intent = builder.createChooserIntent().addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         mActivity.startActivityForResult(intent, meaningLessNum);
+    }
+
+    private String getTweetMessage() {
+        String message1 = "スタメンを作成しました！";
+        String androidTab = "Android: ";
+        String googlePlayUrl = "bit.ly/2Dqbg6M";
+        String hashTagMessage = "#野球スタメン作成アプリ";
+        String nextLine = "\n";
+        return message1 + nextLine
+                + androidTab + googlePlayUrl + nextLine + nextLine
+                + hashTagMessage;
     }
 
     public void share() {
