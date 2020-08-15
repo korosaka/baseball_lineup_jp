@@ -20,12 +20,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#3CB371"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -49,9 +49,9 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.0"
+                        android:inputType="text"
                         android:maxLength="7"
                         android:maxLines="1"
-                        android:inputType="text"
                         android:textColor="#000000"
                         android:textSize="24sp" />
 
@@ -59,24 +59,31 @@
                         android:id="@+id/clear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/clear_button_background"
                         android:enabled="false"
                         android:onClick="onClickClear"
-                        android:text="@string/clear" />
+                        android:textSize="16sp"
+                        android:text="@string/clear"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/cancel"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.6"
                         android:enabled="false"
                         android:onClick="onClickCancel"
                         android:text="@string/cancel"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
+                        android:background="@drawable/cancel_button_background"
                         android:textStyle="bold" />
 
                     <Button
@@ -87,18 +94,21 @@
                         android:layout_marginRight="5dp"
                         android:layout_weight="1.0"
                         android:enabled="false"
+                        android:background="@drawable/record_button_background"
                         android:onClick="onClickSave"
                         android:text="@string/save"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <Button
                         android:id="@+id/replace"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.6"
                         android:onClick="onClickReplace"
+                        android:background="@drawable/replace_button_background"
                         android:text="@string/replace"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
 
@@ -106,6 +116,7 @@
 
 
             </LinearLayout>
+
 
             <TextView
                 android:id="@+id/title"
@@ -121,7 +132,6 @@
 
             </TextView>
 
-
             <FrameLayout
                 android:id="@+id/lineup_container"
                 android:layout_width="match_parent"
@@ -132,17 +142,40 @@
 
             </FrameLayout>
 
-            <Button
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="onClickField"
-                android:text="@string/field"
-                android:textStyle="bold" />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="onClickShareOrder"
-                android:text="share"/>
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="80dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="1.0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:onClick="onClickField"
+                    android:background="@drawable/field_button_background"
+                    android:text="@string/field"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="1.0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:onClick="onClickShareOrder"
+                    android:background="@drawable/share_button_background"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textAllCaps="false"
+                    android:text="@string/share" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
