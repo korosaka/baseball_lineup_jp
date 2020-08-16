@@ -83,6 +83,7 @@
                     android:id="@+id/center"
                     android:layout_width="100sp"
                     android:layout_height="32sp"
+                    android:layout_marginRight="14dp"
                     android:gravity="center"
                     android:background="@drawable/outfielder_name_background"
                     android:text="@string/unselected"
@@ -108,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:gravity="center_vertical|start"
-                    android:paddingLeft="20dp">
+                    android:paddingLeft="3dp">
 
                     <TextView
                         android:id="@+id/left_order"
@@ -137,7 +138,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:gravity="center_vertical|end"
-                    android:paddingRight="20dp">
+                    android:paddingRight="12dp">
 
                     <TextView
                         android:id="@+id/right_order"
@@ -153,8 +154,8 @@
                         android:id="@+id/right"
                         android:layout_width="100sp"
                         android:layout_height="32sp"
-                        android:gravity="center"
                         android:background="@drawable/outfielder_name_background"
+                        android:gravity="center"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -221,6 +222,7 @@
                         android:layout_width="100sp"
                         android:layout_height="32sp"
                         android:gravity="center"
+                        android:layout_marginRight="18dp"
                         android:background="@drawable/infielder_name_background"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
@@ -232,7 +234,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.04" />
+                android:layout_weight="0.05" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -244,7 +246,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:gravity="start"
-                    android:paddingLeft="20dp">
+                    android:paddingLeft="1dp">
 
                     <TextView
                         android:id="@+id/third_order"
@@ -272,7 +274,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:paddingRight="20dp"
+                    android:paddingRight="15dp"
                     android:gravity="end">
 
                     <TextView
@@ -319,7 +321,7 @@
                     android:layout_width="100sp"
                     android:layout_height="32sp"
                     android:gravity="center"
-                    android:layout_gravity="center"
+                    android:layout_marginRight="13dp"
                     android:background="@drawable/pitcher_name_background"
                     android:text="@string/unselected"
                     android:textColor="@android:color/black"
@@ -331,7 +333,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.1" />
+                android:layout_weight="0.07" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -371,7 +373,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:paddingRight="3dp"
+                    android:paddingRight="1dp"
                     android:gravity="end">
 
                     <TextView
@@ -435,7 +437,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:paddingRight="3dp"
+                    android:paddingRight="1dp"
                     android:gravity="end">
 
                     <TextView
@@ -499,7 +501,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:paddingRight="3dp"
+                    android:paddingRight="1dp"
                     android:gravity="end">
 
                     <TextView
@@ -546,6 +548,7 @@
                     android:layout_width="100sp"
                     android:layout_height="32sp"
                     android:gravity="center"
+                    android:layout_marginRight="13dp"
                     android:background="@drawable/catcher_name_background"
                     android:text="@string/unselected"
                     android:textColor="@android:color/black"
