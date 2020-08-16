@@ -17,6 +17,16 @@ public class FieldActivity extends BaseAdActivity {
     private TextView position8;
     private TextView position9;
     private TextView[] dh = new TextView[6];
+    private TextView orderPitcher;
+    private TextView orderCatcher;
+    private TextView orderFirst;
+    private TextView orderSecond;
+    private TextView orderThird;
+    private TextView orderShort;
+    private TextView orderLeft;
+    private TextView orderCenter;
+    private TextView orderRight;
+    private TextView[] orderDh = new TextView[6];
 
     private int playerNumber = 0;
     private int maxDh = 0;
@@ -71,7 +81,7 @@ public class FieldActivity extends BaseAdActivity {
         position3 = findViewById(R.id.first);
         position4 = findViewById(R.id.second);
         position5 = findViewById(R.id.third);
-        position6 = findViewById(R.id.shortStop);
+        position6 = findViewById(R.id.short_stop);
         position7 = findViewById(R.id.left);
         position8 = findViewById(R.id.center);
         position9 = findViewById(R.id.right);
@@ -81,11 +91,27 @@ public class FieldActivity extends BaseAdActivity {
         dh[3] = findViewById(R.id.dh4);
         dh[4] = findViewById(R.id.dh5);
         dh[5] = findViewById(R.id.dh6);
+        orderPitcher = findViewById(R.id.pitcher_order);
+        orderCatcher = findViewById(R.id.catcher_order);
+        orderFirst = findViewById(R.id.first_order);
+        orderSecond = findViewById(R.id.second_order);
+        orderThird = findViewById(R.id.third_order);
+        orderShort = findViewById(R.id.short_stop_order);
+        orderLeft = findViewById(R.id.left_order);
+        orderCenter = findViewById(R.id.center_order);
+        orderRight = findViewById(R.id.right_order);
+        orderDh[0] = findViewById(R.id.dh1_order);
+        orderDh[1] = findViewById(R.id.dh2_order);
+        orderDh[2] = findViewById(R.id.dh3_order);
+        orderDh[3] = findViewById(R.id.dh4_order);
+        orderDh[4] = findViewById(R.id.dh5_order);
+        orderDh[5] = findViewById(R.id.dh6_order);
     }
 
     private void hideDh() {
         for (int i = 5; i >= maxDh; i--) {
             dh[i].setVisibility(View.INVISIBLE);
+            orderDh[i].setVisibility(View.INVISIBLE);
         }
     }
 
@@ -132,37 +158,37 @@ public class FieldActivity extends BaseAdActivity {
             switch (CachedPlayerPositionsInfo.instance.getAppropriatePosition(i)) {
                 case "(投)":
                     if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH)
-                        setText(position1, i, true);
+                        setText(position1, orderPitcher, i, true);
                     else
-                        setText(position1, i, false);
+                        setText(position1, orderPitcher, i, false);
                     break;
                 case "(捕)":
-                    setText(position2, i, false);
+                    setText(position2, orderCatcher, i, false);
                     break;
                 case "(一)":
-                    setText(position3, i, false);
+                    setText(position3, orderFirst, i, false);
                     break;
                 case "(二)":
-                    setText(position4, i, false);
+                    setText(position4, orderSecond, i, false);
                     break;
                 case "(三)":
-                    setText(position5, i, false);
+                    setText(position5, orderThird, i, false);
                     break;
                 case "(遊)":
-                    setText(position6, i, false);
+                    setText(position6, orderShort, i, false);
                     break;
                 case "(左)":
-                    setText(position7, i, false);
+                    setText(position7, orderLeft, i, false);
                     break;
                 case "(中)":
-                    setText(position8, i, false);
+                    setText(position8, orderCenter, i, false);
                     break;
                 case "(右)":
-                    setText(position9, i, false);
+                    setText(position9, orderRight, i, false);
                     break;
                 case "(DH)":
                     if (dhCount >= maxDh) dhCount = 0;
-                    setText(dh[dhCount], i, false);
+                    setText(dh[dhCount], orderDh[dhCount], i, false);
                     dhCount++;
                     break;
                 default:
@@ -171,11 +197,12 @@ public class FieldActivity extends BaseAdActivity {
         }
     }
 
-    private void setText(TextView textView, int num, boolean dhPitcher) {
-        String playerName = CachedPlayerNamesInfo.instance.getAppropriateName(num);
+    private void setText(TextView name, TextView order, int num, boolean dhPitcher) {
+        String playerName = customNameSpace(CachedPlayerNamesInfo.instance.getAppropriateName(num));
+        name.setText(playerName);
+        if (dhPitcher) order.setText("[P]");
+        else order.setText("[" + (num + 1) + "]");
 
-        if (dhPitcher) textView.setText(playerName + " (P)");
-        else textView.setText(playerName + " (" + (num + 1) + ")");
 
         int textSize;
         switch (playerName.length()) {
@@ -189,6 +216,17 @@ public class FieldActivity extends BaseAdActivity {
                 textSize = 16;
                 break;
         }
-        textView.setTextSize(textSize);
+        name.setTextSize(textSize);
+    }
+
+    private String customNameSpace(String playerName) {
+        switch (playerName.length()) {
+            case 2:
+                return playerName.charAt(0) + FixedWords.SPACE + FixedWords.SPACE + FixedWords.SPACE + playerName.charAt(1);
+            case 3:
+                return playerName.charAt(0) + FixedWords.SPACE + playerName.charAt(1) + FixedWords.SPACE + playerName.charAt(2);
+            default:
+                return playerName;
+        }
     }
 }

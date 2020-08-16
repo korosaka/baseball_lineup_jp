@@ -3,6 +3,7 @@ package com.websarva.wings.android.dasenapp;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
 
 
@@ -290,9 +292,13 @@ public class MainActivity extends BaseAdActivity {
         etName.setFocusableInTouchMode(true);
         etName.requestFocus();
         record.setEnabled(true);
+        record.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.record_button_background, null));
         cancel.setEnabled(true);
+        cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
         clear.setEnabled(true);
+        clear.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.clear_button_background, null));
         replace.setEnabled(false);
+        replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
 
         // DH制の投手の場合のみ対応
         if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH && num == 9) {
@@ -338,9 +344,13 @@ public class MainActivity extends BaseAdActivity {
         etName.setFocusableInTouchMode(false);
         etName.setEnabled(false);
         record.setEnabled(false);
+        record.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
         cancel.setEnabled(false);
+        cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
         clear.setEnabled(false);
+        clear.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
         replace.setEnabled(true);
+        replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
     }
 
     //クリアボタン処理
@@ -369,10 +379,13 @@ public class MainActivity extends BaseAdActivity {
         isReplacing = true;
         // 入れ替えボタンはenable(false)に
         replace.setEnabled(false);
+        replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
         // キャンセルはできるように
         cancel.setEnabled(true);
+        cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
         // タイトルが『２つボタンクリック』になる
         title.setText(R.string.replace_title);
+        title.setTextColor(Color.parseColor("#ff3300"));
 
     }
 
@@ -433,8 +446,11 @@ public class MainActivity extends BaseAdActivity {
         if (isFirstReplaceClicked) cancelFirstClick(firstClicked);
         isReplacing = false;
         title.setText(R.string.title);
+        title.setTextColor(Color.parseColor("#ffffff"));
         replace.setEnabled(true);
+        replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
         cancel.setEnabled(false);
+        cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
         if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH)
             dhLineupFragment.setPitcherButtonEnable(true);
     }
