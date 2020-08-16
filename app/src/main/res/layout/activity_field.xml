@@ -66,14 +66,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/center_order"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="3dp"
+                    android:layout_marginRight="1dp"
                     android:text="@string/no_order"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -81,10 +81,10 @@
 
                 <TextView
                     android:id="@+id/center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100sp"
+                    android:layout_height="32sp"
+                    android:gravity="center"
                     android:background="@drawable/outfielder_name_background"
-                    android:padding="5dp"
                     android:text="@string/unselected"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -107,14 +107,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="start"
+                    android:gravity="center_vertical|start"
                     android:paddingLeft="20dp">
 
                     <TextView
                         android:id="@+id/left_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginRight="1dp"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -122,10 +122,10 @@
 
                     <TextView
                         android:id="@+id/left"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100sp"
+                        android:layout_height="32sp"
+                        android:gravity="center"
                         android:background="@drawable/outfielder_name_background"
-                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -136,14 +136,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="end"
+                    android:gravity="center_vertical|end"
                     android:paddingRight="20dp">
 
                     <TextView
                         android:id="@+id/right_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginRight="1dp"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -151,10 +151,10 @@
 
                     <TextView
                         android:id="@+id/right"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100sp"
+                        android:layout_height="32sp"
+                        android:gravity="center"
                         android:background="@drawable/outfielder_name_background"
-                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -182,7 +182,7 @@
                         android:id="@+id/short_stop_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginRight="1dp"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -190,10 +190,10 @@
 
                     <TextView
                         android:id="@+id/short_stop"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100sp"
+                        android:layout_height="32sp"
+                        android:gravity="center"
                         android:background="@drawable/infielder_name_background"
-                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -210,7 +210,7 @@
                         android:id="@+id/second_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginRight="1dp"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -218,10 +218,10 @@
 
                     <TextView
                         android:id="@+id/second"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100sp"
+                        android:layout_height="32sp"
+                        android:gravity="center"
                         android:background="@drawable/infielder_name_background"
-                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -250,7 +250,7 @@
                         android:id="@+id/third_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginRight="1dp"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -258,10 +258,10 @@
 
                     <TextView
                         android:id="@+id/third"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100sp"
+                        android:layout_height="32sp"
+                        android:gravity="center"
                         android:background="@drawable/infielder_name_background"
-                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -279,7 +279,7 @@
                         android:id="@+id/first_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginRight="1dp"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -287,11 +287,11 @@
 
                     <TextView
                         android:id="@+id/first"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100sp"
+                        android:layout_height="32sp"
+                        android:gravity="center"
                         android:text="@string/unselected"
                         android:background="@drawable/infielder_name_background"
-                        android:padding="5dp"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -308,7 +308,7 @@
                     android:id="@+id/pitcher_order"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="3dp"
+                    android:layout_marginRight="1dp"
                     android:text="@string/no_order"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -316,11 +316,11 @@
 
                 <TextView
                     android:id="@+id/pitcher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100sp"
+                    android:layout_height="32sp"
+                    android:gravity="center"
                     android:layout_gravity="center"
                     android:background="@drawable/pitcher_name_background"
-                    android:padding="5dp"
                     android:text="@string/unselected"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -349,7 +349,7 @@
                         android:id="@+id/dh4_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginRight="1dp"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -357,10 +357,10 @@
 
                     <TextView
                         android:id="@+id/dh4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100sp"
+                        android:layout_height="32sp"
+                        android:gravity="center"
                         android:background="@drawable/dh_name_background"
-                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -378,7 +378,7 @@
                         android:id="@+id/dh1_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginRight="1dp"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -386,10 +386,10 @@
 
                     <TextView
                         android:id="@+id/dh1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100sp"
+                        android:layout_height="32sp"
+                        android:gravity="center"
                         android:background="@drawable/dh_name_background"
-                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -413,7 +413,7 @@
                         android:id="@+id/dh5_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginRight="1dp"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -421,10 +421,10 @@
 
                     <TextView
                         android:id="@+id/dh5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100sp"
+                        android:layout_height="32sp"
+                        android:gravity="center"
                         android:background="@drawable/dh_name_background"
-                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -442,7 +442,7 @@
                         android:id="@+id/dh2_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginRight="1dp"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -450,10 +450,10 @@
 
                     <TextView
                         android:id="@+id/dh2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100sp"
+                        android:layout_height="32sp"
+                        android:gravity="center"
                         android:background="@drawable/dh_name_background"
-                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -477,7 +477,7 @@
                         android:id="@+id/dh6_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginRight="1dp"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -485,10 +485,10 @@
 
                     <TextView
                         android:id="@+id/dh6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100sp"
+                        android:layout_height="32sp"
+                        android:gravity="center"
                         android:background="@drawable/dh_name_background"
-                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -506,7 +506,7 @@
                         android:id="@+id/dh3_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginRight="1dp"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -514,21 +514,16 @@
 
                     <TextView
                         android:id="@+id/dh3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100sp"
+                        android:layout_height="32sp"
+                        android:gravity="center"
                         android:background="@drawable/dh_name_background"
-                        android:padding="5dp"
                         android:text="@string/unselected"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.04" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -540,7 +535,7 @@
                     android:id="@+id/catcher_order"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="3dp"
+                    android:layout_marginRight="1dp"
                     android:text="@string/no_order"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -548,11 +543,10 @@
 
                 <TextView
                     android:id="@+id/catcher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_width="100sp"
+                    android:layout_height="32sp"
+                    android:gravity="center"
                     android:background="@drawable/catcher_name_background"
-                    android:padding="5dp"
                     android:text="@string/unselected"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -563,7 +557,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.08" />
+                android:layout_weight="0.06" />
         </LinearLayout>
 
     </FrameLayout>
