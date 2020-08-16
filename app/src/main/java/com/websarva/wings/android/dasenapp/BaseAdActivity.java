@@ -23,7 +23,7 @@ abstract class BaseAdActivity extends BaseActivity {
     private static final String BANNER_AD_UNIT_ID = "ca-app-pub-6298264304843789/6273376185";
 
     private InterstitialAd mInterstitialAd;
-    private static final String INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
+    private static final String INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-6298264304843789/1536477833";
 
     protected void setAdView(FrameLayout container) {
         adViewContainer = container;
