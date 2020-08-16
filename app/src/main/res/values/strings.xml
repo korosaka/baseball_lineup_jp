@@ -72,7 +72,7 @@
     <string name="cancel">キャンセル</string>
     <string name="replace">入れ替え</string>
     <string name="replace_title">入れ替える２つの打順を選んでください</string>
-    <string name="share">共有(LINE/Twitter)</string>
+    <string name="share">LINE/Twitter</string>
     <string name="no_order">[-]</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
