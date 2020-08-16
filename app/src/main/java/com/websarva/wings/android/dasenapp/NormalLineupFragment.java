@@ -71,17 +71,29 @@ public class NormalLineupFragment extends Fragment {
 
     private void setLayout() {
         for (int i = 0; i < 9; i++) {
-            names[i].setText(CachedPlayerNamesInfo.instance.getNameNormal(i));
+            names[i].setText(customNameSpace(CachedPlayerNamesInfo.instance.getNameNormal(i)));
             changeTextSize(names[i]);
             positions[i].setText(CachedPlayerPositionsInfo.instance.getPositionNormal(i));
         }
     }
 
     public void changeData(int num, String name, String position) {
-        names[num].setText(name);
+        names[num].setText(customNameSpace(name));
         changeTextSize(names[num]);
         positions[num].setText(position);
     }
+
+    private String customNameSpace(String playerName) {
+        switch (playerName.length()) {
+            case 2:
+                return playerName.charAt(0) + FixedWords.SPACE + FixedWords.SPACE + FixedWords.SPACE + playerName.charAt(1);
+            case 3:
+                return playerName.charAt(0) + FixedWords.SPACE + playerName.charAt(1) + FixedWords.SPACE + playerName.charAt(2);
+            default:
+                return playerName;
+        }
+    }
+
 
     public void changeButtonColor(int num) {
         number_buttons[num].setTextColor(Color.parseColor("#FF0000"));
@@ -93,7 +105,18 @@ public class NormalLineupFragment extends Fragment {
 
     private void changeTextSize(TextView textView) {
         int lengthOfText = textView.length();
-        if (lengthOfText > 5) textView.setTextSize(24);
-        else textView.setTextSize(28);
+        int textSize;
+        switch (lengthOfText) {
+            case 6:
+                textSize = 24;
+                break;
+            case 7:
+                textSize = 20;
+                break;
+            default:
+                textSize = 28;
+                break;
+        }
+        textView.setTextSize(textSize);
     }
 }

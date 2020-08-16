@@ -16,7 +16,7 @@
     <string name="position">----</string>
     <string name="save">登録</string>
     <string name="clear">クリア</string>
-    <string name="title">~Starting Member~</string>
+    <string name="title"><u>Starting Member</u></string>
     <string name="subtitle">~Starting Member~（サブ）</string>
     <string-array name="positions">
         <item>----</item>
@@ -63,14 +63,17 @@
     <string name="google_policy"><a href="https://policies.google.com/technologies/ads?hl=ja">Google広告に関するポリシー</a></string>
     <string name="agree">同意する</string>
     <string name="close">閉じる</string>
-
+    <string name="ask_finish_app">アプリを終了しますか？</string>
+    <string name="yes">はい</string>
     <string name="order">ノーマル</string>
     <string name="subOrder">DH</string>
-    <string name="field">フィールド表示</string>
+    <string name="field">守備画面表示</string>
     <string name="back">戻る</string>
     <string name="cancel">キャンセル</string>
     <string name="replace">入れ替え</string>
     <string name="replace_title">入れ替える２つの打順を選んでください</string>
+    <string name="share">LINE/Twitter</string>
+    <string name="no_order">[-]</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
