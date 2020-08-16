@@ -198,8 +198,7 @@ public class FieldActivity extends BaseAdActivity {
     }
 
     private void setText(TextView name, TextView order, int num, boolean dhPitcher) {
-        String playerName = CachedPlayerNamesInfo.instance.getAppropriateName(num);
-
+        String playerName = customNameSpace(CachedPlayerNamesInfo.instance.getAppropriateName(num));
         name.setText(playerName);
         if (dhPitcher) order.setText("[P]");
         else order.setText("[" + (num + 1) + "]");
@@ -218,5 +217,16 @@ public class FieldActivity extends BaseAdActivity {
                 break;
         }
         name.setTextSize(textSize);
+    }
+
+    private String customNameSpace(String playerName) {
+        switch (playerName.length()) {
+            case 2:
+                return playerName.charAt(0) + FixedWords.SPACE + FixedWords.SPACE + FixedWords.SPACE + playerName.charAt(1);
+            case 3:
+                return playerName.charAt(0) + FixedWords.SPACE + playerName.charAt(1) + FixedWords.SPACE + playerName.charAt(2);
+            default:
+                return playerName;
+        }
     }
 }

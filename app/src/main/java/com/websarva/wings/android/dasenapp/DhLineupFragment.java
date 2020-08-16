@@ -70,7 +70,7 @@ public class DhLineupFragment extends Fragment {
 
     private void setLayout() {
         for (int i = 0; i < 10; i++) {
-            names[i].setText(CachedPlayerNamesInfo.instance.getNameDh(i));
+            names[i].setText(customNameSpace(CachedPlayerNamesInfo.instance.getNameDh(i)));
             changeTextSize(names[i]);
             if (i == 9) return;
             positions[i].setText(CachedPlayerPositionsInfo.instance.getPositionDh(i));
@@ -78,11 +78,23 @@ public class DhLineupFragment extends Fragment {
     }
 
     public void changeData(int num, String name, String position) {
-        names[num].setText(name);
+        names[num].setText(customNameSpace(name));
         changeTextSize(names[num]);
         if (num == 9) return;
         positions[num].setText(position);
     }
+
+    private String customNameSpace(String playerName) {
+        switch (playerName.length()) {
+            case 2:
+                return playerName.charAt(0) + FixedWords.SPACE + FixedWords.SPACE + FixedWords.SPACE + playerName.charAt(1);
+            case 3:
+                return playerName.charAt(0) + FixedWords.SPACE + playerName.charAt(1) + FixedWords.SPACE + playerName.charAt(2);
+            default:
+                return playerName;
+        }
+    }
+
 
     public void changeButtonColor(int num) {
         number_buttons[num].setTextColor(Color.parseColor("#FF0000"));
