@@ -21,8 +21,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
 
-
-public class MainActivity extends BaseAdActivity {
+/**
+ * To use this Activity's method in PlayerListAdapter, implementing PlayerListAdapterListener
+ */
+public class MainActivity extends BaseAdActivity implements PlayerListAdapterListener {
     //選択した打順
     TextView tvSelectNum;
     //入力欄
@@ -47,6 +49,7 @@ public class MainActivity extends BaseAdActivity {
     Button clear;
 
     int firstClicked = -1;
+    private Button firstClickedButton;
     private DatabaseUsing databaseUsing;
     private NormalLineupFragment normalLineupFragment;
     private DhLineupFragment dhLineupFragment;
@@ -126,68 +129,16 @@ public class MainActivity extends BaseAdActivity {
         policyFragment.show(getSupportFragmentManager(), FixedWords.PRIVACY_POLICY);
     }
 
-    //以下１〜９番の打順ボタン処理⬇
-    public void onClick1(View view) {
-        commonMethod(0);
-    }
-
-    public void onClick2(View view) {
-        commonMethod(1);
-    }
-
-    public void onClick3(View view) {
-        commonMethod(2);
-    }
-
-    public void onClick4(View view) {
-        commonMethod(3);
-    }
-
-    public void onClick5(View view) {
-        commonMethod(4);
-    }
-
-    public void onClick6(View view) {
-        commonMethod(5);
-    }
-
-    public void onClick7(View view) {
-        commonMethod(6);
-    }
-
-    public void onClick8(View view) {
-        commonMethod(7);
-    }
-
-    public void onClick9(View view) {
-        commonMethod(8);
-    }
-
-    public void onClickP(View view) {
-        commonMethod(9);
-    }
-
-    //打順ボタン共通メソッド（打順・登録状態表示、EditText・登録/クリアボタンの有効化、データベース用の数字登録）
-    public void commonMethod(int j) {
-        // 入れ替え時のクリックと処理区別
-        if (isReplacing) {
-            replaceMethod(j);
-        } else {
-            // 通常時の打順選択
-            selectNum(j);
-        }
-    }
-
-    private void replaceMethod(int j) {
+    private void replaceMethod(int j, Button numButton) {
         // 入れ替え時
         if (!isFirstReplaceClicked) {
             // 1つめ選択時
-            selectFirstReplacing(j);
+            selectFirstReplacing(j, numButton);
         } else {
             // 2つめ選択時
             if (j == firstClicked) {
                 // 同じボタンがクリックされた →　元に戻す
-                cancelFirstClick(j);
+                cancelFirstClick(numButton);
             } else {
                 // 異なるボタン →入れ替え処理
                 // DB/Layout内で入れ替え
@@ -198,14 +149,15 @@ public class MainActivity extends BaseAdActivity {
         }
     }
 
-    private void selectFirstReplacing(int num) {
-        changeButtonColor(num);
+    private void selectFirstReplacing(int num, Button numButton) {
+        firstClickedButton = numButton;
+        changeButtonColor(numButton);
         firstClicked = num;
         isFirstReplaceClicked = true;
     }
 
-    private void cancelFirstClick(int num) {
-        setButtonDefault(num);
+    private void cancelFirstClick(Button numButton) {
+        setButtonDefault(numButton);
         isFirstReplaceClicked = false;
         firstClicked = -1;
     }
@@ -321,14 +273,14 @@ public class MainActivity extends BaseAdActivity {
         switch (CurrentOrderVersion.instance.getCurrentVersion()) {
             //画面のメンバー表に反映（１〜９番まで）
             case FixedWords.DEFAULT:
-                normalLineupFragment.changeData(currentNum, playerName, position);
                 CachedPlayerNamesInfo.instance.setNameNormal(currentNum, playerName);
                 CachedPlayerPositionsInfo.instance.setPositionNormal(currentNum, position);
+                normalLineupFragment.changeData(currentNum, playerName, position);
                 break;
             case FixedWords.DH:
-                dhLineupFragment.changeData(currentNum, playerName, position);
                 CachedPlayerNamesInfo.instance.setNameDh(currentNum, playerName);
                 CachedPlayerPositionsInfo.instance.setPositionDh(currentNum, position);
+                dhLineupFragment.changeData(currentNum, playerName, position);
                 break;
         }
 
@@ -443,7 +395,7 @@ public class MainActivity extends BaseAdActivity {
      * 入れ替え処理中ならリセット
      */
     private void cancelReplacing() {
-        if (isFirstReplaceClicked) cancelFirstClick(firstClicked);
+        if (isFirstReplaceClicked) cancelFirstClick(firstClickedButton);
         isReplacing = false;
         title.setText(R.string.title);
         title.setTextColor(Color.parseColor("#ffffff"));
@@ -455,13 +407,13 @@ public class MainActivity extends BaseAdActivity {
             dhLineupFragment.setPitcherButtonEnable(true);
     }
 
-    private void changeButtonColor(int num) {
+    private void changeButtonColor(Button numButton) {
         switch (CurrentOrderVersion.instance.getCurrentVersion()) {
             case FixedWords.DEFAULT:
-                normalLineupFragment.changeButtonColor(num);
+                normalLineupFragment.changeButtonColor(numButton);
                 break;
             case FixedWords.DH:
-                dhLineupFragment.changeButtonColor(num);
+                dhLineupFragment.changeButtonColor(numButton);
                 break;
             case FixedWords.ALL10:
                 break;
@@ -478,13 +430,13 @@ public class MainActivity extends BaseAdActivity {
         }
     }
 
-    private void setButtonDefault(int num) {
+    private void setButtonDefault(Button numButton) {
         switch (CurrentOrderVersion.instance.getCurrentVersion()) {
             case FixedWords.DEFAULT:
-                normalLineupFragment.setButtonDefault(num);
+                normalLineupFragment.setButtonDefault(numButton);
                 break;
             case FixedWords.DH:
-                dhLineupFragment.setButtonDefault(num);
+                dhLineupFragment.setButtonDefault(numButton);
                 break;
             case FixedWords.ALL10:
                 break;
@@ -523,6 +475,18 @@ public class MainActivity extends BaseAdActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
+
+    @Override
+    public void onClickOrderNum(int orderNum, Button numButton) {
+        // 入れ替え時のクリックと処理区別
+        if (isReplacing) {
+            replaceMethod(orderNum - 1, numButton);
+        } else {
+            // 通常時の打順選択
+            selectNum(orderNum - 1);
+        }
+    }
+
 
     @Override
     void keyBackFunction() {

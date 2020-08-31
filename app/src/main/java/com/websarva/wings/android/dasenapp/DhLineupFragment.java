@@ -6,122 +6,107 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DhLineupFragment extends Fragment {
 
-    private TextView[] names = new TextView[10];
-    private TextView[] positions = new TextView[9];
-    private Button[] number_buttons = new Button[10];
+    private ListView playerList;
+    private PlayerListAdapter listAdapter;
+    private List<PlayerListItemData> players;
+    public static Button pitcherButton;
 
     public static DhLineupFragment newInstance() {
         return new DhLineupFragment();
     }
+
     // レイアウト紐付け
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View v = inflater.inflate(R.layout.fragment_dh_lineup, container, false);
-        bindLayout(v);
-        setLayout();
+        View view = inflater.inflate(R.layout.fragment_dh_lineup, container, false);
+        playerList = view.findViewById(R.id.player_list_dh);
 
-        return v;
+        return view;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-    private void bindLayout(View v) {
-
-        names[0] = v.findViewById(R.id.name1_dh);
-        names[1] = v.findViewById(R.id.name2_dh);
-        names[2] = v.findViewById(R.id.name3_dh);
-        names[3] = v.findViewById(R.id.name4_dh);
-        names[4] = v.findViewById(R.id.name5_dh);
-        names[5] = v.findViewById(R.id.name6_dh);
-        names[6] = v.findViewById(R.id.name7_dh);
-        names[7] = v.findViewById(R.id.name8_dh);
-        names[8] = v.findViewById(R.id.name9_dh);
-        names[9] = v.findViewById(R.id.nameP_dh);
-
-
-        positions[0] = v.findViewById(R.id.position1_dh);
-        positions[1] = v.findViewById(R.id.position2_dh);
-        positions[2] = v.findViewById(R.id.position3_dh);
-        positions[3] = v.findViewById(R.id.position4_dh);
-        positions[4] = v.findViewById(R.id.position5_dh);
-        positions[5] = v.findViewById(R.id.position6_dh);
-        positions[6] = v.findViewById(R.id.position7_dh);
-        positions[7] = v.findViewById(R.id.position8_dh);
-        positions[8] = v.findViewById(R.id.position9_dh);
-
-        number_buttons[0] = v.findViewById(R.id.btn1_dh);
-        number_buttons[1] = v.findViewById(R.id.btn2_dh);
-        number_buttons[2] = v.findViewById(R.id.btn3_dh);
-        number_buttons[3] = v.findViewById(R.id.btn4_dh);
-        number_buttons[4] = v.findViewById(R.id.btn5_dh);
-        number_buttons[5] = v.findViewById(R.id.btn6_dh);
-        number_buttons[6] = v.findViewById(R.id.btn7_dh);
-        number_buttons[7] = v.findViewById(R.id.btn8_dh);
-        number_buttons[8] = v.findViewById(R.id.btn9_dh);
-        number_buttons[9] = v.findViewById(R.id.btnP_dh);
-    }
-
-    private void setLayout() {
+        players = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            names[i].setText(customNameSpace(CachedPlayerNamesInfo.instance.getNameDh(i)));
-            changeTextSize(names[i]);
-            if (i == 9) return;
-            positions[i].setText(CachedPlayerPositionsInfo.instance.getPositionDh(i));
+            int oderNumber = i + 1;
+            PlayerListItemData playerItem = new PlayerListItemData(
+                    oderNumber,
+                    CachedPlayerPositionsInfo.instance.getPositionDh(i),
+                    CachedPlayerNamesInfo.instance.getNameDh(i));
+            players.add(playerItem);
         }
+        listAdapter =
+                new PlayerListAdapter(
+                        getContext(),
+                        R.layout.player_list_item,
+                        players,
+                        (MainActivity) getActivity());
+        playerList.setAdapter(listAdapter);
+        setListViewHeightBasedOnChildren(playerList);
     }
+
 
     public void changeData(int num, String name, String position) {
-        names[num].setText(customNameSpace(name));
-        changeTextSize(names[num]);
-        if (num == 9) return;
-        positions[num].setText(position);
+        PlayerListItemData newPlayerItem =
+                new PlayerListItemData(num + 1, position, name);
+        players.set(num, newPlayerItem);
+        listAdapter.notifyDataSetChanged();
     }
 
-    private String customNameSpace(String playerName) {
-        switch (playerName.length()) {
-            case 2:
-                return playerName.charAt(0) + FixedWords.SPACE + FixedWords.SPACE + FixedWords.SPACE + playerName.charAt(1);
-            case 3:
-                return playerName.charAt(0) + FixedWords.SPACE + playerName.charAt(1) + FixedWords.SPACE + playerName.charAt(2);
-            default:
-                return playerName;
-        }
+    public void changeButtonColor(Button button) {
+        button.setTextColor(Color.parseColor("#FF0000"));
     }
 
-
-    public void changeButtonColor(int num) {
-        number_buttons[num].setTextColor(Color.parseColor("#FF0000"));
-    }
-
-    public void setButtonDefault(int num) {
-        number_buttons[num].setTextColor(Color.parseColor("#000000"));
+    public void setButtonDefault(Button button) {
+        button.setTextColor(Color.parseColor("#000000"));
     }
 
     public void setPitcherButtonEnable(boolean enable) {
-        number_buttons[9].setEnabled(enable);
+        pitcherButton.setEnabled(enable);
     }
 
-    private void changeTextSize(TextView textView) {
-        int lengthOfText = textView.length();
-        int textSize;
-        switch (lengthOfText) {
-            case 6:
-                textSize = 24;
-                break;
-            case 7:
-                textSize = 20;
-                break;
-            default:
-                textSize = 28;
-                break;
+    /**
+     * when using listView in a scrollView, only one item would be showed.
+     * So, this function is needed to show every item.
+     * reference
+     * https://www.it-swarm.dev/ja/android/listview%E3%82%92%E6%8A%98%E3%82%8A%E3%81%9F%E3%81%9F%E3%81%BE%E3%81%9A%E3%81%ABscrollview%E3%81%AB%E9%85%8D%E7%BD%AE%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/969129306/
+     */
+    private void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
         }
-        textView.setTextSize(textSize);
+
+        int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
+
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            if (listItem instanceof ViewGroup) {
+                listItem.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
+
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
+
 }
