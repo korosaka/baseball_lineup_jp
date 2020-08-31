@@ -22,5 +22,7 @@ public class FixedWords {
     public static final String CLOSE = "close";
 
     public static final String DATA_STORE = "dataStore";
+    public static final String NUMBER_OF_PLAYER = "numberOfPlayer";
+
 
 }
