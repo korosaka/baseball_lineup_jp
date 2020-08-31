@@ -48,7 +48,7 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
         int orderNum = playerItem.getItemOrderNumber();
         if (orderNum == 10) {
             orderButton.setText("P");
-            DhLineupFragment.pitcherButton = orderButton;
+            mListener.setDhPitcherButton(orderButton);
         } else {
             orderButton.setText(orderNum + "番");
         }
@@ -97,4 +97,5 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
 
 interface PlayerListAdapterListener {
     void onClickOrderNum(int orderNum, Button numButton);
+    void setDhPitcherButton(Button pitcherButton);
 }

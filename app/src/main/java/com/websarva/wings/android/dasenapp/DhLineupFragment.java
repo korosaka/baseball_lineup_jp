@@ -13,13 +13,13 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DhLineupFragment extends Fragment {
 
     private ListView playerList;
     private PlayerListAdapter listAdapter;
     private List<PlayerListItemData> players;
-    public static Button pitcherButton;
 
     public static DhLineupFragment newInstance() {
         return new DhLineupFragment();
@@ -76,7 +76,7 @@ public class DhLineupFragment extends Fragment {
     }
 
     public void setPitcherButtonEnable(boolean enable) {
-        pitcherButton.setEnabled(enable);
+        ((MainActivity) Objects.requireNonNull(getActivity())).getDhPitcherButton().setEnabled(enable);
     }
 
     /**

@@ -53,6 +53,11 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
     private DatabaseUsing databaseUsing;
     private NormalLineupFragment normalLineupFragment;
     private DhLineupFragment dhLineupFragment;
+    private Button dhPitcherButton;
+
+    public Button getDhPitcherButton() {
+        return dhPitcherButton;
+    }
 
     //ここからmain
     @Override
@@ -485,6 +490,14 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
             // 通常時の打順選択
             selectNum(orderNum - 1);
         }
+    }
+
+    /**
+     * for replacing on DH order (disable pitcher button)
+     */
+    @Override
+    public void setDhPitcherButton(Button pitcherButton) {
+        this.dhPitcherButton = pitcherButton;
     }
 
 
