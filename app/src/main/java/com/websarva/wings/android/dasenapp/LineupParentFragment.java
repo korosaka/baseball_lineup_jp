@@ -36,13 +36,13 @@ abstract public class LineupParentFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         players = new ArrayList<>();
-        for (int i = 0; i < numberOfPlayer; i++) {
-            int oderNumber = i + 1;
+        for (int index = 0; index < numberOfPlayer; index++) {
+            int oderNumber = index + 1;
             PlayerListItemData playerItem =
                     new PlayerListItemData(
                             oderNumber,
-                            getPositionFromCache(i),
-                            getNameFromCache(i));
+                            getPositionFromCache(index),
+                            getNameFromCache(index));
             players.add(playerItem);
         }
         listAdapter =
@@ -59,10 +59,10 @@ abstract public class LineupParentFragment extends Fragment {
 
     abstract String getNameFromCache(int index);
 
-    public void changeData(int num, String name, String position) {
+    public void changeData(int index, String name, String position) {
         PlayerListItemData newPlayerItem =
-                new PlayerListItemData(num + 1, position, name);
-        players.set(num, newPlayerItem);
+                new PlayerListItemData(index + 1, position, name);
+        players.set(index, newPlayerItem);
         listAdapter.notifyDataSetChanged();
     }
 

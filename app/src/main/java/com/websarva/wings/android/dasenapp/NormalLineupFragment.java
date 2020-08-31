@@ -10,7 +10,7 @@ public class NormalLineupFragment extends LineupParentFragment {
     public static NormalLineupFragment newInstance() {
         NormalLineupFragment fragment = new NormalLineupFragment();
         Bundle args = new Bundle();
-        args.putInt(FixedWords.NUMBER_OF_PLAYER, 9);
+        args.putInt(FixedWords.NUMBER_OF_PLAYER, FixedWords.NUMBER_OF_LINEUP_NORMAL);
         fragment.setArguments(args);
         return fragment;
     }

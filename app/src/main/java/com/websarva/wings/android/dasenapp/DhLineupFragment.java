@@ -12,7 +12,7 @@ public class DhLineupFragment extends LineupParentFragment {
     public static DhLineupFragment newInstance() {
         DhLineupFragment fragment = new DhLineupFragment();
         Bundle args = new Bundle();
-        args.putInt(FixedWords.NUMBER_OF_PLAYER, 10);
+        args.putInt(FixedWords.NUMBER_OF_PLAYER, FixedWords.NUMBER_OF_LINEUP_DH);
         fragment.setArguments(args);
         return fragment;
     }

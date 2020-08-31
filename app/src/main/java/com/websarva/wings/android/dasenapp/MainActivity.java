@@ -483,12 +483,11 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
 
     @Override
     public void onClickOrderNum(int orderNum, Button numButton) {
-        // 入れ替え時のクリックと処理区別
+        int index = orderNum - 1;
         if (isReplacing) {
-            replaceMethod(orderNum - 1, numButton);
+            replaceMethod(index, numButton);
         } else {
-            // 通常時の打順選択
-            selectNum(orderNum - 1);
+            selectNum(index);
         }
     }
 

@@ -46,11 +46,12 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
 
         PlayerListItemData playerItem = playerItems.get(position);
         int orderNum = playerItem.getItemOrderNumber();
-        if (orderNum == 10) {
-            orderButton.setText("P");
+        if (orderNum == FixedWords.DH_PITCHER_ORDER) {
+            orderButton.setText(FixedWords.PITCHER_INITIAL);
             mListener.setDhPitcherButton(orderButton);
         } else {
-            orderButton.setText(orderNum + "番");
+            String orderNumJP = orderNum + FixedWords.JP_NUMBER;
+            orderButton.setText(orderNumJP);
         }
         orderButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
