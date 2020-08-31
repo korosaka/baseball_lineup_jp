@@ -283,6 +283,7 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
                 normalLineupFragment.changeData(currentNum, playerName, position);
                 break;
             case FixedWords.DH:
+                if ((currentNum + 1) == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
                 CachedPlayerNamesInfo.instance.setNameDh(currentNum, playerName);
                 CachedPlayerPositionsInfo.instance.setPositionDh(currentNum, position);
                 dhLineupFragment.changeData(currentNum, playerName, position);
