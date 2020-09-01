@@ -1,6 +1,7 @@
 package com.websarva.wings.android.dasenapp;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
     }
 
 
+    // TODO divide method
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -49,6 +51,7 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
         if (orderNum == FixedWords.DH_PITCHER_ORDER) {
             orderButton.setText(FixedWords.PITCHER_INITIAL);
             mListener.setDhPitcherButton(orderButton);
+            positionText.setTextColor(Color.parseColor(FixedWords.COLOR_PITCHER_TEXT));
         } else {
             String orderNumJP = orderNum + FixedWords.JP_NUMBER;
             orderButton.setText(orderNumJP);

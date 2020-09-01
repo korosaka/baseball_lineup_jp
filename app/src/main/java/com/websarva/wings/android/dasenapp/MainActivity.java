@@ -55,9 +55,6 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
     private DhLineupFragment dhLineupFragment;
     private Button dhPitcherButton;
 
-    public Button getDhPitcherButton() {
-        return dhPitcherButton;
-    }
 
     //ここからmain
     @Override
@@ -283,6 +280,7 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
                 normalLineupFragment.changeData(currentNum, playerName, position);
                 break;
             case FixedWords.DH:
+                if ((currentNum + 1) == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
                 CachedPlayerNamesInfo.instance.setNameDh(currentNum, playerName);
                 CachedPlayerPositionsInfo.instance.setPositionDh(currentNum, position);
                 dhLineupFragment.changeData(currentNum, playerName, position);
@@ -331,7 +329,7 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
     public void onClickReplace(View view) {
 
         if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH)
-            dhLineupFragment.setPitcherButtonEnable(false);
+            setPitcherButtonEnable(false);
         // 入れ替えクリックされているフラグ
         isReplacing = true;
         // 入れ替えボタンはenable(false)に
@@ -342,7 +340,7 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
         // タイトルが『２つボタンクリック』になる
         title.setText(R.string.replace_title);
-        title.setTextColor(Color.parseColor("#ff3300"));
+        title.setTextColor(Color.parseColor(FixedWords.COLOR_EMPHASIZING));
 
     }
 
@@ -403,22 +401,30 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         if (isFirstReplaceClicked) cancelFirstClick(firstClickedButton);
         isReplacing = false;
         title.setText(R.string.title);
-        title.setTextColor(Color.parseColor("#ffffff"));
+        title.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
         replace.setEnabled(true);
         replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
         cancel.setEnabled(false);
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
         if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH)
-            dhLineupFragment.setPitcherButtonEnable(true);
+            setPitcherButtonEnable(true);
     }
+
+    private void setPitcherButtonEnable(boolean enable) {
+        dhPitcherButton.setEnabled(enable);
+        int backgroundId = R.drawable.order_num_button_background;
+        if (!enable) backgroundId = R.drawable.disable_button_background;
+        dhPitcherButton.setBackground(ResourcesCompat.getDrawable(getResources(), backgroundId, null));
+    }
+
 
     private void changeButtonColor(Button numButton) {
         switch (CurrentOrderVersion.instance.getCurrentVersion()) {
             case FixedWords.DEFAULT:
-                normalLineupFragment.changeButtonColor(numButton);
+                normalLineupFragment.highLightButton(numButton);
                 break;
             case FixedWords.DH:
-                dhLineupFragment.changeButtonColor(numButton);
+                dhLineupFragment.highLightButton(numButton);
                 break;
             case FixedWords.ALL10:
                 break;

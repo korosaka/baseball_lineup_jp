@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Objects;
-
 public class DhLineupFragment extends LineupParentFragment {
 
     public static DhLineupFragment newInstance() {
@@ -24,12 +22,6 @@ public class DhLineupFragment extends LineupParentFragment {
         View view = inflater.inflate(R.layout.fragment_dh_lineup, container, false);
         playerList = view.findViewById(R.id.player_list_dh);
         return view;
-    }
-
-
-    // TODO write in MainActivity ?
-    public void setPitcherButtonEnable(boolean enable) {
-        ((MainActivity) Objects.requireNonNull(getActivity())).getDhPitcherButton().setEnabled(enable);
     }
 
     @Override

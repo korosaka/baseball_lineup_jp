@@ -4,25 +4,26 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="2dp">
+    android:padding="1dp">
 
     <Button
         android:id="@+id/order_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_custom"
+        android:background="@drawable/order_num_button_background"
         android:textSize="22sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/position_text"
-        android:layout_width="wrap_content"
+        android:layout_width="60sp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:gravity="center"
         android:text="@string/position"
         android:textColor="@android:color/holo_green_dark"
         android:textSize="28sp"
+        android:maxLines="1"
         android:textStyle="bold" />
 
     <TextView
@@ -33,5 +34,6 @@
         android:text="@string/unselected"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="28sp"
+        android:maxLines="1"
         android:textStyle="bold" />
 </LinearLayout>
