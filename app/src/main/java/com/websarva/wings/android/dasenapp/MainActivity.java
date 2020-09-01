@@ -55,9 +55,6 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
     private DhLineupFragment dhLineupFragment;
     private Button dhPitcherButton;
 
-    public Button getDhPitcherButton() {
-        return dhPitcherButton;
-    }
 
     //ここからmain
     @Override
@@ -332,7 +329,7 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
     public void onClickReplace(View view) {
 
         if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH)
-            dhLineupFragment.setPitcherButtonEnable(false);
+            setPitcherButtonEnable(false);
         // 入れ替えクリックされているフラグ
         isReplacing = true;
         // 入れ替えボタンはenable(false)に
@@ -410,8 +407,16 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         cancel.setEnabled(false);
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
         if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH)
-            dhLineupFragment.setPitcherButtonEnable(true);
+            setPitcherButtonEnable(true);
     }
+
+    private void setPitcherButtonEnable(boolean enable) {
+        dhPitcherButton.setEnabled(enable);
+        int backgroundId = R.drawable.order_num_button_background;
+        if (!enable) backgroundId = R.drawable.disable_button_background;
+        dhPitcherButton.setBackground(ResourcesCompat.getDrawable(getResources(), backgroundId, null));
+    }
+
 
     private void changeButtonColor(Button numButton) {
         switch (CurrentOrderVersion.instance.getCurrentVersion()) {
