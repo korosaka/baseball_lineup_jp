@@ -67,7 +67,7 @@ abstract public class LineupParentFragment extends Fragment {
         listAdapter.notifyDataSetChanged();
     }
 
-    public void changeButtonColor(Button button) {
+    public void highLightButton(Button button) {
         button.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
         button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.emphasized_button_background, null));
     }

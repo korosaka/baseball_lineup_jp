@@ -421,10 +421,10 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
     private void changeButtonColor(Button numButton) {
         switch (CurrentOrderVersion.instance.getCurrentVersion()) {
             case FixedWords.DEFAULT:
-                normalLineupFragment.changeButtonColor(numButton);
+                normalLineupFragment.highLightButton(numButton);
                 break;
             case FixedWords.DH:
-                dhLineupFragment.changeButtonColor(numButton);
+                dhLineupFragment.highLightButton(numButton);
                 break;
             case FixedWords.ALL10:
                 break;
