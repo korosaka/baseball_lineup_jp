@@ -340,7 +340,7 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
         // タイトルが『２つボタンクリック』になる
         title.setText(R.string.replace_title);
-        title.setTextColor(Color.parseColor("#ff3300"));
+        title.setTextColor(Color.parseColor(FixedWords.COLOR_EMPHASIZING));
 
     }
 
@@ -401,7 +401,7 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         if (isFirstReplaceClicked) cancelFirstClick(firstClickedButton);
         isReplacing = false;
         title.setText(R.string.title);
-        title.setTextColor(Color.parseColor("#ffffff"));
+        title.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
         replace.setEnabled(true);
         replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
         cancel.setEnabled(false);

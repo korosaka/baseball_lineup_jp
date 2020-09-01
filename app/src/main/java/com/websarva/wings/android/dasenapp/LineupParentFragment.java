@@ -3,6 +3,7 @@ package com.websarva.wings.android.dasenapp;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -67,11 +68,13 @@ abstract public class LineupParentFragment extends Fragment {
     }
 
     public void changeButtonColor(Button button) {
-        button.setTextColor(Color.parseColor("#FF0000"));
+        button.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
+        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.emphasized_button_background, null));
     }
 
     public void setButtonDefault(Button button) {
-        button.setTextColor(Color.parseColor("#000000"));
+        button.setTextColor(Color.parseColor(FixedWords.COLOR_BLACK));
+        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.order_num_button_background, null));
     }
 
     /**

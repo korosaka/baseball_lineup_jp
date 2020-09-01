@@ -31,5 +31,7 @@ public class FixedWords {
     public static final int DH_PITCHER_ORDER = 10;
 
     public static final String COLOR_PITCHER_TEXT = "#ff0066";
-
+    public static final String COLOR_EMPHASIZING = "#ff3300";
+    public static final String COLOR_WHITE = "#ffffff";
+    public static final String COLOR_BLACK = "#000000";
 }
