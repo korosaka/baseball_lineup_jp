@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import java.util.Objects;
 
@@ -29,7 +32,11 @@ public class DhLineupFragment extends LineupParentFragment {
 
     // TODO write in MainActivity ?
     public void setPitcherButtonEnable(boolean enable) {
-        ((MainActivity) Objects.requireNonNull(getActivity())).getDhPitcherButton().setEnabled(enable);
+        Button pitcherButton = ((MainActivity) Objects.requireNonNull(getActivity())).getDhPitcherButton();
+        pitcherButton.setEnabled(enable);
+        int backgroundId = R.drawable.order_num_button_background;
+        if (!enable) backgroundId = R.drawable.disable_button_background;
+        pitcherButton.setBackground(ResourcesCompat.getDrawable(getResources(), backgroundId, null));
     }
 
     @Override

@@ -30,4 +30,6 @@ public class FixedWords {
     public static final int NUMBER_OF_LINEUP_DH = 10;
     public static final int DH_PITCHER_ORDER = 10;
 
+    public static final String COLOR_PITCHER_TEXT = "#ff0066";
+
 }
