@@ -53,8 +53,7 @@ public class DatabaseUsing {
                 playerName = FixedWords.HYPHEN_5;
                 playerPosition = FixedWords.HYPHEN_4;
             }
-            int cachedInfoIndex = orderNum - 1;
-            setPlayerCachedInfo(orderType, cachedInfoIndex, playerName, playerPosition);
+            setPlayerCachedInfo(orderType, orderNum, playerName, playerPosition);
         } catch (Exception e) {
             Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
         } finally {
@@ -81,15 +80,15 @@ public class DatabaseUsing {
     /**
      * 1つ(1人)ずつデータベースに登録されている情報をキャッシュ
      */
-    private void setPlayerCachedInfo(int orderType, int cachedInfoIndex, String name, String position) {
+    private void setPlayerCachedInfo(int orderType, int orderNum, String name, String position) {
         switch (orderType) {
             case FixedWords.NORMAL_ORDER:
-                CachedPlayerNamesInfo.instance.setNameNormal(cachedInfoIndex, name);
-                CachedPlayerPositionsInfo.instance.setPositionNormal(cachedInfoIndex, position);
+                CachedPlayerNamesInfo.instance.setNameNormal(orderNum, name);
+                CachedPlayerPositionsInfo.instance.setPositionNormal(orderNum, position);
                 break;
             case FixedWords.DH_ORDER:
-                CachedPlayerNamesInfo.instance.setNameDh(cachedInfoIndex, name);
-                CachedPlayerPositionsInfo.instance.setPositionDh(cachedInfoIndex, position);
+                CachedPlayerNamesInfo.instance.setNameDh(orderNum, name);
+                CachedPlayerPositionsInfo.instance.setPositionDh(orderNum, position);
                 break;
         }
 

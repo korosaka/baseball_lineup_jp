@@ -127,44 +127,45 @@ public class FieldActivity extends BaseAdActivity {
         }
     }
 
+    // TODO refactor
     private void setPlayers() {
         int dhCount = 0;
         //ある打順の守備位置dataがどこかのポジションと合致すれば、その打順登録名を守備フィールドに
-        for (int i = 0; i < playerNumber; i++) {
-            switch (CachedPlayerPositionsInfo.instance.getAppropriatePosition(i)) {
+        for (int orderNum = 1; orderNum <= playerNumber; orderNum++) {
+            switch (CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderNum)) {
                 case "(投)":
                     if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH_ORDER)
-                        setText(position1, orderPitcher, i, true);
+                        setText(position1, orderPitcher, orderNum, true);
                     else
-                        setText(position1, orderPitcher, i, false);
+                        setText(position1, orderPitcher, orderNum, false);
                     break;
                 case "(捕)":
-                    setText(position2, orderCatcher, i, false);
+                    setText(position2, orderCatcher, orderNum, false);
                     break;
                 case "(一)":
-                    setText(position3, orderFirst, i, false);
+                    setText(position3, orderFirst, orderNum, false);
                     break;
                 case "(二)":
-                    setText(position4, orderSecond, i, false);
+                    setText(position4, orderSecond, orderNum, false);
                     break;
                 case "(三)":
-                    setText(position5, orderThird, i, false);
+                    setText(position5, orderThird, orderNum, false);
                     break;
                 case "(遊)":
-                    setText(position6, orderShort, i, false);
+                    setText(position6, orderShort, orderNum, false);
                     break;
                 case "(左)":
-                    setText(position7, orderLeft, i, false);
+                    setText(position7, orderLeft, orderNum, false);
                     break;
                 case "(中)":
-                    setText(position8, orderCenter, i, false);
+                    setText(position8, orderCenter, orderNum, false);
                     break;
                 case "(右)":
-                    setText(position9, orderRight, i, false);
+                    setText(position9, orderRight, orderNum, false);
                     break;
                 case "(DH)":
                     if (dhCount >= maxDh) dhCount = 0;
-                    setText(dh[dhCount], orderDh[dhCount], i, false);
+                    setText(dh[dhCount], orderDh[dhCount], orderNum, false);
                     dhCount++;
                     break;
                 default:
@@ -173,11 +174,11 @@ public class FieldActivity extends BaseAdActivity {
         }
     }
 
-    private void setText(TextView name, TextView order, int num, boolean dhPitcher) {
-        String playerName = customNameSpace(CachedPlayerNamesInfo.instance.getAppropriateName(num));
+    private void setText(TextView name, TextView order, int orderNum, boolean dhPitcher) {
+        String playerName = customNameSpace(CachedPlayerNamesInfo.instance.getAppropriateName(orderNum));
         name.setText(playerName);
-        if (dhPitcher) order.setText("[P]");
-        else order.setText("[" + (num + 1) + "]");
+        if (dhPitcher) order.setText(("[" + FixedWords.PITCHER_INITIAL + "]"));
+        else order.setText(("[" + orderNum + "]"));
 
 
         int textSize;

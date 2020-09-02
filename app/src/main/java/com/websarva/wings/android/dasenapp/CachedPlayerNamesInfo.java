@@ -5,37 +5,42 @@ public class CachedPlayerNamesInfo {
 
     public static CachedPlayerNamesInfo instance = new CachedPlayerNamesInfo();
 
+    // TODO refactor
     private String[] namesOfNormal = new String[9];
     private String[] namesOfDh = new String[10];
 
     // setter
-    public void setNameNormal(int i, String name) {
-        namesOfNormal[i] = name;
+    public void setNameNormal(int orderNum, String name) {
+        namesOfNormal[convertOrderNumToIndexNum(orderNum)] = name;
     }
 
-    public void setNameDh(int i, String name) {
-        namesOfDh[i] = name;
+    public void setNameDh(int orderNum, String name) {
+        namesOfDh[convertOrderNumToIndexNum(orderNum)] = name;
     }
 
 
     // getter
-    public String getNameNormal(int i) {
-        return namesOfNormal[i];
+    public String getNameNormal(int orderNum) {
+        return namesOfNormal[convertOrderNumToIndexNum(orderNum)];
     }
 
-    public String getNameDh(int i) {
-        return namesOfDh[i];
+    public String getNameDh(int orderNum) {
+        return namesOfDh[convertOrderNumToIndexNum(orderNum)];
     }
 
 
-    public String getAppropriateName(int i) {
+    public String getAppropriateName(int orderNum) {
         switch (CurrentOrderVersion.instance.getCurrentVersion()) {
             case FixedWords.NORMAL_ORDER:
-                return getNameNormal(i);
+                return getNameNormal(orderNum);
             case FixedWords.DH_ORDER:
-                return getNameDh(i);
+                return getNameDh(orderNum);
         }
         return FixedWords.EMPTY;
+    }
+
+    private int convertOrderNumToIndexNum(int orderNum) {
+        return orderNum - 1;
     }
 
 }

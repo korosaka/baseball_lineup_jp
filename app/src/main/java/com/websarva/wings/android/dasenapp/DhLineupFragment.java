@@ -25,13 +25,13 @@ public class DhLineupFragment extends LineupParentFragment {
     }
 
     @Override
-    String getPositionFromCache(int index) {
-        return CachedPlayerPositionsInfo.instance.getPositionDh(index);
+    String getPositionFromCache(int orderNum) {
+        return CachedPlayerPositionsInfo.instance.getPositionDh(orderNum);
     }
 
     @Override
-    String getNameFromCache(int index) {
-        return CachedPlayerNamesInfo.instance.getNameDh(index);
+    String getNameFromCache(int orderNum) {
+        return CachedPlayerNamesInfo.instance.getNameDh(orderNum);
     }
 
 }

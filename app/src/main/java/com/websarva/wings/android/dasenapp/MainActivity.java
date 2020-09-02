@@ -166,18 +166,15 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
 
     public void replacing2players(int firstSelectedOrderNum, int secondSelectedOrderNum) {
 
-        int firstIndexForCached = firstSelectedOrderNum - 1;
-        int secondIndexForCached = secondSelectedOrderNum - 1;
-
         // 最初に選択した選手のところに後から選択した選手を上書き
         databaseUsing.registerInfo(firstSelectedOrderNum,
-                CachedPlayerNamesInfo.instance.getAppropriateName(secondIndexForCached),
-                CachedPlayerPositionsInfo.instance.getAppropriatePosition(secondIndexForCached));
+                CachedPlayerNamesInfo.instance.getAppropriateName(secondSelectedOrderNum),
+                CachedPlayerPositionsInfo.instance.getAppropriatePosition(secondSelectedOrderNum));
 
         // 後に選択した選手の場所に最初の選手を登録
         databaseUsing.registerInfo(secondSelectedOrderNum,
-                CachedPlayerNamesInfo.instance.getAppropriateName(firstIndexForCached),
-                CachedPlayerPositionsInfo.instance.getAppropriatePosition(firstIndexForCached));
+                CachedPlayerNamesInfo.instance.getAppropriateName(firstSelectedOrderNum),
+                CachedPlayerPositionsInfo.instance.getAppropriatePosition(firstSelectedOrderNum));
 
         // キャッシュデータもデータベースの内容に合わせる(入れ替え後のデータに更新する)
         databaseUsing.getDatabaseInfo(CurrentOrderVersion.instance.getCurrentVersion(), firstSelectedOrderNum);
@@ -189,25 +186,22 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
 
     private void changeText(int firstSelectedOrderNum, int secondSelectedOrderNum) {
 
-        int firstIndexForCached = firstSelectedOrderNum - 1;
-        int secondIndexForCached = secondSelectedOrderNum - 1;
-
         switch (CurrentOrderVersion.instance.getCurrentVersion()) {
             case FixedWords.NORMAL_ORDER:
-                normalLineupFragment.changeData(firstIndexForCached,
-                        CachedPlayerNamesInfo.instance.getAppropriateName(firstIndexForCached),
-                        CachedPlayerPositionsInfo.instance.getAppropriatePosition(firstIndexForCached));
-                normalLineupFragment.changeData(secondIndexForCached,
-                        CachedPlayerNamesInfo.instance.getAppropriateName(secondIndexForCached),
-                        CachedPlayerPositionsInfo.instance.getAppropriatePosition(secondIndexForCached));
+                normalLineupFragment.changeData(firstSelectedOrderNum,
+                        CachedPlayerNamesInfo.instance.getAppropriateName(firstSelectedOrderNum),
+                        CachedPlayerPositionsInfo.instance.getAppropriatePosition(firstSelectedOrderNum));
+                normalLineupFragment.changeData(secondSelectedOrderNum,
+                        CachedPlayerNamesInfo.instance.getAppropriateName(secondSelectedOrderNum),
+                        CachedPlayerPositionsInfo.instance.getAppropriatePosition(secondSelectedOrderNum));
                 break;
             case FixedWords.DH_ORDER:
-                dhLineupFragment.changeData(firstIndexForCached,
-                        CachedPlayerNamesInfo.instance.getAppropriateName(firstIndexForCached),
-                        CachedPlayerPositionsInfo.instance.getAppropriatePosition(firstIndexForCached));
-                dhLineupFragment.changeData(secondIndexForCached,
-                        CachedPlayerNamesInfo.instance.getAppropriateName(secondIndexForCached),
-                        CachedPlayerPositionsInfo.instance.getAppropriatePosition(secondIndexForCached));
+                dhLineupFragment.changeData(firstSelectedOrderNum,
+                        CachedPlayerNamesInfo.instance.getAppropriateName(firstSelectedOrderNum),
+                        CachedPlayerPositionsInfo.instance.getAppropriatePosition(firstSelectedOrderNum));
+                dhLineupFragment.changeData(secondSelectedOrderNum,
+                        CachedPlayerNamesInfo.instance.getAppropriateName(secondSelectedOrderNum),
+                        CachedPlayerPositionsInfo.instance.getAppropriatePosition(secondSelectedOrderNum));
                 break;
         }
 
@@ -215,10 +209,9 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
 
     private void selectNum(int orderNum) {
 
-        int orderIndex = orderNum - 1;
         readyInputtingName(orderNum,
-                CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderIndex),
-                CachedPlayerNamesInfo.instance.getAppropriateName(orderIndex));
+                CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderNum),
+                CachedPlayerNamesInfo.instance.getAppropriateName(orderNum));
         currentNum = orderNum;
     }
 
@@ -274,20 +267,18 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
 
         databaseUsing.registerInfo(currentNum, playerName, position);
 
-        int indexForCache = currentNum - 1;
-
         switch (CurrentOrderVersion.instance.getCurrentVersion()) {
             //画面のメンバー表に反映（１〜９番まで）
             case FixedWords.NORMAL_ORDER:
-                CachedPlayerNamesInfo.instance.setNameNormal(indexForCache, playerName);
-                CachedPlayerPositionsInfo.instance.setPositionNormal(indexForCache, position);
-                normalLineupFragment.changeData(indexForCache, playerName, position);
+                CachedPlayerNamesInfo.instance.setNameNormal(currentNum, playerName);
+                CachedPlayerPositionsInfo.instance.setPositionNormal(currentNum, position);
+                normalLineupFragment.changeData(currentNum, playerName, position);
                 break;
             case FixedWords.DH_ORDER:
                 if (currentNum == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
-                CachedPlayerNamesInfo.instance.setNameDh(indexForCache, playerName);
-                CachedPlayerPositionsInfo.instance.setPositionDh(indexForCache, position);
-                dhLineupFragment.changeData(indexForCache, playerName, position);
+                CachedPlayerNamesInfo.instance.setNameDh(currentNum, playerName);
+                CachedPlayerPositionsInfo.instance.setPositionDh(currentNum, position);
+                dhLineupFragment.changeData(currentNum, playerName, position);
                 break;
         }
 

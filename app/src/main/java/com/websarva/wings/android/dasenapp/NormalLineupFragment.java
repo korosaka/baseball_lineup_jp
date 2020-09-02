@@ -24,13 +24,13 @@ public class NormalLineupFragment extends LineupParentFragment {
     }
 
     @Override
-    String getPositionFromCache(int index) {
-        return CachedPlayerPositionsInfo.instance.getPositionNormal(index);
+    String getPositionFromCache(int orderNum) {
+        return CachedPlayerPositionsInfo.instance.getPositionNormal(orderNum);
     }
 
     @Override
-    String getNameFromCache(int index) {
-        return CachedPlayerNamesInfo.instance.getNameNormal(index);
+    String getNameFromCache(int orderNum) {
+        return CachedPlayerNamesInfo.instance.getNameNormal(orderNum);
     }
 
 }

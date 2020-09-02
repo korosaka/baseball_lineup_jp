@@ -37,13 +37,12 @@ abstract public class LineupParentFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         players = new ArrayList<>();
-        for (int index = 0; index < numberOfPlayer; index++) {
-            int oderNumber = index + 1;
+        for (int oderNumber = 1; oderNumber <= numberOfPlayer; oderNumber++) {
             PlayerListItemData playerItem =
                     new PlayerListItemData(
                             oderNumber,
-                            getPositionFromCache(index),
-                            getNameFromCache(index));
+                            getPositionFromCache(oderNumber),
+                            getNameFromCache(oderNumber));
             players.add(playerItem);
         }
         listAdapter =
@@ -56,15 +55,19 @@ abstract public class LineupParentFragment extends Fragment {
         setListViewHeightBasedOnChildren(playerList);
     }
 
-    abstract String getPositionFromCache(int index);
+    abstract String getPositionFromCache(int orderNum);
 
-    abstract String getNameFromCache(int index);
+    abstract String getNameFromCache(int orderNum);
 
-    public void changeData(int index, String name, String position) {
+    public void changeData(int orderNum, String name, String position) {
         PlayerListItemData newPlayerItem =
-                new PlayerListItemData(index + 1, position, name);
-        players.set(index, newPlayerItem);
+                new PlayerListItemData(orderNum, position, name);
+        players.set(convertOrderNumToListIndex(orderNum), newPlayerItem);
         listAdapter.notifyDataSetChanged();
+    }
+
+    private int convertOrderNumToListIndex(int orderNum) {
+        return orderNum - 1;
     }
 
     public void highLightButton(Button button) {

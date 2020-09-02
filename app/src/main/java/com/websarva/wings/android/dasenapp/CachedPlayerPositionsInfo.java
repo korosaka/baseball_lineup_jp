@@ -9,35 +9,39 @@ public class CachedPlayerPositionsInfo {
     private String[] positionsOfDh = new String[10];
 
     // setter
-    public void setPositionNormal(int i, String name) {
-        positionsOfNormal[i] = name;
+    public void setPositionNormal(int orderNum, String name) {
+        positionsOfNormal[convertOrderNumToIndexNum(orderNum)] = name;
     }
 
-    public void setPositionDh(int i, String name) {
-        positionsOfDh[i] = name;
-        if (i == 9) positionsOfDh[i] = FixedWords.PITCHER;
+    public void setPositionDh(int orderNum, String name) {
+        positionsOfDh[convertOrderNumToIndexNum(orderNum)] = name;
+        if (orderNum == FixedWords.DH_PITCHER_ORDER)
+            positionsOfDh[convertOrderNumToIndexNum(orderNum)] = FixedWords.PITCHER;
     }
 
 
     // getter
-    public String getPositionNormal(int i) {
-        return positionsOfNormal[i];
+    public String getPositionNormal(int orderNum) {
+        return positionsOfNormal[convertOrderNumToIndexNum(orderNum)];
     }
 
-    public String getPositionDh(int i) {
-        return positionsOfDh[i];
+    public String getPositionDh(int orderNum) {
+        return positionsOfDh[convertOrderNumToIndexNum(orderNum)];
     }
 
 
-    public String getAppropriatePosition(int i) {
+    public String getAppropriatePosition(int orderNum) {
         switch (CurrentOrderVersion.instance.getCurrentVersion()) {
             case FixedWords.NORMAL_ORDER:
-                return getPositionNormal(i);
+                return getPositionNormal(orderNum);
             case FixedWords.DH_ORDER:
-                return getPositionDh(i);
+                return getPositionDh(orderNum);
         }
         return FixedWords.EMPTY;
     }
 
+    private int convertOrderNumToIndexNum(int orderNum) {
+        return orderNum - 1;
+    }
 
 }
