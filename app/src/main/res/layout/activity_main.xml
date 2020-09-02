@@ -38,7 +38,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="3dp"
-                        android:text="@string/current_num"
+                        android:text="@string/hyphen_4"
                         android:textColor="#003300"
                         android:textSize="24sp"
                         android:textStyle="bold" />

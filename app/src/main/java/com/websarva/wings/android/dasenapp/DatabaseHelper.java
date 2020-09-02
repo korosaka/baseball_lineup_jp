@@ -5,30 +5,48 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    //データベースファイル名の定数フィールド
-    private static final String DATABASE_NAME = "lineup.db";
-    //バージョン情報の定数フィールド
-    private static final int DATABASE_VERSION = 1;
+    /**
+     * when we update a table or add new a table, this version(number) must be changed
+     */
+    private static final int DATABASE_VERSION = 2;
+    private static final int PREVIOUS_DB_VERSION = 1;
+    private static final String CREATE_NORMAL_ORDER_TABLE =
+            "CREATE TABLE " +
+                    FixedWords.NORMAL_ORDER_TABLE + "(" +
+                    FixedWords.COLUMN_ORDER_NUMBER + " INTEGER PRIMARY KEY, " +
+                    FixedWords.COLUMN_NAME + " TEXT, " +
+                    FixedWords.COLUMN_POSITION + " TEXT);";
+    private static final String CREATE_DH_ORDER_TABLE =
+            "CREATE TABLE " +
+                    FixedWords.DH_ORDER_TABLE + "(" +
+                    FixedWords.COLUMN_ORDER_NUMBER + " INTEGER PRIMARY KEY, " +
+                    FixedWords.COLUMN_NAME + " TEXT, " +
+                    FixedWords.COLUMN_POSITION + " TEXT);";
 
-    //コンストラクタ
-    public DatabaseHelper(Context context){
-        //親クラスのコンストラクタ
-        super(context,DATABASE_NAME,null,DATABASE_VERSION);
+
+    public DatabaseHelper(Context context) {
+        super(context, FixedWords.DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    /**
+     * Creating tables is done only once
+     * if you want add columns to a table, need to create another table newly
+     */
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_NORMAL_ORDER_TABLE);
+        db.execSQL(CREATE_DH_ORDER_TABLE);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db){
-        //テーブル作成用SQL文字列作成
-        //テーブルの作成は最初の一度きり
-        //一度テーブルを作るとその名前のテーブルは最初の形で残り、カラムの名前などを上書きするとエラーになる！
-        //だからテーブルの内容変えたら、テーブルの名前を変えるorアプリを消去等して、別のテーブルとして作り直す！！
-        String sql = "CREATE TABLE lineup(_id INTEGER PRIMARY KEY, number INTEGER, playerName TEXT,position TEXT);";
-        //実行
-        db.execSQL(sql);
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion == PREVIOUS_DB_VERSION) deleteOldTable(db);
+        db.execSQL(CREATE_NORMAL_ORDER_TABLE);
+        db.execSQL(CREATE_DH_ORDER_TABLE);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion){
-
+    private void deleteOldTable(SQLiteDatabase db) {
+        String deleteSql = "DROP TABLE IF EXISTS " + FixedWords.OLD_ORDER_TABLE + ";";
+        db.execSQL(deleteSql);
     }
 }

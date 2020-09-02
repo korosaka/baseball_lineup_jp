@@ -4,15 +4,11 @@ public class FixedWords {
 
     public static final String EMPTY = "";
     public static final String SPACE = " ";
+    public static final String HYPHEN_4 = "----";
+    public static final String HYPHEN_5 = "-----";
 
-    public static final int DEFAULT = 1;
-    public static final int DH = 2;
-    public static final int ALL10 = 3;
-    public static final int ALL11 = 4;
-    public static final int ALL12 = 5;
-    public static final int ALL13 = 6;
-    public static final int ALL14 = 7;
-    public static final int ALL15 = 8;
+    public static final int NORMAL_ORDER = 1;
+    public static final int DH_ORDER = 2;
 
     public static final String JP_NUMBER = "番";
     public static final String PITCHER = "(投)";
@@ -34,4 +30,15 @@ public class FixedWords {
     public static final String COLOR_EMPHASIZING = "#ff3300";
     public static final String COLOR_WHITE = "#ffffff";
     public static final String COLOR_BLACK = "#000000";
+
+    public static final String DATABASE_NAME = "lineup.db";
+    public static final String OLD_ORDER_TABLE = "lineup";
+    public static final String NORMAL_ORDER_TABLE = "lineup_normal";
+    public static final String DH_ORDER_TABLE = "lineup_dh";
+    public static final String COLUMN_ORDER_NUMBER = "order_number";
+    public static final String COLUMN_NAME = "playerName";
+    public static final String COLUMN_POSITION = "position";
+
+    public static final String ERROR_LOG_TAG = "errorTag";
+    public static final String ERROR_LOG_MESSAGE = "error happened!";
 }
