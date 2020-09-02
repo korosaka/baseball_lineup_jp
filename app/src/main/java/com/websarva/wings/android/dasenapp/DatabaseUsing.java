@@ -16,16 +16,16 @@ public class DatabaseUsing {
 
     public void getPlayersInfo(int orderType) {
 
-        int players = FixedWords.NUMBER_OF_LINEUP_NORMAL;
+        int numberOfPlayers = FixedWords.NUMBER_OF_LINEUP_NORMAL;
         switch (orderType) {
             case FixedWords.NORMAL_ORDER:
                 break;
             case FixedWords.DH_ORDER:
-                players = FixedWords.NUMBER_OF_LINEUP_DH;
+                numberOfPlayers = FixedWords.NUMBER_OF_LINEUP_DH;
                 break;
         }
 
-        for (int orderNum = 1; orderNum <= players; orderNum++) {
+        for (int orderNum = 1; orderNum <= numberOfPlayers; orderNum++) {
             getDatabaseInfo(orderType, orderNum);
         }
 
