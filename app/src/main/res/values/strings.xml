@@ -11,9 +11,8 @@
     <string name="ninth">９番</string>
     <string name="pitcher">P</string>
     <string name="pitcher_text">(投)</string>
-    <string name="unselected">-----</string>
-    <string name="current_num">----</string>
-    <string name="position">----</string>
+    <string name="hyphen_5">-----</string>
+    <string name="hyphen_4">----</string>
     <string name="save">登録</string>
     <string name="clear">クリア</string>
     <string name="title"><u>Starting Member</u></string>

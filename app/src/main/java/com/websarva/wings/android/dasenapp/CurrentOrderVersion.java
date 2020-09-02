@@ -5,7 +5,7 @@ public class CurrentOrderVersion {
 
     public static CurrentOrderVersion instance = new CurrentOrderVersion();
 
-    private int currentVersion = FixedWords.DEFAULT;
+    private int currentVersion = FixedWords.NORMAL_ORDER;
 
     public void setCurrentVersion(int version) {
         currentVersion = version;

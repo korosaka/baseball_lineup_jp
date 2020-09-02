@@ -117,36 +117,12 @@ public class FieldActivity extends BaseAdActivity {
 
     private void setPlayerCount() {
         switch (CurrentOrderVersion.instance.getCurrentVersion()) {
-            case FixedWords.DEFAULT:
+            case FixedWords.NORMAL_ORDER:
                 playerNumber = 9;
                 break;
-            case FixedWords.DH:
+            case FixedWords.DH_ORDER:
                 playerNumber = 10;
                 maxDh = 1;
-                break;
-            case FixedWords.ALL10:
-                playerNumber = 10;
-                maxDh = 1;
-                break;
-            case FixedWords.ALL11:
-                playerNumber = 11;
-                maxDh = 2;
-                break;
-            case FixedWords.ALL12:
-                playerNumber = 12;
-                maxDh = 3;
-                break;
-            case FixedWords.ALL13:
-                playerNumber = 13;
-                maxDh = 4;
-                break;
-            case FixedWords.ALL14:
-                playerNumber = 14;
-                maxDh = 5;
-                break;
-            case FixedWords.ALL15:
-                playerNumber = 15;
-                maxDh = 6;
                 break;
         }
     }
@@ -157,7 +133,7 @@ public class FieldActivity extends BaseAdActivity {
         for (int i = 0; i < playerNumber; i++) {
             switch (CachedPlayerPositionsInfo.instance.getAppropriatePosition(i)) {
                 case "(投)":
-                    if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH)
+                    if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH_ORDER)
                         setText(position1, orderPitcher, i, true);
                     else
                         setText(position1, orderPitcher, i, false);
