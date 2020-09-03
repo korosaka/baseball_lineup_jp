@@ -164,17 +164,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="80dp"
                 android:orientation="horizontal">
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_weight="1.0"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
-                    android:onClick="onClickField"
+                    android:layout_weight="1.0"
                     android:background="@drawable/field_button_background"
+                    android:onClick="onClickField"
                     android:text="@string/field"
                     android:textColor="#000000"
                     android:textSize="18sp"
@@ -182,17 +181,37 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_weight="1.0"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
-                    android:onClick="onClickShareOrder"
+                    android:layout_weight="1.0"
                     android:background="@drawable/share_button_background"
-                    android:textStyle="bold"
+                    android:onClick="onClickShareOrder"
+                    android:text="@string/share"
+                    android:textAllCaps="false"
                     android:textColor="#000000"
                     android:textSize="18sp"
-                    android:textAllCaps="false"
-                    android:text="@string/share" />
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="80dp">
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/back_button_background"
+                    android:onClick="onClickBackToTop"
+                    android:text="@string/back"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>

@@ -1,10 +1,8 @@
 package com.websarva.wings.android.dasenapp;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
+// TODO DHと全て共通化できる(Cache class)
 public class NormalLineupFragment extends LineupParentFragment {
 
     public static NormalLineupFragment newInstance() {
@@ -13,14 +11,6 @@ public class NormalLineupFragment extends LineupParentFragment {
         args.putInt(FixedWords.NUMBER_OF_PLAYER, FixedWords.NUMBER_OF_LINEUP_NORMAL);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_normal_lineup, container, false);
-        playerList = view.findViewById(R.id.player_list_normal);
-        return view;
     }
 
     @Override

@@ -7,6 +7,7 @@ public class FixedWords {
     public static final String HYPHEN_4 = "----";
     public static final String HYPHEN_5 = "-----";
 
+    public static final String ORDER_TYPE = "orderType";
     public static final int NORMAL_ORDER = 1;
     public static final int DH_ORDER = 2;
 

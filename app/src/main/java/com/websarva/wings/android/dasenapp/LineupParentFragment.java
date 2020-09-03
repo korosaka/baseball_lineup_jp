@@ -33,6 +33,15 @@ abstract public class LineupParentFragment extends Fragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_starting_lineup, container, false);
+        playerList = view.findViewById(R.id.starting_player_list);
+        return view;
+    }
+
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -50,7 +59,7 @@ abstract public class LineupParentFragment extends Fragment {
                         getContext(),
                         R.layout.player_list_item,
                         players,
-                        (MainActivity) getActivity());
+                        (MakingOrderActivity) getActivity());
         playerList.setAdapter(listAdapter);
         setListViewHeightBasedOnChildren(playerList);
     }

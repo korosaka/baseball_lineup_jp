@@ -32,12 +32,15 @@ public class FieldActivity extends BaseAdActivity {
     private int maxDh = 0;
     private static int displayCount = 0;
     private static final int INTERSTITIAL_AD_FREQUENCY = 4;
+    private int orderType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_field);
         setAdView(findViewById(R.id.ad_view_container_on_field));
         super.onCreate(savedInstanceState);
+
+        orderType = getIntent().getIntExtra(FixedWords.ORDER_TYPE, FixedWords.NORMAL_ORDER);
         prepareInterstitialAd();
         bindLayout();
         setPlayerCount();
@@ -116,7 +119,7 @@ public class FieldActivity extends BaseAdActivity {
     }
 
     private void setPlayerCount() {
-        switch (CurrentOrderVersion.instance.getCurrentVersion()) {
+        switch (orderType) {
             case FixedWords.NORMAL_ORDER:
                 playerNumber = 9;
                 break;
@@ -132,9 +135,9 @@ public class FieldActivity extends BaseAdActivity {
         int dhCount = 0;
         //ある打順の守備位置dataがどこかのポジションと合致すれば、その打順登録名を守備フィールドに
         for (int orderNum = 1; orderNum <= playerNumber; orderNum++) {
-            switch (CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderNum)) {
+            switch (CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderType, orderNum)) {
                 case "(投)":
-                    if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH_ORDER)
+                    if (orderType == FixedWords.DH_ORDER)
                         setText(position1, orderPitcher, orderNum, true);
                     else
                         setText(position1, orderPitcher, orderNum, false);
@@ -175,7 +178,7 @@ public class FieldActivity extends BaseAdActivity {
     }
 
     private void setText(TextView name, TextView order, int orderNum, boolean dhPitcher) {
-        String playerName = customNameSpace(CachedPlayerNamesInfo.instance.getAppropriateName(orderNum));
+        String playerName = customNameSpace(CachedPlayerNamesInfo.instance.getAppropriateName(orderType, orderNum));
         name.setText(playerName);
         if (dhPitcher) order.setText(("[" + FixedWords.PITCHER_INITIAL + "]"));
         else order.setText(("[" + orderNum + "]"));
