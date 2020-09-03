@@ -5,7 +5,7 @@
     android:background="@drawable/order_background">
 
     <ListView
-        android:id="@+id/player_list_dh"
+        android:id="@+id/starting_player_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

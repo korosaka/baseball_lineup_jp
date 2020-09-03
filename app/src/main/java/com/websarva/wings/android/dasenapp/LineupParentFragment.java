@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,6 +31,15 @@ abstract public class LineupParentFragment extends Fragment {
             numberOfPlayer = getArguments().getInt(FixedWords.NUMBER_OF_PLAYER);
         }
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_starting_lineup, container, false);
+        playerList = view.findViewById(R.id.starting_player_list);
+        return view;
+    }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
