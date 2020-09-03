@@ -29,12 +29,9 @@ abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO refactor ?
-        switch (item.getItemId()) {
-            case R.id.policy:
-                PrivacyPolicyFragment policyFragment = PrivacyPolicyFragment.newInstance(FixedWords.CLOSE);
-                policyFragment.show(getSupportFragmentManager(), FixedWords.PRIVACY_POLICY);
-                break;
+        if (item.getItemId() == R.id.policy) {
+            PrivacyPolicyFragment policyFragment = PrivacyPolicyFragment.newInstance(FixedWords.CLOSE);
+            policyFragment.show(getSupportFragmentManager(), FixedWords.PRIVACY_POLICY);
         }
         return super.onOptionsItemSelected(item);
     }

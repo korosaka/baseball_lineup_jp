@@ -116,12 +116,14 @@ public class DatabaseUsing {
 
     private void insertSqlData(int orderType, int orderNum, SQLiteDatabase dbW, String name, String position) {
         String sqlInsert = makeInsertQuery(orderType);
+        int indexOrderNum = 1;
+        int indexPlayerName = 2;
+        int indexPlayerPosition = 3;
 
-        // TODO refactor (number)
         SQLiteStatement stmt = dbW.compileStatement(sqlInsert);
-        stmt.bindLong(1, orderNum);
-        stmt.bindString(2, name);
-        stmt.bindString(3, position);
+        stmt.bindLong(indexOrderNum, orderNum);
+        stmt.bindString(indexPlayerName, name);
+        stmt.bindString(indexPlayerPosition, position);
 
         stmt.executeInsert();
     }

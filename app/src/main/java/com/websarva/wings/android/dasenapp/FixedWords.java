@@ -12,8 +12,18 @@ public class FixedWords {
     public static final int DH_ORDER = 2;
 
     public static final String JP_NUMBER = "番";
-    public static final String PITCHER = "(投)";
     public static final String PITCHER_INITIAL = "P";
+    public static final String PITCHER = "(投)";
+    public static final String CATCHER = "(捕)";
+    public static final String FIRST_BASE = "(一)";
+    public static final String SECOND_BASE = "(二)";
+    public static final String THIRD_BASE = "(三)";
+    public static final String SHORT_STOP = "(遊)";
+    public static final String LEFT = "(左)";
+    public static final String CENTER = "(中)";
+    public static final String RIGHT = "(右)";
+    public static final String DH = "(DH)";
+
 
     public static final String PRIVACY_POLICY = "privacyPolicy";
     public static final String BUTTON_TYPE = "buttonType";

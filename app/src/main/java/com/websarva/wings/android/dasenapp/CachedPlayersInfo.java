@@ -34,8 +34,6 @@ public class CachedPlayersInfo {
 
     private void setPositionDh(int orderNum, String position) {
         positionsOfDh[convertOrderNumToIndexNum(orderNum)] = position;
-        if (orderNum == FixedWords.DH_PITCHER_ORDER)
-            positionsOfDh[convertOrderNumToIndexNum(orderNum)] = FixedWords.PITCHER;
     }
 
     private void setPositionToCache(int orderType, int orderNum, String position) {

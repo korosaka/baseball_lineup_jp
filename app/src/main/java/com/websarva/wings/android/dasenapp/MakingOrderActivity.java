@@ -83,17 +83,11 @@ public class MakingOrderActivity extends BaseAdActivity implements PlayerListAda
         etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean flag) {
-//                フォーカスを取得→キーボード表示
-                // TODO refactor
-                if (flag) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(view, 0);
-                }
-//                フォーカス外れる→キーボード非表示
-                else {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
+                // get focus → display keyboard
+                // lose focus → dismiss keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (flag) imm.showSoftInput(view, 0);
+                else imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
     }
@@ -226,7 +220,6 @@ public class MakingOrderActivity extends BaseAdActivity implements PlayerListAda
         String playerName = etName.getText().toString();
         if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
         String position = (String) spinner.getSelectedItem();
-        // TODO kakunin
         if (currentNum == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
         databaseUsing.registerInfo(currentNum, playerName, position, orderType);
         CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, currentNum, position, playerName);
