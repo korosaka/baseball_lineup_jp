@@ -54,10 +54,7 @@ public class MakingOrderActivity extends BaseAdActivity implements PlayerListAda
 
         orderType = getIntent().getIntExtra(FixedWords.ORDER_TYPE, FixedWords.NORMAL_ORDER);
         databaseUsing = new DatabaseUsing(this);
-        for (int orderType = FixedWords.NORMAL_ORDER; orderType <= FixedWords.DH_ORDER; orderType++) {
-            databaseUsing.getPlayersInfo(orderType);
-        }
-
+        databaseUsing.getPlayersInfo(orderType);
         bindLayout();
         setEdit();
         setOrderFragment();
