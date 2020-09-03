@@ -9,6 +9,7 @@ public class CachedPlayerNamesInfo {
     private String[] namesOfNormal = new String[9];
     private String[] namesOfDh = new String[10];
 
+    // TODO setAppropriateName
     // setter
     public void setNameNormal(int orderNum, String name) {
         namesOfNormal[convertOrderNumToIndexNum(orderNum)] = name;
@@ -29,8 +30,8 @@ public class CachedPlayerNamesInfo {
     }
 
 
-    public String getAppropriateName(int orderNum) {
-        switch (CurrentOrderVersion.instance.getCurrentVersion()) {
+    public String getAppropriateName(int orderType, int orderNum) {
+        switch (orderType) {
             case FixedWords.NORMAL_ORDER:
                 return getNameNormal(orderNum);
             case FixedWords.DH_ORDER:

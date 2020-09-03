@@ -97,10 +97,9 @@ public class DatabaseUsing {
     /**
      * store data in DB (delete → register)
      */
-    public void registerInfo(int orderNum, String name, String position) {
+    public void registerInfo(int orderNum, String name, String position, int orderType) {
 
         SQLiteDatabase dbW = helper.getWritableDatabase();
-        int orderType = CurrentOrderVersion.instance.getCurrentVersion();
 
         try {
             deleteSqlData(orderType, orderNum, dbW);
@@ -135,6 +134,7 @@ public class DatabaseUsing {
     private void insertSqlData(int orderType, int orderNum, SQLiteDatabase dbW, String name, String position) {
         String sqlInsert = makeInsertQuery(orderType);
 
+        // TODO refactor (number)
         SQLiteStatement stmt = dbW.compileStatement(sqlInsert);
         stmt.bindLong(1, orderNum);
         stmt.bindString(2, name);

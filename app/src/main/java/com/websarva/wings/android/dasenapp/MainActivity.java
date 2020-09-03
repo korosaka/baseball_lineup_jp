@@ -25,35 +25,24 @@ import androidx.fragment.app.FragmentTransaction;
  * To use this Activity's method in PlayerListAdapter, implementing PlayerListAdapterListener
  */
 public class MainActivity extends BaseAdActivity implements PlayerListAdapterListener {
-    //選択した打順
-    TextView tvSelectNum;
-    //入力欄
-    public EditText etName;
-    //登録ボタン
-    Button record;
-    //    キャンセルボタン
-    Button cancel;
-    // 入れ替えボタン
-    Button replace;
-    // 入れ替え中フラグ
-    Boolean isReplacing = false;
-    // １つ目入れ替え選択フラグ
-    Boolean isFirstReplaceClicked = false;
-    //スタメンタイトル
-    TextView title;
-    //グローバル変数i（データベースへの登録・検索で使う）
-    int currentNum = 0;
-    //スピナーオブジェクト
-    Spinner spinner;
-    //クリアボタン（現在上部に入力中のものを未入力状態に戻す（選択打順も））
-    Button clear;
+    private TextView tvSelectNum;
+    private EditText etName;
+    private Button record;
+    private Button cancel;
+    private Button replace;
+    private Boolean isReplacing = false;
+    private Boolean isFirstReplaceClicked = false;
+    private TextView title;
+    private int currentNum = 0;
+    private Spinner spinner;
+    private Button clear;
 
-    int firstClickedOrderNum = -1;
+    private int firstClickedOrderNum = -1;
     private Button firstClickedButton;
     private DatabaseUsing databaseUsing;
-    private NormalLineupFragment normalLineupFragment;
-    private DhLineupFragment dhLineupFragment;
+    private LineupParentFragment lineupFragment;
     private Button dhPitcherButton;
+    private int orderType;
 
 
     //ここからmain
@@ -63,6 +52,7 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         setAdView(findViewById(R.id.ad_view_container_on_order));
         super.onCreate(savedInstanceState);
 
+        orderType = getIntent().getIntExtra(FixedWords.ORDER_TYPE, FixedWords.NORMAL_ORDER);
         databaseUsing = new DatabaseUsing(this);
         for (int orderType = FixedWords.NORMAL_ORDER; orderType <= FixedWords.DH_ORDER; orderType++) {
             databaseUsing.getPlayersInfo(orderType);
@@ -102,6 +92,7 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
             @Override
             public void onFocusChange(View view, boolean flag) {
 //                フォーカスを取得→キーボード表示
+                // TODO refactor
                 if (flag) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.showSoftInput(view, 0);
@@ -116,13 +107,20 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
     }
 
     private void setOrderFragment() {
-        normalLineupFragment = NormalLineupFragment.newInstance();
-        dhLineupFragment = DhLineupFragment.newInstance();
+
+        switch (orderType) {
+            case FixedWords.NORMAL_ORDER:
+                lineupFragment = NormalLineupFragment.newInstance();
+                setSpinnerResource(getResources().getStringArray(R.array.positions));
+                break;
+            case FixedWords.DH_ORDER:
+                lineupFragment = DhLineupFragment.newInstance();
+                setSpinnerResource(getResources().getStringArray(R.array.positions_dh));
+                break;
+        }
+        if (lineupFragment == null) return;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.lineup_container, normalLineupFragment);
-        transaction.add(R.id.lineup_container, dhLineupFragment);
-        transaction.show(normalLineupFragment);
-        transaction.hide(dhLineupFragment);
+        transaction.add(R.id.lineup_container, lineupFragment);
         transaction.commit();
     }
 
@@ -132,18 +130,14 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
     }
 
     private void replaceMethod(int orderNum, Button numButton) {
-        // 入れ替え時
         if (!isFirstReplaceClicked) {
             // 1つめ選択時
             selectFirstReplacing(orderNum, numButton);
         } else {
             // 2つめ選択時
             if (orderNum == firstClickedOrderNum) {
-                // 同じボタンがクリックされた →　元に戻す
                 cancelFirstClick(numButton);
             } else {
-                // 異なるボタン →入れ替え処理
-                // DB/Layout内で入れ替え
                 replacing2players(firstClickedOrderNum, orderNum);
                 cancelReplacing();
                 setLayoutDefault();
@@ -153,13 +147,13 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
 
     private void selectFirstReplacing(int orderNum, Button numButton) {
         firstClickedButton = numButton;
-        changeButtonColor(numButton);
+        lineupFragment.highLightButton(numButton);
         firstClickedOrderNum = orderNum;
         isFirstReplaceClicked = true;
     }
 
     private void cancelFirstClick(Button numButton) {
-        setButtonDefault(numButton);
+        lineupFragment.setButtonDefault(numButton);
         isFirstReplaceClicked = false;
         firstClickedOrderNum = -1;
     }
@@ -168,55 +162,41 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
 
         // 最初に選択した選手のところに後から選択した選手を上書き
         databaseUsing.registerInfo(firstSelectedOrderNum,
-                CachedPlayerNamesInfo.instance.getAppropriateName(secondSelectedOrderNum),
-                CachedPlayerPositionsInfo.instance.getAppropriatePosition(secondSelectedOrderNum));
+                CachedPlayerNamesInfo.instance.getAppropriateName(orderType, secondSelectedOrderNum),
+                CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderType, secondSelectedOrderNum),
+                orderType);
 
         // 後に選択した選手の場所に最初の選手を登録
         databaseUsing.registerInfo(secondSelectedOrderNum,
-                CachedPlayerNamesInfo.instance.getAppropriateName(firstSelectedOrderNum),
-                CachedPlayerPositionsInfo.instance.getAppropriatePosition(firstSelectedOrderNum));
+                CachedPlayerNamesInfo.instance.getAppropriateName(orderType, firstSelectedOrderNum),
+                CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderType, firstSelectedOrderNum),
+                orderType);
 
         // キャッシュデータもデータベースの内容に合わせる(入れ替え後のデータに更新する)
-        databaseUsing.getDatabaseInfo(CurrentOrderVersion.instance.getCurrentVersion(), firstSelectedOrderNum);
-        databaseUsing.getDatabaseInfo(CurrentOrderVersion.instance.getCurrentVersion(), secondSelectedOrderNum);
+        databaseUsing.getDatabaseInfo(orderType, firstSelectedOrderNum);
+        databaseUsing.getDatabaseInfo(orderType, secondSelectedOrderNum);
 
         // TextViewも更新
         changeText(firstSelectedOrderNum, secondSelectedOrderNum);
     }
 
     private void changeText(int firstSelectedOrderNum, int secondSelectedOrderNum) {
-
-        switch (CurrentOrderVersion.instance.getCurrentVersion()) {
-            case FixedWords.NORMAL_ORDER:
-                normalLineupFragment.changeData(firstSelectedOrderNum,
-                        CachedPlayerNamesInfo.instance.getAppropriateName(firstSelectedOrderNum),
-                        CachedPlayerPositionsInfo.instance.getAppropriatePosition(firstSelectedOrderNum));
-                normalLineupFragment.changeData(secondSelectedOrderNum,
-                        CachedPlayerNamesInfo.instance.getAppropriateName(secondSelectedOrderNum),
-                        CachedPlayerPositionsInfo.instance.getAppropriatePosition(secondSelectedOrderNum));
-                break;
-            case FixedWords.DH_ORDER:
-                dhLineupFragment.changeData(firstSelectedOrderNum,
-                        CachedPlayerNamesInfo.instance.getAppropriateName(firstSelectedOrderNum),
-                        CachedPlayerPositionsInfo.instance.getAppropriatePosition(firstSelectedOrderNum));
-                dhLineupFragment.changeData(secondSelectedOrderNum,
-                        CachedPlayerNamesInfo.instance.getAppropriateName(secondSelectedOrderNum),
-                        CachedPlayerPositionsInfo.instance.getAppropriatePosition(secondSelectedOrderNum));
-                break;
-        }
-
+        lineupFragment.changeData(firstSelectedOrderNum,
+                CachedPlayerNamesInfo.instance.getAppropriateName(orderType, firstSelectedOrderNum),
+                CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderType, firstSelectedOrderNum));
+        lineupFragment.changeData(secondSelectedOrderNum,
+                CachedPlayerNamesInfo.instance.getAppropriateName(orderType, secondSelectedOrderNum),
+                CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderType, secondSelectedOrderNum));
     }
 
     private void selectNum(int orderNum) {
-
         readyInputtingName(orderNum,
-                CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderNum),
-                CachedPlayerNamesInfo.instance.getAppropriateName(orderNum));
+                CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderType, orderNum),
+                CachedPlayerNamesInfo.instance.getAppropriateName(orderType, orderNum));
         currentNum = orderNum;
     }
 
-    //文字列からスピナーをセットするメソッド（上記メソッドで使用）
-    private void setSpinner(Spinner spinner, String position) {
+    private void selectSpinnerItem(Spinner spinner, String position) {
         SpinnerAdapter adapter = spinner.getAdapter();
         int index = 0;
         for (int i = 0; i < adapter.getCount(); i++) {
@@ -228,11 +208,11 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         spinner.setSelection(index);
     }
 
+    // TODO refactor ?
     private void readyInputtingName(int orderNum, String position, String name) {
         spinner.setEnabled(true);
         tvSelectNum.setText((orderNum + FixedWords.JP_NUMBER));
-        //下記メソッド使用
-        setSpinner(spinner, position);
+        selectSpinnerItem(spinner, position);
         etName.setText(name);
         if (etName.getText().toString().equals("-----")) etName.setText("");
         etName.setEnabled(true);
@@ -248,45 +228,36 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         replace.setEnabled(false);
         replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
 
-        // DH制の投手の場合のみ対応
-        if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH_ORDER &&
+        if (orderType == FixedWords.DH_ORDER &&
                 orderNum == FixedWords.DH_PITCHER_ORDER) {
             tvSelectNum.setText(FixedWords.PITCHER_INITIAL);
-            setSpinner(spinner, FixedWords.HYPHEN_4);
+            selectSpinnerItem(spinner, FixedWords.HYPHEN_4);
             spinner.setEnabled(false);
         }
     }
 
-    //登録ボタン押した処理
     public void onClickSave(View view) {
-        //入力文字列取得
         String playerName = etName.getText().toString();
         if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
-        //ポジション取得
         String position = (String) spinner.getSelectedItem();
+        databaseUsing.registerInfo(currentNum, playerName, position, orderType);
 
-        databaseUsing.registerInfo(currentNum, playerName, position);
-
-        switch (CurrentOrderVersion.instance.getCurrentVersion()) {
-            //画面のメンバー表に反映（１〜９番まで）
+        switch (orderType) {
             case FixedWords.NORMAL_ORDER:
                 CachedPlayerNamesInfo.instance.setNameNormal(currentNum, playerName);
                 CachedPlayerPositionsInfo.instance.setPositionNormal(currentNum, position);
-                normalLineupFragment.changeData(currentNum, playerName, position);
                 break;
             case FixedWords.DH_ORDER:
                 if (currentNum == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
                 CachedPlayerNamesInfo.instance.setNameDh(currentNum, playerName);
                 CachedPlayerPositionsInfo.instance.setPositionDh(currentNum, position);
-                dhLineupFragment.changeData(currentNum, playerName, position);
                 break;
         }
-
+        lineupFragment.changeData(currentNum, playerName, position);
         setLayoutDefault();
     }
 
     private void setLayoutDefault() {
-        //それぞれ初期状態に戻す
         tvSelectNum.setText(getString(R.string.hyphen_4));
         etName.setText(FixedWords.EMPTY);
         spinner.setSelection(0);
@@ -303,44 +274,31 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
     }
 
-    //クリアボタン処理
     public void onClickClear(View view) {
-        //入力名をクリア状態に
-        etName.setText("");
-        //スピナー（守備位置）を未選択状態に戻す
+        etName.setText(FixedWords.EMPTY);
         spinner.setSelection(0);
     }
 
-    //    キャンセルボタン処理
     public void onClickCancel(View view) {
-
-        // 入れ替えボタンクリック時のキャンセルor入力中のキャンセル？
         if (isReplacing) cancelReplacing();
-        //それぞれ初期状態に戻す
         setLayoutDefault();
     }
 
-    // 入れ替えボタン処理
     public void onClickReplace(View view) {
-
-        if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH_ORDER)
-            setPitcherButtonEnable(false);
-        // 入れ替えクリックされているフラグ
+        if (orderType == FixedWords.DH_ORDER) setPitcherButtonEnable(false);
         isReplacing = true;
-        // 入れ替えボタンはenable(false)に
         replace.setEnabled(false);
         replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
-        // キャンセルはできるように
         cancel.setEnabled(true);
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
-        // タイトルが『２つボタンクリック』になる
         title.setText(R.string.replace_title);
         title.setTextColor(Color.parseColor(FixedWords.COLOR_EMPHASIZING));
-
     }
 
     public void onClickField(View view) {
-        startActivity(new Intent(MainActivity.this, FieldActivity.class));
+        Intent intent = new Intent(MainActivity.this, FieldActivity.class);
+        intent.putExtra(FixedWords.ORDER_TYPE, orderType);
+        startActivity(intent);
 
         setLayoutDefault();
         if (isReplacing) cancelReplacing();
@@ -352,7 +310,7 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
     }
 
 
-    //オプションメニュー追加
+    // TODO move to parent class
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //メニューインフレター取得
@@ -363,20 +321,11 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         return super.onCreateOptionsMenu(menu);
     }
 
-    //オプションメニューを選択した時の処理
+    // TODO move to parent class
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //IDのR値による処理分岐
+        // TODO refactor ?
         switch (item.getItemId()) {
-            case R.id.oder:
-                showOrder(FixedWords.NORMAL_ORDER);
-                setSpinner(getResources().getStringArray(R.array.positions));
-                break;
-            //DHの場合
-            case R.id.dh:
-                showOrder(FixedWords.DH_ORDER);
-                setSpinner(getResources().getStringArray(R.array.positions_dh));
-                break;
             case R.id.policy:
                 PrivacyPolicyFragment policyFragment = PrivacyPolicyFragment.newInstance(FixedWords.CLOSE);
                 policyFragment.show(getSupportFragmentManager(), FixedWords.PRIVACY_POLICY);
@@ -384,14 +333,9 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         }
         setLayoutDefault();
         if (isReplacing) cancelReplacing();
-
-        //親クラス同名メソッドで戻り値返却
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * 入れ替え処理中ならリセット
-     */
     private void cancelReplacing() {
         if (isFirstReplaceClicked) cancelFirstClick(firstClickedButton);
         isReplacing = false;
@@ -401,8 +345,7 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
         cancel.setEnabled(false);
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
-        if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH_ORDER)
-            setPitcherButtonEnable(true);
+        if (orderType == FixedWords.DH_ORDER) setPitcherButtonEnable(true);
     }
 
     private void setPitcherButtonEnable(boolean enable) {
@@ -412,47 +355,24 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         dhPitcherButton.setBackground(ResourcesCompat.getDrawable(getResources(), backgroundId, null));
     }
 
+    // TODO may be needed for function of sub members
+//    private void showOrder(int orderType) {
+//
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        switch (orderType) {
+//            case FixedWords.NORMAL_ORDER:
+//                transaction.hide(dhLineupFragment);
+//                transaction.show(normalLineupFragment);
+//                break;
+//            case FixedWords.DH_ORDER:
+//                transaction.hide(normalLineupFragment);
+//                transaction.show(dhLineupFragment);
+//                break;
+//        }
+//        transaction.commit();
+//    }
 
-    private void changeButtonColor(Button numButton) {
-        switch (CurrentOrderVersion.instance.getCurrentVersion()) {
-            case FixedWords.NORMAL_ORDER:
-                normalLineupFragment.highLightButton(numButton);
-                break;
-            case FixedWords.DH_ORDER:
-                dhLineupFragment.highLightButton(numButton);
-                break;
-        }
-    }
-
-    private void setButtonDefault(Button numButton) {
-        switch (CurrentOrderVersion.instance.getCurrentVersion()) {
-            case FixedWords.NORMAL_ORDER:
-                normalLineupFragment.setButtonDefault(numButton);
-                break;
-            case FixedWords.DH_ORDER:
-                dhLineupFragment.setButtonDefault(numButton);
-                break;
-        }
-    }
-
-    private void showOrder(int orderType) {
-
-        CurrentOrderVersion.instance.setCurrentVersion(orderType);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        switch (orderType) {
-            case FixedWords.NORMAL_ORDER:
-                transaction.hide(dhLineupFragment);
-                transaction.show(normalLineupFragment);
-                break;
-            case FixedWords.DH_ORDER:
-                transaction.hide(normalLineupFragment);
-                transaction.show(dhLineupFragment);
-                break;
-        }
-        transaction.commit();
-    }
-
-    private void setSpinner(String[] spinnerResource) {
+    private void setSpinnerResource(String[] spinnerResource) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerResource);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);

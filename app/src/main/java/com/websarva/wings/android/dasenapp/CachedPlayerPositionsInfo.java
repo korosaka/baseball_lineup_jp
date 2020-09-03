@@ -8,6 +8,7 @@ public class CachedPlayerPositionsInfo {
     private String[] positionsOfNormal = new String[9];
     private String[] positionsOfDh = new String[10];
 
+    // TODO setAppropriatePosition
     // setter
     public void setPositionNormal(int orderNum, String name) {
         positionsOfNormal[convertOrderNumToIndexNum(orderNum)] = name;
@@ -18,6 +19,8 @@ public class CachedPlayerPositionsInfo {
         if (orderNum == FixedWords.DH_PITCHER_ORDER)
             positionsOfDh[convertOrderNumToIndexNum(orderNum)] = FixedWords.PITCHER;
     }
+
+    // TODO setPlayerInfo(setPosition + setName) => make 2class 1class
 
 
     // getter
@@ -30,8 +33,8 @@ public class CachedPlayerPositionsInfo {
     }
 
 
-    public String getAppropriatePosition(int orderNum) {
-        switch (CurrentOrderVersion.instance.getCurrentVersion()) {
+    public String getAppropriatePosition(int orderType, int orderNum) {
+        switch (orderType) {
             case FixedWords.NORMAL_ORDER:
                 return getPositionNormal(orderNum);
             case FixedWords.DH_ORDER:
