@@ -30,7 +30,6 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
     }
 
 
-    // TODO divide method
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -46,8 +45,15 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
         TextView positionText = view.findViewById(R.id.position_text);
         TextView nameText = view.findViewById(R.id.name_text);
 
-        PlayerListItemData playerItem = playerItems.get(position);
+        preparePlayerItemView(playerItems.get(position), orderButton, positionText, nameText);
+
+        return view;
+    }
+
+    private void preparePlayerItemView(
+            PlayerListItemData playerItem, Button orderButton, TextView positionText, TextView nameText) {
         int orderNum = playerItem.getItemOrderNumber();
+
         if (orderNum == FixedWords.DH_PITCHER_ORDER) {
             orderButton.setText(FixedWords.PITCHER_INITIAL);
             mListener.setDhPitcherButton(orderButton);
@@ -58,15 +64,13 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
         }
         orderButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mListener.onClickOrderNum(playerItem.getItemOrderNumber(), orderButton);
+                mListener.onClickOrderNum(orderNum, orderButton);
             }
         });
 
         positionText.setText(playerItem.getItemPosition());
         nameText.setText(customNameSpace(playerItem.getItemName()));
         changeTextSize(nameText);
-
-        return view;
     }
 
     private void changeTextSize(TextView textView) {

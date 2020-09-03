@@ -1,13 +1,9 @@
 package com.websarva.wings.android.dasenapp;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -17,7 +13,6 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -33,14 +28,14 @@ public class MakingOrderActivity extends BaseAdActivity implements PlayerListAda
     private Boolean isReplacing = false;
     private Boolean isFirstReplaceClicked = false;
     private TextView title;
-    private int currentNum = 0;
+    private int currentNum;
     private Spinner spinner;
     private Button clear;
 
-    private int firstClickedOrderNum = -1;
+    private int firstClickedOrderNum;
     private Button firstClickedButton;
     private DatabaseUsing databaseUsing;
-    private LineupParentFragment lineupFragment;
+    private StartingLineupFragment lineupFragment;
     private Button dhPitcherButton;
     private int orderType;
 
@@ -58,6 +53,7 @@ public class MakingOrderActivity extends BaseAdActivity implements PlayerListAda
         bindLayout();
         setEdit();
         setOrderFragment();
+        setPositionsSpinner();
     }
 
     @Override
@@ -87,37 +83,31 @@ public class MakingOrderActivity extends BaseAdActivity implements PlayerListAda
         etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean flag) {
-//                フォーカスを取得→キーボード表示
-                // TODO refactor
-                if (flag) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(view, 0);
-                }
-//                フォーカス外れる→キーボード非表示
-                else {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
+                // get focus → display keyboard
+                // lose focus → dismiss keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (flag) imm.showSoftInput(view, 0);
+                else imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
     }
 
     private void setOrderFragment() {
-
-        switch (orderType) {
-            case FixedWords.NORMAL_ORDER:
-                lineupFragment = NormalLineupFragment.newInstance();
-                setSpinnerResource(getResources().getStringArray(R.array.positions));
-                break;
-            case FixedWords.DH_ORDER:
-                lineupFragment = DhLineupFragment.newInstance();
-                setSpinnerResource(getResources().getStringArray(R.array.positions_dh));
-                break;
-        }
-        if (lineupFragment == null) return;
+        lineupFragment = StartingLineupFragment.newInstance(orderType);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.lineup_container, lineupFragment);
         transaction.commit();
+    }
+
+    private void setPositionsSpinner() {
+        switch (orderType) {
+            case FixedWords.NORMAL_ORDER:
+                setSpinnerResource(getResources().getStringArray(R.array.positions));
+                break;
+            case FixedWords.DH_ORDER:
+                setSpinnerResource(getResources().getStringArray(R.array.positions_dh));
+                break;
+        }
     }
 
     private void replaceMethod(int orderNum, Button numButton) {
@@ -153,37 +143,36 @@ public class MakingOrderActivity extends BaseAdActivity implements PlayerListAda
 
         // 最初に選択した選手のところに後から選択した選手を上書き
         databaseUsing.registerInfo(firstSelectedOrderNum,
-                CachedPlayerNamesInfo.instance.getAppropriateName(orderType, secondSelectedOrderNum),
-                CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderType, secondSelectedOrderNum),
+                CachedPlayersInfo.instance.getNameFromCache(orderType, secondSelectedOrderNum),
+                CachedPlayersInfo.instance.getPositionFromCache(orderType, secondSelectedOrderNum),
                 orderType);
 
         // 後に選択した選手の場所に最初の選手を登録
         databaseUsing.registerInfo(secondSelectedOrderNum,
-                CachedPlayerNamesInfo.instance.getAppropriateName(orderType, firstSelectedOrderNum),
-                CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderType, firstSelectedOrderNum),
+                CachedPlayersInfo.instance.getNameFromCache(orderType, firstSelectedOrderNum),
+                CachedPlayersInfo.instance.getPositionFromCache(orderType, firstSelectedOrderNum),
                 orderType);
 
         // キャッシュデータもデータベースの内容に合わせる(入れ替え後のデータに更新する)
         databaseUsing.getDatabaseInfo(orderType, firstSelectedOrderNum);
         databaseUsing.getDatabaseInfo(orderType, secondSelectedOrderNum);
 
-        // TextViewも更新
-        changeText(firstSelectedOrderNum, secondSelectedOrderNum);
+        replaceListView(firstSelectedOrderNum, secondSelectedOrderNum);
     }
 
-    private void changeText(int firstSelectedOrderNum, int secondSelectedOrderNum) {
-        lineupFragment.changeData(firstSelectedOrderNum,
-                CachedPlayerNamesInfo.instance.getAppropriateName(orderType, firstSelectedOrderNum),
-                CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderType, firstSelectedOrderNum));
-        lineupFragment.changeData(secondSelectedOrderNum,
-                CachedPlayerNamesInfo.instance.getAppropriateName(orderType, secondSelectedOrderNum),
-                CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderType, secondSelectedOrderNum));
+    private void replaceListView(int firstSelectedOrderNum, int secondSelectedOrderNum) {
+        lineupFragment.updatePlayerListView(firstSelectedOrderNum,
+                CachedPlayersInfo.instance.getNameFromCache(orderType, firstSelectedOrderNum),
+                CachedPlayersInfo.instance.getPositionFromCache(orderType, firstSelectedOrderNum));
+        lineupFragment.updatePlayerListView(secondSelectedOrderNum,
+                CachedPlayersInfo.instance.getNameFromCache(orderType, secondSelectedOrderNum),
+                CachedPlayersInfo.instance.getPositionFromCache(orderType, secondSelectedOrderNum));
     }
 
     private void selectNum(int orderNum) {
         readyInputtingName(orderNum,
-                CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderType, orderNum),
-                CachedPlayerNamesInfo.instance.getAppropriateName(orderType, orderNum));
+                CachedPlayersInfo.instance.getPositionFromCache(orderType, orderNum),
+                CachedPlayersInfo.instance.getNameFromCache(orderType, orderNum));
         currentNum = orderNum;
     }
 
@@ -199,13 +188,12 @@ public class MakingOrderActivity extends BaseAdActivity implements PlayerListAda
         spinner.setSelection(index);
     }
 
-    // TODO refactor ?
     private void readyInputtingName(int orderNum, String position, String name) {
         spinner.setEnabled(true);
         tvSelectNum.setText((orderNum + FixedWords.JP_NUMBER));
         selectSpinnerItem(spinner, position);
         etName.setText(name);
-        if (etName.getText().toString().equals("-----")) etName.setText("");
+        if (etName.getText().toString().equals(FixedWords.HYPHEN_5)) etName.setText(FixedWords.EMPTY);
         etName.setEnabled(true);
         etName.setFocusable(true);
         etName.setFocusableInTouchMode(true);
@@ -231,20 +219,10 @@ public class MakingOrderActivity extends BaseAdActivity implements PlayerListAda
         String playerName = etName.getText().toString();
         if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
         String position = (String) spinner.getSelectedItem();
+        if (currentNum == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
         databaseUsing.registerInfo(currentNum, playerName, position, orderType);
-
-        switch (orderType) {
-            case FixedWords.NORMAL_ORDER:
-                CachedPlayerNamesInfo.instance.setNameNormal(currentNum, playerName);
-                CachedPlayerPositionsInfo.instance.setPositionNormal(currentNum, position);
-                break;
-            case FixedWords.DH_ORDER:
-                if (currentNum == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
-                CachedPlayerNamesInfo.instance.setNameDh(currentNum, playerName);
-                CachedPlayerPositionsInfo.instance.setPositionDh(currentNum, position);
-                break;
-        }
-        lineupFragment.changeData(currentNum, playerName, position);
+        CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, currentNum, position, playerName);
+        lineupFragment.updatePlayerListView(currentNum, playerName, position);
         setLayoutDefault();
     }
 

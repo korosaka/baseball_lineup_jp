@@ -44,7 +44,7 @@ public class DatabaseUsing {
 
         try {
             cursor = dbR.rawQuery(sqlSelect, new String[]{String.valueOf(orderNum)});
-            // moveToNext(): if there isn't any data, return false
+            // if there isn't any data, return false
             if (cursor.moveToNext()) {
                 playerName = cursor.getString(getNameIndex(cursor));
                 playerPosition = cursor.getString(getPositionIndex(cursor));
@@ -53,7 +53,7 @@ public class DatabaseUsing {
                 playerName = FixedWords.HYPHEN_5;
                 playerPosition = FixedWords.HYPHEN_4;
             }
-            setPlayerCachedInfo(orderType, orderNum, playerName, playerPosition);
+            CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, orderNum, playerPosition, playerName);
         } catch (Exception e) {
             Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
         } finally {
@@ -76,23 +76,6 @@ public class DatabaseUsing {
         return cursor.getColumnIndex(FixedWords.COLUMN_POSITION);
     }
 
-
-    /**
-     * 1つ(1人)ずつデータベースに登録されている情報をキャッシュ
-     */
-    private void setPlayerCachedInfo(int orderType, int orderNum, String name, String position) {
-        switch (orderType) {
-            case FixedWords.NORMAL_ORDER:
-                CachedPlayerNamesInfo.instance.setNameNormal(orderNum, name);
-                CachedPlayerPositionsInfo.instance.setPositionNormal(orderNum, position);
-                break;
-            case FixedWords.DH_ORDER:
-                CachedPlayerNamesInfo.instance.setNameDh(orderNum, name);
-                CachedPlayerPositionsInfo.instance.setPositionDh(orderNum, position);
-                break;
-        }
-
-    }
 
     /**
      * store data in DB (delete → register)
@@ -133,12 +116,14 @@ public class DatabaseUsing {
 
     private void insertSqlData(int orderType, int orderNum, SQLiteDatabase dbW, String name, String position) {
         String sqlInsert = makeInsertQuery(orderType);
+        int indexOrderNum = 1;
+        int indexPlayerName = 2;
+        int indexPlayerPosition = 3;
 
-        // TODO refactor (number)
         SQLiteStatement stmt = dbW.compileStatement(sqlInsert);
-        stmt.bindLong(1, orderNum);
-        stmt.bindString(2, name);
-        stmt.bindString(3, position);
+        stmt.bindLong(indexOrderNum, orderNum);
+        stmt.bindString(indexPlayerName, name);
+        stmt.bindString(indexPlayerPosition, position);
 
         stmt.executeInsert();
     }
