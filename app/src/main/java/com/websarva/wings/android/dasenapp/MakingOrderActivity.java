@@ -28,11 +28,11 @@ public class MakingOrderActivity extends BaseAdActivity implements PlayerListAda
     private Boolean isReplacing = false;
     private Boolean isFirstReplaceClicked = false;
     private TextView title;
-    private int currentNum = 0;
+    private int currentNum;
     private Spinner spinner;
     private Button clear;
 
-    private int firstClickedOrderNum = -1;
+    private int firstClickedOrderNum;
     private Button firstClickedButton;
     private DatabaseUsing databaseUsing;
     private StartingLineupFragment lineupFragment;
@@ -188,7 +188,6 @@ public class MakingOrderActivity extends BaseAdActivity implements PlayerListAda
         spinner.setSelection(index);
     }
 
-    // TODO refactor ?
     private void readyInputtingName(int orderNum, String position, String name) {
         spinner.setEnabled(true);
         tvSelectNum.setText((orderNum + FixedWords.JP_NUMBER));
