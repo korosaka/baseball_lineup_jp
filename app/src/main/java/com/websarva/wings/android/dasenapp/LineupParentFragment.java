@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -50,7 +49,7 @@ abstract public class LineupParentFragment extends Fragment {
                         getContext(),
                         R.layout.player_list_item,
                         players,
-                        (MainActivity) getActivity());
+                        (MakingOrderActivity) getActivity());
         playerList.setAdapter(listAdapter);
         setListViewHeightBasedOnChildren(playerList);
     }

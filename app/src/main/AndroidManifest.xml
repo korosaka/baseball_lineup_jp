@@ -29,7 +29,7 @@
             android:value="ca-app-pub-6298264304843789~9524433477" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".MakingOrderActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".FieldActivity"

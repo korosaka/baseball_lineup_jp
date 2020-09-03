@@ -24,7 +24,7 @@ import androidx.fragment.app.FragmentTransaction;
 /**
  * To use this Activity's method in PlayerListAdapter, implementing PlayerListAdapterListener
  */
-public class MainActivity extends BaseAdActivity implements PlayerListAdapterListener {
+public class MakingOrderActivity extends BaseAdActivity implements PlayerListAdapterListener {
     private TextView tvSelectNum;
     private EditText etName;
     private Button record;
@@ -48,7 +48,7 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
     //ここからmain
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_making_order);
         setAdView(findViewById(R.id.ad_view_container_on_order));
         super.onCreate(savedInstanceState);
 
@@ -61,7 +61,6 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         bindLayout();
         setEdit();
         setOrderFragment();
-        if (!PrivacyPolicyFragment.isPolicyAgreed(this)) showPrivacyPolicy();
     }
 
     @Override
@@ -122,11 +121,6 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.lineup_container, lineupFragment);
         transaction.commit();
-    }
-
-    private void showPrivacyPolicy() {
-        PrivacyPolicyFragment policyFragment = PrivacyPolicyFragment.newInstance(FixedWords.AGREE);
-        policyFragment.show(getSupportFragmentManager(), FixedWords.PRIVACY_POLICY);
     }
 
     private void replaceMethod(int orderNum, Button numButton) {
@@ -296,7 +290,7 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
     }
 
     public void onClickField(View view) {
-        Intent intent = new Intent(MainActivity.this, FieldActivity.class);
+        Intent intent = new Intent(MakingOrderActivity.this, FieldActivity.class);
         intent.putExtra(FixedWords.ORDER_TYPE, orderType);
         startActivity(intent);
 
@@ -304,37 +298,15 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         if (isReplacing) cancelReplacing();
     }
 
+    public void onClickBackToTop(View view) {
+        finish();
+    }
+
     public void onClickShareOrder(View view) {
         Sharing mSharing = new Sharing(getApplicationContext(), this, findViewById(R.id.lineup_container));
         mSharing.share();
     }
 
-
-    // TODO move to parent class
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //メニューインフレター取得
-        MenuInflater inflater = getMenuInflater();
-        //オプションメニュー用.xmlファイルをインフレート（メニュー部品をJavaオブジェクトに）
-        inflater.inflate(R.menu.menu_options_menu_list, menu);
-        //親クラスの同名メソッドで返却
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    // TODO move to parent class
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO refactor ?
-        switch (item.getItemId()) {
-            case R.id.policy:
-                PrivacyPolicyFragment policyFragment = PrivacyPolicyFragment.newInstance(FixedWords.CLOSE);
-                policyFragment.show(getSupportFragmentManager(), FixedWords.PRIVACY_POLICY);
-                break;
-        }
-        setLayoutDefault();
-        if (isReplacing) cancelReplacing();
-        return super.onOptionsItemSelected(item);
-    }
 
     private void cancelReplacing() {
         if (isFirstReplaceClicked) cancelFirstClick(firstClickedButton);
@@ -395,21 +367,9 @@ public class MainActivity extends BaseAdActivity implements PlayerListAdapterLis
         this.dhPitcherButton = pitcherButton;
     }
 
-
     @Override
     void keyBackFunction() {
-        finishApp();
+        finish();
     }
 
-    private void finishApp() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_CustomButtonDialog);
-        builder.setMessage(getResources().getString(R.string.ask_finish_app));
-        builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                finish();
-            }
-        });
-        builder.setNegativeButton(getResources().getString(R.string.cancel), null);
-        builder.show();
-    }
 }
