@@ -135,7 +135,7 @@ public class FieldActivity extends BaseAdActivity {
         int dhCount = 0;
         //ある打順の守備位置dataがどこかのポジションと合致すれば、その打順登録名を守備フィールドに
         for (int orderNum = 1; orderNum <= playerNumber; orderNum++) {
-            switch (CachedPlayerPositionsInfo.instance.getAppropriatePosition(orderType, orderNum)) {
+            switch (CachedPlayersInfo.instance.getPositionFromCache(orderType, orderNum)) {
                 case "(投)":
                     if (orderType == FixedWords.DH_ORDER)
                         setText(position1, orderPitcher, orderNum, true);
@@ -178,7 +178,7 @@ public class FieldActivity extends BaseAdActivity {
     }
 
     private void setText(TextView name, TextView order, int orderNum, boolean dhPitcher) {
-        String playerName = customNameSpace(CachedPlayerNamesInfo.instance.getAppropriateName(orderType, orderNum));
+        String playerName = customNameSpace(CachedPlayersInfo.instance.getNameFromCache(orderType, orderNum));
         name.setText(playerName);
         if (dhPitcher) order.setText(("[" + FixedWords.PITCHER_INITIAL + "]"));
         else order.setText(("[" + orderNum + "]"));

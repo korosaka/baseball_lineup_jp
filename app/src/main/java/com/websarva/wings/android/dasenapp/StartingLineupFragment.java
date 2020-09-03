@@ -16,19 +16,35 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class LineupParentFragment extends Fragment {
+public class StartingLineupFragment extends Fragment {
 
     protected ListView playerList;
     protected PlayerListAdapter listAdapter;
     protected List<PlayerListItemData> players;
     // TODO after ++ -- (for special rule)
     protected int numberOfPlayer;
+    protected int orderType;
+
+    public static StartingLineupFragment newInstance(int orderType) {
+        StartingLineupFragment fragment = new StartingLineupFragment();
+        Bundle args = new Bundle();
+        args.putInt(FixedWords.ORDER_TYPE, orderType);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            numberOfPlayer = getArguments().getInt(FixedWords.NUMBER_OF_PLAYER);
+        if (getArguments() != null) orderType = getArguments().getInt(FixedWords.ORDER_TYPE);
+        switch (orderType) {
+            case FixedWords.NORMAL_ORDER:
+                numberOfPlayer = FixedWords.NUMBER_OF_LINEUP_NORMAL;
+                break;
+            case FixedWords.DH_ORDER:
+                numberOfPlayer = FixedWords.NUMBER_OF_LINEUP_DH;
+                break;
         }
     }
 
@@ -40,7 +56,6 @@ abstract public class LineupParentFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -50,8 +65,8 @@ abstract public class LineupParentFragment extends Fragment {
             PlayerListItemData playerItem =
                     new PlayerListItemData(
                             oderNumber,
-                            getPositionFromCache(oderNumber),
-                            getNameFromCache(oderNumber));
+                            CachedPlayersInfo.instance.getPositionFromCache(orderType, oderNumber),
+                            CachedPlayersInfo.instance.getNameFromCache(orderType, oderNumber));
             players.add(playerItem);
         }
         listAdapter =
@@ -64,11 +79,7 @@ abstract public class LineupParentFragment extends Fragment {
         setListViewHeightBasedOnChildren(playerList);
     }
 
-    abstract String getPositionFromCache(int orderNum);
-
-    abstract String getNameFromCache(int orderNum);
-
-    public void changeData(int orderNum, String name, String position) {
+    public void updatePlayerListView(int orderNum, String name, String position) {
         PlayerListItemData newPlayerItem =
                 new PlayerListItemData(orderNum, position, name);
         players.set(convertOrderNumToListIndex(orderNum), newPlayerItem);
