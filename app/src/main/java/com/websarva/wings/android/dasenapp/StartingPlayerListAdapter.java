@@ -13,14 +13,14 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-public class PlayerListAdapter extends ArrayAdapter<StartingPlayerListItemData> {
+public class StartingPlayerListAdapter extends ArrayAdapter<StartingPlayerListItemData> {
 
     private List<StartingPlayerListItemData> playerItems;
     private int mResource;
     private LayoutInflater mInflater;
-    private PlayerListAdapterListener mListener;
+    private StartingPlayerListAdapterListener mListener;
 
-    public PlayerListAdapter(Context context, int resource, List<StartingPlayerListItemData> items, PlayerListAdapterListener listener) {
+    public StartingPlayerListAdapter(Context context, int resource, List<StartingPlayerListItemData> items, StartingPlayerListAdapterListener listener) {
         super(context, resource, items);
 
         playerItems = items;
@@ -103,7 +103,7 @@ public class PlayerListAdapter extends ArrayAdapter<StartingPlayerListItemData> 
 
 }
 
-interface PlayerListAdapterListener {
+interface StartingPlayerListAdapterListener {
     void onClickOrderNum(int orderNum, Button numButton);
     void setDhPitcherButton(Button pitcherButton);
 }

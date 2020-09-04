@@ -19,7 +19,7 @@ import java.util.List;
 public class StartingLineupFragment extends Fragment {
 
     protected ListView playerList;
-    protected PlayerListAdapter listAdapter;
+    protected StartingPlayerListAdapter listAdapter;
     protected List<StartingPlayerListItemData> players;
     // TODO after ++ -- (for special rule)
     protected int numberOfPlayer;
@@ -70,7 +70,7 @@ public class StartingLineupFragment extends Fragment {
             players.add(playerItem);
         }
         listAdapter =
-                new PlayerListAdapter(
+                new StartingPlayerListAdapter(
                         getContext(),
                         R.layout.starting_player_list_item,
                         players,

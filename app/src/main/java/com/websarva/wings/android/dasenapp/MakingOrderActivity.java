@@ -19,7 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 /**
  * To use this Activity's method in PlayerListAdapter, implementing PlayerListAdapterListener
  */
-public class MakingOrderActivity extends BaseAdActivity implements PlayerListAdapterListener {
+public class MakingOrderActivity extends BaseAdActivity implements StartingPlayerListAdapterListener {
     private TextView tvSelectNum;
     private EditText etName;
     private Button record;
