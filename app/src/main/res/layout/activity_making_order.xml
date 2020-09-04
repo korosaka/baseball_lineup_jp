@@ -49,6 +49,18 @@
                         android:layout_height="wrap_content"
                         android:entries="@array/positions" />
 
+                    <TextView
+                        android:id="@+id/sub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="20dp"
+                        android:text="控え"
+                        android:textColor="#000000"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
                     <EditText
                         android:id="@+id/etName"
                         android:layout_width="0dp"
@@ -61,6 +73,68 @@
                         android:textSize="24sp" />
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/share_button_background"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="20dp"
+                        android:text="用途"
+                        android:textColor="#000000"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:text="投手"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:text="代打"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:text="代走"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:text="守備"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -156,15 +230,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp">
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="15dp">
 
             </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <Button
                     android:layout_width="0dp"
@@ -172,9 +247,7 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:layout_weight="1.0"
-                    android:background="@drawable/field_button_background"
-                    android:onClick="onClickField"
-                    android:text="@string/field"
+                    android:text="控え追加"
                     android:textColor="#000000"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -185,10 +258,39 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:layout_weight="1.0"
-                    android:background="@drawable/share_button_background"
-                    android:onClick="onClickShareOrder"
-                    android:text="@string/share"
-                    android:textAllCaps="false"
+                    android:text="控え削除"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:text="控え表示"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/field_button_background"
+                    android:onClick="onClickField"
+                    android:text="@string/field"
                     android:textColor="#000000"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -212,6 +314,21 @@
                     android:textColor="#000000"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/share_button_background"
+                    android:onClick="onClickShareOrder"
+                    android:text="@string/share"
+                    android:textAllCaps="false"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
 
         </LinearLayout>
