@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -22,6 +23,10 @@ import androidx.fragment.app.FragmentTransaction;
 public class MakingOrderActivity extends BaseAdActivity implements StartingPlayerListAdapterListener, SubPlayerListAdapterListener {
     private TextView tvSelectNum;
     private EditText etName;
+    private LinearLayout rolesBox;
+    private Button addSub;
+    private Button deleteSub;
+    private Button orderSwitch;
     private Button record;
     private Button cancel;
     private Button replace;
@@ -39,6 +44,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private SubMembersFragment subMembersFragment;
     private Button dhPitcherButton;
     private int orderType;
+    private String showingOrder;
 
 
     //ここからmain
@@ -68,6 +74,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         //上記のグローバルフィールド紐付け
         tvSelectNum = findViewById(R.id.selectNum);
         etName = findViewById(R.id.etName);
+        rolesBox = findViewById(R.id.role_box_for_sub);
+        addSub = findViewById(R.id.add_sub_button);
+        deleteSub = findViewById(R.id.delete_sub_button);
+        orderSwitch = findViewById(R.id.order_switch_button);
         record = findViewById(R.id.record);
         cancel = findViewById(R.id.cancel);
         replace = findViewById(R.id.replace);
@@ -99,9 +109,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.lineup_container, lineupFragment);
         transaction.add(R.id.lineup_container, subMembersFragment);
-        transaction.show(lineupFragment);
-        transaction.hide(subMembersFragment);
         transaction.commit();
+        showStartingOrder();
     }
 
     private void setPositionsSpinner() {
@@ -309,15 +318,26 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     public void onClickSwitchOrder(View view) {
-        showSubMembers();
+        if (showingOrder.equals(FixedWords.Starting_ORDER)) showSubMembers();
+        else showStartingOrder();
     }
 
     private void showStartingOrder() {
         switchOrder(true);
+        showingOrder = FixedWords.Starting_ORDER;
+        rolesBox.setVisibility(View.GONE);
+        addSub.setVisibility(View.GONE);
+        deleteSub.setVisibility(View.GONE);
+        orderSwitch.setText("控え表示");
     }
 
     private void showSubMembers() {
         switchOrder(false);
+        showingOrder = FixedWords.SUB_MEMBERS;
+        rolesBox.setVisibility(View.VISIBLE);
+        addSub.setVisibility(View.VISIBLE);
+        deleteSub.setVisibility(View.VISIBLE);
+        orderSwitch.setText("先発表示");
     }
 
     private void switchOrder(boolean isStartingLineup) {
@@ -328,6 +348,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         } else {
             transaction.hide(lineupFragment);
             transaction.show(subMembersFragment);
+
         }
         transaction.commit();
     }

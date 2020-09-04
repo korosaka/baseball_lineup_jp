@@ -75,6 +75,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/role_box_for_sub"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -84,8 +85,7 @@
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:visibility="gone">
+                    android:paddingRight="5dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -238,40 +238,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginRight="3dp"
-                    android:layout_weight="1.0"
-                    android:text="控え追加"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginRight="3dp"
-                    android:layout_weight="1.0"
-                    android:text="控え削除"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/order_switch_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
@@ -284,17 +254,29 @@
                     android:textStyle="bold" />
 
                 <Button
+                    android:id="@+id/add_sub_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:layout_weight="1.0"
-                    android:background="@drawable/field_button_background"
-                    android:onClick="onClickField"
-                    android:text="@string/field"
+                    android:text="控え追加"
                     android:textColor="#000000"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/delete_sub_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:text="控え削除"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -312,6 +294,19 @@
                     android:background="@drawable/back_button_background"
                     android:onClick="onClickBackToTop"
                     android:text="@string/back"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/field_button_background"
+                    android:onClick="onClickField"
+                    android:text="@string/field"
                     android:textColor="#000000"
                     android:textSize="18sp"
                     android:textStyle="bold" />

@@ -10,6 +10,8 @@ public class FixedWords {
     public static final String ORDER_TYPE = "orderType";
     public static final int NORMAL_ORDER = 1;
     public static final int DH_ORDER = 2;
+    public static final String Starting_ORDER = "startingOrder";
+    public static final String SUB_MEMBERS = "subMembers";
 
     public static final String JP_NUMBER = "番";
     public static final String PITCHER_INITIAL = "P";

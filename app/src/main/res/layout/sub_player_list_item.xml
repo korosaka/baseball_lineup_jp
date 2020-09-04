@@ -8,10 +8,10 @@
 
     <Button
         android:id="@+id/sub_order_button"
-        android:layout_width="wrap_content"
+        android:layout_width="60sp"
         android:layout_height="wrap_content"
         android:background="@drawable/order_num_button_background"
-        android:text="控え"
+        android:text="控"
         android:textSize="22sp"
         android:textStyle="bold" />
 
