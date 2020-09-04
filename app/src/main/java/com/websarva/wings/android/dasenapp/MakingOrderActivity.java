@@ -19,7 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 /**
  * To use this Activity's method in PlayerListAdapter, implementing PlayerListAdapterListener
  */
-public class MakingOrderActivity extends BaseAdActivity implements StartingPlayerListAdapterListener {
+public class MakingOrderActivity extends BaseAdActivity implements StartingPlayerListAdapterListener, SubPlayerListAdapterListener {
     private TextView tvSelectNum;
     private EditText etName;
     private Button record;
@@ -36,6 +36,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private Button firstClickedButton;
     private DatabaseUsing databaseUsing;
     private StartingLineupFragment lineupFragment;
+    private SubMembersFragment subMembersFragment;
     private Button dhPitcherButton;
     private int orderType;
 
@@ -94,8 +95,12 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     private void setOrderFragment() {
         lineupFragment = StartingLineupFragment.newInstance(orderType);
+        subMembersFragment = SubMembersFragment.newInstance(orderType);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.lineup_container, lineupFragment);
+        transaction.add(R.id.lineup_container, subMembersFragment);
+        transaction.show(lineupFragment);
+        transaction.hide(subMembersFragment);
         transaction.commit();
     }
 
@@ -193,7 +198,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         tvSelectNum.setText((orderNum + FixedWords.JP_NUMBER));
         selectSpinnerItem(spinner, position);
         etName.setText(name);
-        if (etName.getText().toString().equals(FixedWords.HYPHEN_5)) etName.setText(FixedWords.EMPTY);
+        if (etName.getText().toString().equals(FixedWords.HYPHEN_5))
+            etName.setText(FixedWords.EMPTY);
         etName.setEnabled(true);
         etName.setFocusable(true);
         etName.setFocusableInTouchMode(true);
@@ -302,22 +308,29 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         dhPitcherButton.setBackground(ResourcesCompat.getDrawable(getResources(), backgroundId, null));
     }
 
-    // TODO may be needed for function of sub members
-//    private void showOrder(int orderType) {
-//
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        switch (orderType) {
-//            case FixedWords.NORMAL_ORDER:
-//                transaction.hide(dhLineupFragment);
-//                transaction.show(normalLineupFragment);
-//                break;
-//            case FixedWords.DH_ORDER:
-//                transaction.hide(normalLineupFragment);
-//                transaction.show(dhLineupFragment);
-//                break;
-//        }
-//        transaction.commit();
-//    }
+    public void onClickSwitchOrder(View view) {
+        showSubMembers();
+    }
+
+    private void showStartingOrder() {
+        switchOrder(true);
+    }
+
+    private void showSubMembers() {
+        switchOrder(false);
+    }
+
+    private void switchOrder(boolean isStartingLineup) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (isStartingLineup) {
+            transaction.hide(subMembersFragment);
+            transaction.show(lineupFragment);
+        } else {
+            transaction.hide(lineupFragment);
+            transaction.show(subMembersFragment);
+        }
+        transaction.commit();
+    }
 
     private void setSpinnerResource(String[] spinnerResource) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerResource);
@@ -332,6 +345,12 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         } else {
             selectNum(orderNum);
         }
+    }
+
+    // TODO
+    @Override
+    public void onClickSubOrderNum(int orderNum, Button numButton) {
+
     }
 
     /**
