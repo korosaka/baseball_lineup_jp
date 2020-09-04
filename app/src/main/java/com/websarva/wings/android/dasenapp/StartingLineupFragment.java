@@ -20,7 +20,7 @@ public class StartingLineupFragment extends Fragment {
 
     protected ListView playerList;
     protected PlayerListAdapter listAdapter;
-    protected List<PlayerListItemData> players;
+    protected List<StartingPlayerListItemData> players;
     // TODO after ++ -- (for special rule)
     protected int numberOfPlayer;
     protected int orderType;
@@ -62,8 +62,8 @@ public class StartingLineupFragment extends Fragment {
 
         players = new ArrayList<>();
         for (int oderNumber = 1; oderNumber <= numberOfPlayer; oderNumber++) {
-            PlayerListItemData playerItem =
-                    new PlayerListItemData(
+            StartingPlayerListItemData playerItem =
+                    new StartingPlayerListItemData(
                             oderNumber,
                             CachedPlayersInfo.instance.getPositionFromCache(orderType, oderNumber),
                             CachedPlayersInfo.instance.getNameFromCache(orderType, oderNumber));
@@ -72,7 +72,7 @@ public class StartingLineupFragment extends Fragment {
         listAdapter =
                 new PlayerListAdapter(
                         getContext(),
-                        R.layout.player_list_item,
+                        R.layout.starting_player_list_item,
                         players,
                         (MakingOrderActivity) getActivity());
         playerList.setAdapter(listAdapter);
@@ -80,8 +80,8 @@ public class StartingLineupFragment extends Fragment {
     }
 
     public void updatePlayerListView(int orderNum, String name, String position) {
-        PlayerListItemData newPlayerItem =
-                new PlayerListItemData(orderNum, position, name);
+        StartingPlayerListItemData newPlayerItem =
+                new StartingPlayerListItemData(orderNum, position, name);
         players.set(convertOrderNumToListIndex(orderNum), newPlayerItem);
         listAdapter.notifyDataSetChanged();
     }

@@ -13,14 +13,14 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
+public class PlayerListAdapter extends ArrayAdapter<StartingPlayerListItemData> {
 
-    private List<PlayerListItemData> playerItems;
+    private List<StartingPlayerListItemData> playerItems;
     private int mResource;
     private LayoutInflater mInflater;
     private PlayerListAdapterListener mListener;
 
-    public PlayerListAdapter(Context context, int resource, List<PlayerListItemData> items, PlayerListAdapterListener listener) {
+    public PlayerListAdapter(Context context, int resource, List<StartingPlayerListItemData> items, PlayerListAdapterListener listener) {
         super(context, resource, items);
 
         playerItems = items;
@@ -51,7 +51,7 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
     }
 
     private void preparePlayerItemView(
-            PlayerListItemData playerItem, Button orderButton, TextView positionText, TextView nameText) {
+            StartingPlayerListItemData playerItem, Button orderButton, TextView positionText, TextView nameText) {
         int orderNum = playerItem.getItemOrderNumber();
 
         if (orderNum == FixedWords.DH_PITCHER_ORDER) {
