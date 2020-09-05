@@ -26,15 +26,51 @@ public class DatabaseUsing {
         }
 
         for (int orderNum = 1; orderNum <= numberOfPlayers; orderNum++) {
-            getDatabaseInfo(orderType, orderNum);
+            putStartingPlayersInCache(orderType, orderNum);
         }
 
+    }
+
+    public void putSubPlayersInCache(int orderType) {
+
+        if (CachedPlayersInfo.instance.isInitSubArray(orderType)) return;
+        CachedPlayersInfo.instance.initSubArray(orderType);
+
+        String selectQuery = "SELECT * FROM " + getSubTableName(orderType);
+        SQLiteDatabase dbR = helper.getReadableDatabase();
+        Cursor cursor = null;
+
+        try {
+            cursor = dbR.rawQuery(selectQuery, null);
+            while (cursor.moveToNext()) {
+                SubPlayerListItemData subPlayer =
+                        new SubPlayerListItemData(
+                                cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_LIST_POSITION)),
+                                translateDigitBool(cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_IS_PITCHER))),
+                                translateDigitBool(cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_IS_BATTER))),
+                                translateDigitBool(cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_IS_RUNNER))),
+                                translateDigitBool(cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_IS_FIELDER))),
+                                cursor.getString(getColumnIndex(cursor, FixedWords.COLUMN_NAME)));
+
+                CachedPlayersInfo.instance.addSubMember(orderType, subPlayer);
+            }
+        } catch (Exception e) {
+            Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
+        } finally {
+            dbR.close();
+            if (cursor != null) cursor.close();
+        }
+
+    }
+
+    private boolean translateDigitBool(int digitBool) {
+        return digitBool == FixedWords.DIGIT_TRUE;
     }
 
     /**
      * DBから登録データ取得
      */
-    public void getDatabaseInfo(int orderType, int orderNum) {
+    public void putStartingPlayersInCache(int orderType, int orderNum) {
 
         String playerName;
         String playerPosition;
@@ -64,18 +100,65 @@ public class DatabaseUsing {
 
     private String makeSelectQuery(int orderType) {
         return "SELECT " + FixedWords.COLUMN_NAME + ", " + FixedWords.COLUMN_POSITION +
-                " FROM " + getTableName(orderType) +
+                " FROM " + getStartingTableName(orderType) +
                 " WHERE " + FixedWords.COLUMN_ORDER_NUMBER + " = ?";
     }
 
+    // TODO refactor
     private int getNameIndex(Cursor cursor) {
         return cursor.getColumnIndex(FixedWords.COLUMN_NAME);
     }
 
+    // TODO refactor
     private int getPositionIndex(Cursor cursor) {
         return cursor.getColumnIndex(FixedWords.COLUMN_POSITION);
     }
 
+    private int getColumnIndex(Cursor cursor, String columnName) {
+        return cursor.getColumnIndex(columnName);
+    }
+
+
+    // TODO refactor
+    public void registerSub(SubPlayerListItemData subPlayer, int orderType) {
+
+        SQLiteDatabase dbW = helper.getWritableDatabase();
+        String insertQuery = makeSubInsertQuery(orderType);
+
+        try {
+            SQLiteStatement stmt = dbW.compileStatement(insertQuery);
+            stmt.bindLong(1, subPlayer.getListIndex());
+            stmt.bindLong(2, translateBoolToDigit(subPlayer.getPitcher()));
+            stmt.bindLong(3, translateBoolToDigit(subPlayer.getBatter()));
+            stmt.bindLong(4, translateBoolToDigit(subPlayer.getRunner()));
+            stmt.bindLong(5, translateBoolToDigit(subPlayer.getFielder()));
+            stmt.bindString(6, subPlayer.getName());
+
+            stmt.executeInsert();
+        } catch (Exception e) {
+            Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
+        } finally {
+            dbW.close();
+        }
+
+    }
+
+    private int translateBoolToDigit(boolean bool) {
+        if (bool) return FixedWords.DIGIT_TRUE;
+        return FixedWords.DIGIT_FALSE;
+    }
+
+    private String makeSubInsertQuery(int orderType) {
+        return "INSERT INTO " +
+                getSubTableName(orderType) + "(" +
+                FixedWords.COLUMN_LIST_POSITION + ", " +
+                FixedWords.COLUMN_IS_PITCHER + ", " +
+                FixedWords.COLUMN_IS_BATTER + ", " +
+                FixedWords.COLUMN_IS_RUNNER + ", " +
+                FixedWords.COLUMN_IS_FIELDER + ", " +
+                FixedWords.COLUMN_NAME +
+                ") VALUES(?,?,?,?,?,?)";
+    }
 
     /**
      * store data in DB (delete → register)
@@ -95,19 +178,31 @@ public class DatabaseUsing {
     }
 
     private void deleteSqlData(int orderType, int orderNum, SQLiteDatabase dbW) {
-        String sqlDelete = "DELETE FROM " + getTableName(orderType) + " WHERE " + FixedWords.COLUMN_ORDER_NUMBER + " = ?";
+        String sqlDelete = "DELETE FROM " + getStartingTableName(orderType) + " WHERE " + FixedWords.COLUMN_ORDER_NUMBER + " = ?";
         SQLiteStatement stmt = dbW.compileStatement(sqlDelete);
         stmt.bindLong(1, orderNum);
         stmt.executeUpdateDelete();
     }
 
-    private String getTableName(int orderType) {
+    private String getStartingTableName(int orderType) {
         String tableName = FixedWords.NORMAL_ORDER_TABLE;
         switch (orderType) {
             case FixedWords.NORMAL_ORDER:
                 break;
             case FixedWords.DH_ORDER:
                 tableName = FixedWords.DH_ORDER_TABLE;
+                break;
+        }
+        return tableName;
+    }
+
+    private String getSubTableName(int orderType) {
+        String tableName = FixedWords.NORMAL_SUB_TABLE;
+        switch (orderType) {
+            case FixedWords.NORMAL_ORDER:
+                break;
+            case FixedWords.DH_ORDER:
+                tableName = FixedWords.DH_SUB_TABLE;
                 break;
         }
         return tableName;
@@ -130,7 +225,7 @@ public class DatabaseUsing {
 
     private String makeInsertQuery(int orderType) {
         return "INSERT INTO " +
-                getTableName(orderType) + "(" +
+                getStartingTableName(orderType) + "(" +
                 FixedWords.COLUMN_ORDER_NUMBER + ", " +
                 FixedWords.COLUMN_NAME + ", " +
                 FixedWords.COLUMN_POSITION +

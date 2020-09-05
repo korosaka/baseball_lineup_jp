@@ -91,43 +91,51 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="20dp"
-                        android:text="用途"
+                        android:layout_marginRight="10dp"
+                        android:text="起用"
                         android:textColor="#000000"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
                     <Button
+                        android:id="@+id/use_pitcher_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.0"
+                        android:onClick="onClickRolePitcher"
                         android:text="投手"
                         android:textColor="#000000"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <Button
+                        android:id="@+id/use_batter_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.0"
+                        android:onClick="onClickRoleBatter"
                         android:text="代打"
                         android:textColor="#000000"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <Button
+                        android:id="@+id/use_runner_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.0"
+                        android:onClick="onClickRoleRunner"
                         android:text="代走"
                         android:textColor="#000000"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <Button
+                        android:id="@+id/use_fielder_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.0"
+                        android:onClick="onClickRoleFielder"
                         android:text="守備"
                         android:textColor="#000000"
                         android:textSize="18sp"
@@ -260,6 +268,7 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:layout_weight="1.0"
+                    android:onClick="onClickAddSub"
                     android:text="控え追加"
                     android:textColor="#000000"
                     android:textSize="18sp"

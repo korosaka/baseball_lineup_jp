@@ -52,21 +52,25 @@ public class SubPlayerListAdapter extends ArrayAdapter<SubPlayerListItemData> {
 
         SubPlayerListItemData playerItem = playerItems.get(position);
 
-        int orderNum = playerItem.getSubOrderNumber();
+        int listPosition = playerItem.getListIndex();
         Boolean isPitcher = playerItem.getPitcher();
         Boolean isBatter = playerItem.getBatter();
         Boolean isRunner = playerItem.getRunner();
         Boolean isFielder = playerItem.getFielder();
         String name = playerItem.getName();
 
-        if (isPitcher) pitcherLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.pitcher_name_background, null));
-        if (isBatter) batterLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.outfielder_name_background, null));
-        if (isRunner) runnerLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.catcher_name_background, null));
-        if (isFielder) fielderLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.infielder_name_background, null));
+        if (isPitcher)
+            pitcherLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.pitcher_name_background, null));
+        if (isBatter)
+            batterLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.outfielder_name_background, null));
+        if (isRunner)
+            runnerLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.catcher_name_background, null));
+        if (isFielder)
+            fielderLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.infielder_name_background, null));
 
         orderButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mListener.onClickSubOrderNum(orderNum, orderButton);
+                mListener.onClickSubOrderNum(playerItems.size(), playerItem, orderButton);
             }
         });
 
@@ -108,6 +112,6 @@ public class SubPlayerListAdapter extends ArrayAdapter<SubPlayerListItemData> {
 }
 
 interface SubPlayerListAdapterListener {
-    void onClickSubOrderNum(int orderNum, Button numButton);
+    void onClickSubOrderNum(int listSize, SubPlayerListItemData subMember, Button numButton);
 }
 

@@ -48,9 +48,19 @@ public class FixedWords {
     public static final String OLD_ORDER_TABLE = "lineup";
     public static final String NORMAL_ORDER_TABLE = "lineup_normal";
     public static final String DH_ORDER_TABLE = "lineup_dh";
+    public static final String NORMAL_SUB_TABLE = "sub_normal";
+    public static final String DH_SUB_TABLE = "sub_dh";
+
     public static final String COLUMN_ORDER_NUMBER = "order_number";
-    public static final String COLUMN_NAME = "playerName";
+    public static final String COLUMN_NAME = "player_name";
     public static final String COLUMN_POSITION = "position";
+    public static final String COLUMN_LIST_POSITION = "list_position";
+    public static final String COLUMN_IS_PITCHER = "is_pitcher";
+    public static final String COLUMN_IS_BATTER = "is_batter";
+    public static final String COLUMN_IS_RUNNER = "is_runner";
+    public static final String COLUMN_IS_FIELDER = "is_fielder";
+    public static final int DIGIT_FALSE = 0;
+    public static final int DIGIT_TRUE = 1;
 
     public static final String ERROR_LOG_TAG = "errorTag";
     public static final String ERROR_LOG_MESSAGE = "error happened!";

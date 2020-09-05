@@ -26,6 +26,11 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private LinearLayout rolesBox;
     private Button addSub;
     private Button deleteSub;
+    private Button usePitcher;
+    private Button useBatter;
+    private Button useRunner;
+    private Button useFielder;
+    private TextView subLabel;
     private Button orderSwitch;
     private Button record;
     private Button cancel;
@@ -46,10 +51,17 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private int orderType;
     private String showingOrder;
 
+    private boolean isRolePitcher;
+    private boolean isRoleBatter;
+    private boolean isRoleRunner;
+    private boolean isRoleFielder;
+
 
     //ここからmain
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // TODO debug
+//        android.os.Debug.waitForDebugger();
         setContentView(R.layout.activity_making_order);
         setAdView(findViewById(R.id.ad_view_container_on_order));
         super.onCreate(savedInstanceState);
@@ -57,6 +69,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         orderType = getIntent().getIntExtra(FixedWords.ORDER_TYPE, FixedWords.NORMAL_ORDER);
         databaseUsing = new DatabaseUsing(this);
         databaseUsing.getPlayersInfo(orderType);
+        databaseUsing.putSubPlayersInCache(orderType);
         bindLayout();
         setEdit();
         setOrderFragment();
@@ -71,12 +84,16 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
 
     private void bindLayout() {
-        //上記のグローバルフィールド紐付け
         tvSelectNum = findViewById(R.id.selectNum);
         etName = findViewById(R.id.etName);
         rolesBox = findViewById(R.id.role_box_for_sub);
         addSub = findViewById(R.id.add_sub_button);
         deleteSub = findViewById(R.id.delete_sub_button);
+        usePitcher = findViewById(R.id.use_pitcher_button);
+        useBatter = findViewById(R.id.use_batter_button);
+        useRunner = findViewById(R.id.use_runner_button);
+        useFielder = findViewById(R.id.use_fielder_button);
+        subLabel = findViewById(R.id.sub);
         orderSwitch = findViewById(R.id.order_switch_button);
         record = findViewById(R.id.record);
         cancel = findViewById(R.id.cancel);
@@ -168,8 +185,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
                 orderType);
 
         // キャッシュデータもデータベースの内容に合わせる(入れ替え後のデータに更新する)
-        databaseUsing.getDatabaseInfo(orderType, firstSelectedOrderNum);
-        databaseUsing.getDatabaseInfo(orderType, secondSelectedOrderNum);
+        databaseUsing.putStartingPlayersInCache(orderType, firstSelectedOrderNum);
+        databaseUsing.putStartingPlayersInCache(orderType, secondSelectedOrderNum);
 
         replaceListView(firstSelectedOrderNum, secondSelectedOrderNum);
     }
@@ -203,12 +220,23 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     private void readyInputtingName(int orderNum, String position, String name) {
+        requireInputtingPlayer();
         spinner.setEnabled(true);
         tvSelectNum.setText((orderNum + FixedWords.JP_NUMBER));
         selectSpinnerItem(spinner, position);
         etName.setText(name);
         if (etName.getText().toString().equals(FixedWords.HYPHEN_5))
             etName.setText(FixedWords.EMPTY);
+        if (orderType == FixedWords.DH_ORDER &&
+                orderNum == FixedWords.DH_PITCHER_ORDER) {
+            tvSelectNum.setText(FixedWords.PITCHER_INITIAL);
+            selectSpinnerItem(spinner, FixedWords.HYPHEN_4);
+            spinner.setEnabled(false);
+        }
+    }
+
+    private void requireInputtingPlayer() {
+        etName.setText(FixedWords.EMPTY);
         etName.setEnabled(true);
         etName.setFocusable(true);
         etName.setFocusableInTouchMode(true);
@@ -221,23 +249,31 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         clear.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.clear_button_background, null));
         replace.setEnabled(false);
         replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
-
-        if (orderType == FixedWords.DH_ORDER &&
-                orderNum == FixedWords.DH_PITCHER_ORDER) {
-            tvSelectNum.setText(FixedWords.PITCHER_INITIAL);
-            selectSpinnerItem(spinner, FixedWords.HYPHEN_4);
-            spinner.setEnabled(false);
-        }
     }
 
     public void onClickSave(View view) {
         String playerName = etName.getText().toString();
-        if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
-        String position = (String) spinner.getSelectedItem();
-        if (currentNum == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
-        databaseUsing.registerInfo(currentNum, playerName, position, orderType);
-        CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, currentNum, position, playerName);
-        lineupFragment.updatePlayerListView(currentNum, playerName, position);
+        if (showingOrder.equals(FixedWords.Starting_ORDER)) {
+            if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
+            String position = (String) spinner.getSelectedItem();
+            if (currentNum == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
+            databaseUsing.registerInfo(currentNum, playerName, position, orderType);
+            CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, currentNum, position, playerName);
+            lineupFragment.updatePlayerListView(currentNum, playerName, position);
+        } else {
+            if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
+            SubPlayerListItemData subPlayer =
+                    new SubPlayerListItemData(
+                            CachedPlayersInfo.instance.getNumberOfSubPlayers(orderType),
+                            isRolePitcher,
+                            isRoleBatter,
+                            isRoleRunner,
+                            isRoleFielder,
+                            playerName);
+            databaseUsing.registerSub(subPlayer, orderType);
+            CachedPlayersInfo.instance.addSubMember(orderType, subPlayer);
+            subMembersFragment.updatePlayerListView();
+        }
         setLayoutDefault();
     }
 
@@ -256,6 +292,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         clear.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
         replace.setEnabled(true);
         replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
+        resetRoles();
     }
 
     public void onClickClear(View view) {
@@ -322,9 +359,41 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         else showStartingOrder();
     }
 
+    // TODO refactor ? (one method and switch (button id))
+    public void onClickRolePitcher(View view) {
+        isRolePitcher = !isRolePitcher;
+    }
+
+    public void onClickRoleBatter(View view) {
+        isRoleBatter = !isRoleBatter;
+    }
+
+    public void onClickRoleRunner(View view) {
+        isRoleRunner = !isRoleRunner;
+    }
+
+    public void onClickRoleFielder(View view) {
+        isRoleFielder = !isRoleFielder;
+    }
+
+    private void resetRoles() {
+        isRolePitcher = false;
+        isRoleBatter = false;
+        isRoleRunner = false;
+        isRoleFielder = false;
+    }
+
+
+    public void onClickAddSub(View view) {
+        requireInputtingPlayer();
+    }
+
     private void showStartingOrder() {
         switchOrder(true);
         showingOrder = FixedWords.Starting_ORDER;
+        tvSelectNum.setVisibility(View.VISIBLE);
+        spinner.setVisibility(View.VISIBLE);
+        subLabel.setVisibility(View.GONE);
         rolesBox.setVisibility(View.GONE);
         addSub.setVisibility(View.GONE);
         deleteSub.setVisibility(View.GONE);
@@ -334,6 +403,9 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private void showSubMembers() {
         switchOrder(false);
         showingOrder = FixedWords.SUB_MEMBERS;
+        tvSelectNum.setVisibility(View.GONE);
+        spinner.setVisibility(View.GONE);
+        subLabel.setVisibility(View.VISIBLE);
         rolesBox.setVisibility(View.VISIBLE);
         addSub.setVisibility(View.VISIBLE);
         deleteSub.setVisibility(View.VISIBLE);
@@ -370,7 +442,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     // TODO
     @Override
-    public void onClickSubOrderNum(int orderNum, Button numButton) {
+    public void onClickSubOrderNum(int listSize, SubPlayerListItemData subMember, Button numButton) {
 
     }
 

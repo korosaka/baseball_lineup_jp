@@ -19,8 +19,6 @@ public class SubMembersFragment extends Fragment {
 
     protected ListView playerList;
     protected SubPlayerListAdapter listAdapter;
-    protected List<SubPlayerListItemData> players;
-    protected int numberOfPlayer;
     protected int orderType;
 
 
@@ -52,31 +50,21 @@ public class SubMembersFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        players = new ArrayList<>();
-
-        // TODO test data
-        SubPlayerListItemData playerItem1 = new SubPlayerListItemData(
-                1, true, true, true, true, "小笠原");
-        SubPlayerListItemData playerItem2 = new SubPlayerListItemData(
-                2, true, false, true, false, "ラミレス");
-        SubPlayerListItemData playerItem3 = new SubPlayerListItemData(
-                3, false, false, false, true, "坂本");
-
-        players.add(playerItem1);
-        players.add(playerItem2);
-        players.add(playerItem3);
-
         listAdapter =
                 new SubPlayerListAdapter(
                         getContext(),
                         R.layout.sub_player_list_item,
-                        players,
+                        CachedPlayersInfo.instance.getSubMembers(orderType),
                         (MakingOrderActivity) getActivity()
                 );
 
         playerList.setAdapter(listAdapter);
         setListViewHeightBasedOnChildren(playerList);
+    }
 
+    public void updatePlayerListView() {
+        listAdapter.notifyDataSetChanged();
+        setListViewHeightBasedOnChildren(playerList);
     }
 
     private void setListViewHeightBasedOnChildren(ListView listView) {
