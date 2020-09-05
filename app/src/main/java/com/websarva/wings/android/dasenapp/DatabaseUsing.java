@@ -33,9 +33,7 @@ public class DatabaseUsing {
 
     public void putSubPlayersInCache(int orderType) {
 
-        if (CachedPlayersInfo.instance.isInitSubArray(orderType)) return;
-        CachedPlayersInfo.instance.initSubArray(orderType);
-
+        CachedPlayersInfo.instance.clearSubArray(orderType);
         String selectQuery = "SELECT * FROM " + getSubTableName(orderType);
         SQLiteDatabase dbR = helper.getReadableDatabase();
         Cursor cursor = null;
@@ -45,7 +43,7 @@ public class DatabaseUsing {
             while (cursor.moveToNext()) {
                 SubPlayerListItemData subPlayer =
                         new SubPlayerListItemData(
-                                cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_LIST_POSITION)),
+                                cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_PLAYER_ID)),
                                 translateDigitBool(cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_IS_PITCHER))),
                                 translateDigitBool(cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_IS_BATTER))),
                                 translateDigitBool(cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_IS_RUNNER))),
@@ -119,20 +117,19 @@ public class DatabaseUsing {
     }
 
 
-    // TODO refactor
-    public void registerSub(SubPlayerListItemData subPlayer, int orderType) {
+    public void registerSubPlayer(
+            int orderType, boolean isPitcher, boolean isBatter, boolean isRunner, boolean isFielder, String name) {
 
         SQLiteDatabase dbW = helper.getWritableDatabase();
         String insertQuery = makeSubInsertQuery(orderType);
 
         try {
             SQLiteStatement stmt = dbW.compileStatement(insertQuery);
-            stmt.bindLong(1, subPlayer.getListIndex());
-            stmt.bindLong(2, translateBoolToDigit(subPlayer.getPitcher()));
-            stmt.bindLong(3, translateBoolToDigit(subPlayer.getBatter()));
-            stmt.bindLong(4, translateBoolToDigit(subPlayer.getRunner()));
-            stmt.bindLong(5, translateBoolToDigit(subPlayer.getFielder()));
-            stmt.bindString(6, subPlayer.getName());
+            stmt.bindLong(1, translateBoolToDigit(isPitcher));
+            stmt.bindLong(2, translateBoolToDigit(isBatter));
+            stmt.bindLong(3, translateBoolToDigit(isRunner));
+            stmt.bindLong(4, translateBoolToDigit(isFielder));
+            stmt.bindString(5, name);
 
             stmt.executeInsert();
         } catch (Exception e) {
@@ -151,19 +148,18 @@ public class DatabaseUsing {
     private String makeSubInsertQuery(int orderType) {
         return "INSERT INTO " +
                 getSubTableName(orderType) + "(" +
-                FixedWords.COLUMN_LIST_POSITION + ", " +
                 FixedWords.COLUMN_IS_PITCHER + ", " +
                 FixedWords.COLUMN_IS_BATTER + ", " +
                 FixedWords.COLUMN_IS_RUNNER + ", " +
                 FixedWords.COLUMN_IS_FIELDER + ", " +
                 FixedWords.COLUMN_NAME +
-                ") VALUES(?,?,?,?,?,?)";
+                ") VALUES(?,?,?,?,?)";
     }
 
     /**
      * store data in DB (delete → register)
      */
-    public void registerInfo(int orderNum, String name, String position, int orderType) {
+    public void registerStartingPlayer(int orderNum, String name, String position, int orderType) {
 
         SQLiteDatabase dbW = helper.getWritableDatabase();
 

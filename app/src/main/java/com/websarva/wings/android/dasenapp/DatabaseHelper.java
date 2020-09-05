@@ -27,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_NORMAL_SUB_MEMBERS_TABLE =
             "CREATE TABLE " +
                     FixedWords.NORMAL_SUB_TABLE + "(" +
-                    FixedWords.COLUMN_LIST_POSITION + " INTEGER PRIMARY KEY, " +
+                    FixedWords.COLUMN_PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     FixedWords.COLUMN_IS_PITCHER + " INTEGER DEFAULT 0, " +
                     FixedWords.COLUMN_IS_BATTER + " INTEGER DEFAULT 0, " +
                     FixedWords.COLUMN_IS_RUNNER + " INTEGER DEFAULT 0, " +
@@ -37,7 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_DH_SUB_MEMBERS_TABLE =
             "CREATE TABLE " +
                     FixedWords.DH_SUB_TABLE + "(" +
-                    FixedWords.COLUMN_LIST_POSITION + " INTEGER PRIMARY KEY, " +
+                    FixedWords.COLUMN_PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     FixedWords.COLUMN_IS_PITCHER + " INTEGER DEFAULT 0, " +
                     FixedWords.COLUMN_IS_BATTER + " INTEGER DEFAULT 0, " +
                     FixedWords.COLUMN_IS_RUNNER + " INTEGER DEFAULT 0, " +

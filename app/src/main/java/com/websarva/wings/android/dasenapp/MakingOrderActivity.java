@@ -173,13 +173,13 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     public void replacing2players(int firstSelectedOrderNum, int secondSelectedOrderNum) {
 
         // 最初に選択した選手のところに後から選択した選手を上書き
-        databaseUsing.registerInfo(firstSelectedOrderNum,
+        databaseUsing.registerStartingPlayer(firstSelectedOrderNum,
                 CachedPlayersInfo.instance.getNameFromCache(orderType, secondSelectedOrderNum),
                 CachedPlayersInfo.instance.getPositionFromCache(orderType, secondSelectedOrderNum),
                 orderType);
 
         // 後に選択した選手の場所に最初の選手を登録
-        databaseUsing.registerInfo(secondSelectedOrderNum,
+        databaseUsing.registerStartingPlayer(secondSelectedOrderNum,
                 CachedPlayersInfo.instance.getNameFromCache(orderType, firstSelectedOrderNum),
                 CachedPlayersInfo.instance.getPositionFromCache(orderType, firstSelectedOrderNum),
                 orderType);
@@ -257,21 +257,14 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
             if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
             String position = (String) spinner.getSelectedItem();
             if (currentNum == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
-            databaseUsing.registerInfo(currentNum, playerName, position, orderType);
+            databaseUsing.registerStartingPlayer(currentNum, playerName, position, orderType);
             CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, currentNum, position, playerName);
             lineupFragment.updatePlayerListView(currentNum, playerName, position);
         } else {
             if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
-            SubPlayerListItemData subPlayer =
-                    new SubPlayerListItemData(
-                            CachedPlayersInfo.instance.getNumberOfSubPlayers(orderType),
-                            isRolePitcher,
-                            isRoleBatter,
-                            isRoleRunner,
-                            isRoleFielder,
-                            playerName);
-            databaseUsing.registerSub(subPlayer, orderType);
-            CachedPlayersInfo.instance.addSubMember(orderType, subPlayer);
+            databaseUsing.registerSubPlayer(
+                    orderType, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
+            databaseUsing.putSubPlayersInCache(orderType);
             subMembersFragment.updatePlayerListView();
         }
         setLayoutDefault();
@@ -388,6 +381,9 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         requireInputtingPlayer();
     }
 
+    public void onClickDeleteSub(View view) {
+    }
+
     private void showStartingOrder() {
         switchOrder(true);
         showingOrder = FixedWords.Starting_ORDER;
@@ -442,7 +438,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     // TODO
     @Override
-    public void onClickSubOrderNum(int listSize, SubPlayerListItemData subMember, Button numButton) {
+    public void onClickSubOrderNum(SubPlayerListItemData subMember, Button numButton) {
 
     }
 

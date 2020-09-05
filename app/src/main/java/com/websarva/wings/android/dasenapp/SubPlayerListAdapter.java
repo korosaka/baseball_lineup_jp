@@ -51,30 +51,22 @@ public class SubPlayerListAdapter extends ArrayAdapter<SubPlayerListItemData> {
         TextView nameText = view.findViewById(R.id.sub_name_text);
 
         SubPlayerListItemData playerItem = playerItems.get(position);
-
-        int listPosition = playerItem.getListIndex();
-        Boolean isPitcher = playerItem.getPitcher();
-        Boolean isBatter = playerItem.getBatter();
-        Boolean isRunner = playerItem.getRunner();
-        Boolean isFielder = playerItem.getFielder();
-        String name = playerItem.getName();
-
-        if (isPitcher)
+        if (playerItem.getPitcher())
             pitcherLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.pitcher_name_background, null));
-        if (isBatter)
+        if (playerItem.getBatter())
             batterLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.outfielder_name_background, null));
-        if (isRunner)
+        if (playerItem.getRunner())
             runnerLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.catcher_name_background, null));
-        if (isFielder)
+        if (playerItem.getFielder())
             fielderLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.infielder_name_background, null));
 
         orderButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mListener.onClickSubOrderNum(playerItems.size(), playerItem, orderButton);
+                mListener.onClickSubOrderNum(playerItem, orderButton);
             }
         });
 
-        nameText.setText(customNameSpace(name));
+        nameText.setText(customNameSpace(playerItem.getName()));
         changeTextSize(nameText);
 
         return view;
@@ -112,6 +104,6 @@ public class SubPlayerListAdapter extends ArrayAdapter<SubPlayerListItemData> {
 }
 
 interface SubPlayerListAdapterListener {
-    void onClickSubOrderNum(int listSize, SubPlayerListItemData subMember, Button numButton);
+    void onClickSubOrderNum(SubPlayerListItemData subMember, Button numButton);
 }
 

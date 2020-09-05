@@ -14,8 +14,8 @@ public class CachedPlayersInfo {
     private String[] startingPositionsOfNormal = new String[FixedWords.NUMBER_OF_LINEUP_NORMAL];
     private String[] startingPositionsOfDh = new String[FixedWords.NUMBER_OF_LINEUP_DH];
 
-    private ArrayList<SubPlayerListItemData> subMembersNormal;
-    private ArrayList<SubPlayerListItemData> subMembersDh;
+    private ArrayList<SubPlayerListItemData> subMembersNormal = new ArrayList<>();
+    private ArrayList<SubPlayerListItemData> subMembersDh = new ArrayList<>();
 
 
     public void addSubMember(int orderType, SubPlayerListItemData subMember) {
@@ -29,24 +29,15 @@ public class CachedPlayersInfo {
         }
     }
 
-    public boolean isInitSubArray(int orderType) {
-        if (orderType == FixedWords.NORMAL_ORDER) return subMembersNormal != null;
-        return subMembersDh != null;
-    }
+    public void clearSubArray(int orderType) {
+        if (orderType == FixedWords.NORMAL_ORDER) subMembersNormal.clear();
+        else subMembersDh.clear();
 
-    public void initSubArray(int orderType) {
-        if (orderType == FixedWords.NORMAL_ORDER) subMembersNormal = new ArrayList<>();
-        else subMembersDh = new ArrayList<>();
     }
 
     public ArrayList<SubPlayerListItemData> getSubMembers(int orderType) {
         if (orderType == FixedWords.NORMAL_ORDER) return subMembersNormal;
         return subMembersDh;
-    }
-
-    public int getNumberOfSubPlayers(int orderType) {
-        if (orderType == FixedWords.NORMAL_ORDER) return subMembersNormal.size();
-        return subMembersDh.size();
     }
 
 //    public SubPlayerListItemData getSubMember(int orderType, int positionNum) {

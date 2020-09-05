@@ -1,7 +1,7 @@
 package com.websarva.wings.android.dasenapp;
 
 public class SubPlayerListItemData {
-    private int listIndex;
+    private int id;
     private Boolean isPitcher;
     private Boolean isBatter;
     private Boolean isRunner;
@@ -9,14 +9,14 @@ public class SubPlayerListItemData {
     private String name;
 
     public SubPlayerListItemData(
-            int listIndex,
+            int id,
             Boolean isPitcher,
             Boolean isBatter,
             Boolean isRunner,
             Boolean isFielder,
             String name) {
 
-        this.listIndex = listIndex;
+        this.id = id;
         this.isPitcher = isPitcher;
         this.isBatter = isBatter;
         this.isRunner = isRunner;
@@ -24,8 +24,8 @@ public class SubPlayerListItemData {
         this.name = name;
     }
 
-    public int getListIndex() {
-        return listIndex;
+    public int getId() {
+        return id;
     }
 
     public String getName() {

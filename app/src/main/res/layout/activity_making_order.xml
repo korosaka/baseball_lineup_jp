@@ -281,6 +281,7 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:layout_weight="1.0"
+                    android:onClick="onClickDeleteSub"
                     android:text="控え削除"
                     android:textColor="#000000"
                     android:textSize="18sp"

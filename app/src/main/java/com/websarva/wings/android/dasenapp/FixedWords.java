@@ -54,7 +54,7 @@ public class FixedWords {
     public static final String COLUMN_ORDER_NUMBER = "order_number";
     public static final String COLUMN_NAME = "player_name";
     public static final String COLUMN_POSITION = "position";
-    public static final String COLUMN_LIST_POSITION = "list_position";
+    public static final String COLUMN_PLAYER_ID = "sub_player_id";
     public static final String COLUMN_IS_PITCHER = "is_pitcher";
     public static final String COLUMN_IS_BATTER = "is_batter";
     public static final String COLUMN_IS_RUNNER = "is_runner";
