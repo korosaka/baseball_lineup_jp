@@ -62,6 +62,12 @@ public class FixedWords {
     public static final int DIGIT_FALSE = 0;
     public static final int DIGIT_TRUE = 1;
 
+    public static final String ROLE_PITCHER = "rolePitcher";
+    public static final String ROLE_BATTER = "roleBatter";
+    public static final String ROLE_RUNNER = "roleRunner";
+    public static final String ROLE_FIELDER = "roleFielder";
+
+
     public static final String ERROR_LOG_TAG = "errorTag";
     public static final String ERROR_LOG_MESSAGE = "error happened!";
 }

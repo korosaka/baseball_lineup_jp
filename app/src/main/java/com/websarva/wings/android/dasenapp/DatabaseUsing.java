@@ -102,18 +102,49 @@ public class DatabaseUsing {
                 " WHERE " + FixedWords.COLUMN_ORDER_NUMBER + " = ?";
     }
 
-    // TODO refactor
+    // TODO refactor (use getColumnIndex)
     private int getNameIndex(Cursor cursor) {
         return cursor.getColumnIndex(FixedWords.COLUMN_NAME);
     }
 
-    // TODO refactor
+    // TODO refactor (use getColumnIndex)
     private int getPositionIndex(Cursor cursor) {
         return cursor.getColumnIndex(FixedWords.COLUMN_POSITION);
     }
 
     private int getColumnIndex(Cursor cursor, String columnName) {
         return cursor.getColumnIndex(columnName);
+    }
+
+    public void updateSubPlayer(
+            int orderType, int id, boolean isPitcher, boolean isBatter, boolean isRunner, boolean isFielder, String name) {
+
+        SQLiteDatabase dbW = helper.getWritableDatabase();
+        String updateQuery = makeUpdateSubQuery(orderType);
+        try {
+            SQLiteStatement stmt = dbW.compileStatement(updateQuery);
+            stmt.bindLong(1, translateBoolToDigit(isPitcher));
+            stmt.bindLong(2, translateBoolToDigit(isBatter));
+            stmt.bindLong(3, translateBoolToDigit(isRunner));
+            stmt.bindLong(4, translateBoolToDigit(isFielder));
+            stmt.bindString(5, name);
+            stmt.bindLong(6, id);
+            stmt.executeUpdateDelete();
+        } catch (Exception e) {
+            Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
+        } finally {
+            dbW.close();
+        }
+    }
+
+    private String makeUpdateSubQuery(int orderType) {
+        return "UPDATE " + getSubTableName(orderType) +
+                " SET " + FixedWords.COLUMN_IS_PITCHER + " = ?, " +
+                FixedWords.COLUMN_IS_BATTER + " = ?, " +
+                FixedWords.COLUMN_IS_RUNNER + " = ?, " +
+                FixedWords.COLUMN_IS_FIELDER + " = ?, " +
+                FixedWords.COLUMN_NAME + " = ?" +
+                " WHERE " + FixedWords.COLUMN_PLAYER_ID + " = ?;";
     }
 
 

@@ -26,10 +26,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private LinearLayout rolesBox;
     private Button addSub;
     private Button deleteSub;
-    private Button usePitcher;
-    private Button useBatter;
-    private Button useRunner;
-    private Button useFielder;
+    private Button rolePitcher;
+    private Button roleBatter;
+    private Button roleRunner;
+    private Button roleFielder;
     private TextView subLabel;
     private Button orderSwitch;
     private Button record;
@@ -39,7 +39,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private Boolean isDeleting = false;
     private Boolean isFirstReplaceClicked = false;
     private TextView title;
-    private int currentNum;
+    private int currentStartingNum;
+    // TODO should have as a player ?
+    private int currentSubListIndex;
+    private int currentSubId;
     private Spinner spinner;
     private Button clear;
 
@@ -90,10 +93,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         rolesBox = findViewById(R.id.role_box_for_sub);
         addSub = findViewById(R.id.add_sub_button);
         deleteSub = findViewById(R.id.delete_sub_button);
-        usePitcher = findViewById(R.id.use_pitcher_button);
-        useBatter = findViewById(R.id.use_batter_button);
-        useRunner = findViewById(R.id.use_runner_button);
-        useFielder = findViewById(R.id.use_fielder_button);
+        rolePitcher = findViewById(R.id.use_pitcher_button);
+        roleBatter = findViewById(R.id.use_batter_button);
+        roleRunner = findViewById(R.id.use_runner_button);
+        roleFielder = findViewById(R.id.use_fielder_button);
         subLabel = findViewById(R.id.sub);
         orderSwitch = findViewById(R.id.order_switch_button);
         record = findViewById(R.id.record);
@@ -202,10 +205,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     private void selectNum(int orderNum) {
-        readyInputtingName(orderNum,
+        readyInputtingStartingPlayer(orderNum,
                 CachedPlayersInfo.instance.getPositionFromCache(orderType, orderNum),
                 CachedPlayersInfo.instance.getNameFromCache(orderType, orderNum));
-        currentNum = orderNum;
+        currentStartingNum = orderNum;
     }
 
     private void selectSpinnerItem(Spinner spinner, String position) {
@@ -220,14 +223,11 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         spinner.setSelection(index);
     }
 
-    private void readyInputtingName(int orderNum, String position, String name) {
-        requireInputtingPlayer();
+    private void readyInputtingStartingPlayer(int orderNum, String position, String name) {
+        requireInputtingPlayer(name);
         spinner.setEnabled(true);
         tvSelectNum.setText((orderNum + FixedWords.JP_NUMBER));
         selectSpinnerItem(spinner, position);
-        etName.setText(name);
-        if (etName.getText().toString().equals(FixedWords.HYPHEN_5))
-            etName.setText(FixedWords.EMPTY);
         if (orderType == FixedWords.DH_ORDER &&
                 orderNum == FixedWords.DH_PITCHER_ORDER) {
             tvSelectNum.setText(FixedWords.PITCHER_INITIAL);
@@ -236,8 +236,18 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         }
     }
 
-    private void requireInputtingPlayer() {
-        etName.setText(FixedWords.EMPTY);
+    private void readyInputtingSubPlayer(SubPlayerListItemData subMember) {
+        requireInputtingPlayer(subMember.getName());
+        setRole(subMember.getPitcher(), FixedWords.ROLE_PITCHER);
+        setRole(subMember.getBatter(), FixedWords.ROLE_BATTER);
+        setRole(subMember.getRunner(), FixedWords.ROLE_RUNNER);
+        setRole(subMember.getFielder(), FixedWords.ROLE_FIELDER);
+    }
+
+    private void requireInputtingPlayer(String name) {
+        etName.setText(name);
+        if (etName.getText().toString().equals(FixedWords.HYPHEN_5))
+            etName.setText(FixedWords.EMPTY);
         etName.setEnabled(true);
         etName.setFocusable(true);
         etName.setFocusableInTouchMode(true);
@@ -262,21 +272,32 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     public void onClickSave(View view) {
         String playerName = etName.getText().toString();
+        if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
         if (showingOrder.equals(FixedWords.Starting_ORDER)) {
-            if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
             String position = (String) spinner.getSelectedItem();
-            if (currentNum == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
-            databaseUsing.registerStartingPlayer(currentNum, playerName, position, orderType);
-            CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, currentNum, position, playerName);
-            lineupFragment.updatePlayerListView(currentNum, playerName, position);
+            if (currentStartingNum == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
+            databaseUsing.registerStartingPlayer(currentStartingNum, playerName, position, orderType);
+            CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, currentStartingNum, position, playerName);
+            lineupFragment.updatePlayerListView(currentStartingNum, playerName, position);
         } else {
-            if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
-            databaseUsing.registerSubPlayer(
-                    orderType, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
-            databaseUsing.putSubPlayersInCache(orderType);
+            if (isNewlyAddSub()) {
+                databaseUsing.registerSubPlayer(
+                        orderType, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
+                databaseUsing.putSubPlayersInCache(orderType);
+            } else {
+                // overwrite mode
+                databaseUsing.updateSubPlayer(
+                        orderType, currentSubId, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
+                CachedPlayersInfo.instance.overwriteSubPlayer(
+                        orderType, currentSubListIndex, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
+            }
             subMembersFragment.updatePlayerListView();
         }
         setLayoutDefault();
+    }
+
+    private boolean isNewlyAddSub() {
+        return currentSubListIndex == CachedPlayersInfo.instance.getSubMembers(orderType).size();
     }
 
     private void setLayoutDefault() {
@@ -310,6 +331,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     public void onClickClear(View view) {
         etName.setText(FixedWords.EMPTY);
         spinner.setSelection(0);
+        resetRoles();
     }
 
     public void onClickCancel(View view) {
@@ -373,31 +395,65 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     // TODO refactor ? (one method and switch (button id))
     public void onClickRolePitcher(View view) {
-        isRolePitcher = !isRolePitcher;
+        setRole(!isRolePitcher, FixedWords.ROLE_PITCHER);
     }
 
     public void onClickRoleBatter(View view) {
-        isRoleBatter = !isRoleBatter;
+        setRole(!isRoleBatter, FixedWords.ROLE_BATTER);
     }
 
     public void onClickRoleRunner(View view) {
-        isRoleRunner = !isRoleRunner;
+        setRole(!isRoleRunner, FixedWords.ROLE_RUNNER);
     }
 
     public void onClickRoleFielder(View view) {
-        isRoleFielder = !isRoleFielder;
+        setRole(!isRoleFielder, FixedWords.ROLE_FIELDER);
     }
 
     private void resetRoles() {
-        isRolePitcher = false;
-        isRoleBatter = false;
-        isRoleRunner = false;
-        isRoleFielder = false;
+        setRole(false, FixedWords.ROLE_PITCHER);
+        setRole(false, FixedWords.ROLE_BATTER);
+        setRole(false, FixedWords.ROLE_RUNNER);
+        setRole(false, FixedWords.ROLE_FIELDER);
+    }
+
+    private void setRole(boolean isRole, String role) {
+        switch (role) {
+            case FixedWords.ROLE_PITCHER:
+                isRolePitcher = isRole;
+                if (isRolePitcher)
+                    rolePitcher.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
+                else
+                    rolePitcher.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+                break;
+            case FixedWords.ROLE_BATTER:
+                isRoleBatter = isRole;
+                if (isRoleBatter)
+                    roleBatter.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
+                else
+                    roleBatter.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+                break;
+            case FixedWords.ROLE_RUNNER:
+                isRoleRunner = isRole;
+                if (isRoleRunner)
+                    roleRunner.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
+                else
+                    roleRunner.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+                break;
+            case FixedWords.ROLE_FIELDER:
+                isRoleFielder = isRole;
+                if (isRoleFielder)
+                    roleFielder.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
+                else
+                    roleFielder.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+                break;
+        }
     }
 
 
     public void onClickAddSub(View view) {
-        requireInputtingPlayer();
+        currentSubListIndex = CachedPlayersInfo.instance.getSubMembers(orderType).size();
+        requireInputtingPlayer(FixedWords.EMPTY);
     }
 
     public void onClickDeleteSub(View view) {
@@ -475,6 +531,11 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
             CachedPlayersInfo.instance.deleteSubPlayer(orderType, listPosition);
             subMembersFragment.updatePlayerListView();
             setLayoutDefault();
+        } else {
+            // overwrite mode
+            currentSubListIndex = listPosition;
+            currentSubId = subMember.getId();
+            readyInputtingSubPlayer(subMember);
         }
     }
 

@@ -53,12 +53,20 @@ public class SubPlayerListAdapter extends ArrayAdapter<SubPlayerListItemData> {
         SubPlayerListItemData playerItem = playerItems.get(position);
         if (playerItem.getPitcher())
             pitcherLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.pitcher_name_background, null));
+        else
+            pitcherLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.disable_button_background, null));
         if (playerItem.getBatter())
             batterLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.outfielder_name_background, null));
+        else
+            batterLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.disable_button_background, null));
         if (playerItem.getRunner())
             runnerLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.catcher_name_background, null));
+        else
+            runnerLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.disable_button_background, null));
         if (playerItem.getFielder())
             fielderLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.infielder_name_background, null));
+        else
+            fielderLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.disable_button_background, null));
 
         orderButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

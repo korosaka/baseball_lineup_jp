@@ -36,12 +36,34 @@ public class CachedPlayersInfo {
     public void clearSubArray(int orderType) {
         if (orderType == FixedWords.NORMAL_ORDER) subMembersNormal.clear();
         else subMembersDh.clear();
-
     }
 
     public ArrayList<SubPlayerListItemData> getSubMembers(int orderType) {
         if (orderType == FixedWords.NORMAL_ORDER) return subMembersNormal;
         return subMembersDh;
+    }
+
+    public void overwriteSubPlayer(
+            int orderType,
+            int listIndex,
+            boolean rolePitcher,
+            boolean roleBatter,
+            boolean roleRunner,
+            boolean roleFielder,
+            String name) {
+        SubPlayerListItemData currentPlayer;
+        if (orderType == FixedWords.NORMAL_ORDER) currentPlayer = subMembersNormal.get(listIndex);
+        else currentPlayer = subMembersDh.get(listIndex);
+        SubPlayerListItemData newPlayer = new SubPlayerListItemData(
+                currentPlayer.getId(),
+                rolePitcher,
+                roleBatter,
+                roleRunner,
+                roleFielder,
+                name);
+
+        if (orderType == FixedWords.NORMAL_ORDER) subMembersNormal.set(listIndex, newPlayer);
+        else subMembersDh.set(listIndex, newPlayer);
     }
 
 //    public SubPlayerListItemData getSubMember(int orderType, int positionNum) {
