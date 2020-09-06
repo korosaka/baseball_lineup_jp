@@ -91,16 +91,6 @@ public class StartingLineupFragment extends Fragment {
         return orderNum - 1;
     }
 
-    public void highLightButton(Button button) {
-        button.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
-        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.emphasized_button_background, null));
-    }
-
-    public void setButtonDefault(Button button) {
-        button.setTextColor(Color.parseColor(FixedWords.COLOR_BLACK));
-        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.order_num_button_background, null));
-    }
-
     /**
      * when using listView in a scrollView, only one item would be showed.
      * So, this function is needed to show every item.

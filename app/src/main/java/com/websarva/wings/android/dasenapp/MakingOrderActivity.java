@@ -46,7 +46,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private Spinner spinner;
     private Button clear;
 
-    private int firstClickedOrderNum;
+    private int firstClickedNum;
     private Button firstClickedButton;
     private DatabaseUsing databaseUsing;
     private StartingLineupFragment lineupFragment;
@@ -145,36 +145,74 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         }
     }
 
-    private void replaceMethod(int orderNum, Button numButton) {
+    private void checkSelectedStartingPlayer(int orderNum, Button numButton) {
         if (!isFirstReplaceClicked) {
             // 1つめ選択時
             selectFirstReplacing(orderNum, numButton);
         } else {
             // 2つめ選択時
-            if (orderNum == firstClickedOrderNum) {
+            if (orderNum == firstClickedNum) {
                 cancelFirstClick(numButton);
             } else {
-                replacing2players(firstClickedOrderNum, orderNum);
+                exchangeStartingPlayers(firstClickedNum, orderNum);
                 cancelReplacing();
                 setLayoutDefault();
             }
         }
     }
 
-    private void selectFirstReplacing(int orderNum, Button numButton) {
-        firstClickedButton = numButton;
-        lineupFragment.highLightButton(numButton);
-        firstClickedOrderNum = orderNum;
+    private void checkSelectedSubPlayer(int clickedNum, Button clickedButton) {
+        if (!isFirstReplaceClicked) {
+            selectFirstReplacing(clickedNum, clickedButton);
+        } else {
+            if (clickedNum == firstClickedNum) {
+                cancelFirstClick(clickedButton);
+            }
+            else {
+                exchangeSubPlayers(firstClickedNum, clickedNum);
+                databaseUsing.putSubPlayersInCache(orderType);
+                subMembersFragment.updatePlayerListView();
+                cancelReplacing();
+                setLayoutDefault();
+            }
+        }
+    }
+
+
+    private void selectFirstReplacing(int orderNum, Button playerButton) {
+        firstClickedNum = orderNum;
+        firstClickedButton = playerButton;
         isFirstReplaceClicked = true;
+        highLightButton(playerButton);
+    }
+
+    private void highLightButton(Button button) {
+        button.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
+        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.emphasized_button_background, null));
     }
 
     private void cancelFirstClick(Button numButton) {
-        lineupFragment.setButtonDefault(numButton);
+        setButtonDefault(numButton);
         isFirstReplaceClicked = false;
-        firstClickedOrderNum = -1;
+        firstClickedButton = null;
+        firstClickedNum = FixedWords.NON_SELECTED;
     }
 
-    public void replacing2players(int firstSelectedOrderNum, int secondSelectedOrderNum) {
+    private void setButtonDefault(Button button) {
+        button.setTextColor(Color.parseColor(FixedWords.COLOR_BLACK));
+        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.order_num_button_background, null));
+    }
+
+    private void exchangeSubPlayers(int firstSelectedOrderNum, int secondSelectedOrderNum) {
+        databaseUsing.exchangeSubPlayers(
+                orderType,
+                CachedPlayersInfo.instance.getSubMembers(orderType).get(firstSelectedOrderNum),
+                CachedPlayersInfo.instance.getSubMembers(orderType).get(secondSelectedOrderNum));
+    }
+
+
+
+    private void exchangeStartingPlayers(int firstSelectedOrderNum, int secondSelectedOrderNum) {
 
         // 最初に選択した選手のところに後から選択した選手を上書き
         databaseUsing.registerStartingPlayer(firstSelectedOrderNum,
@@ -348,6 +386,14 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
         title.setText(R.string.replace_title);
         title.setTextColor(Color.parseColor(FixedWords.COLOR_EMPHASIZING));
+
+        addSub.setEnabled(false);
+        addSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        orderSwitch.setEnabled(false);
+        orderSwitch.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        deleteSub.setEnabled(false);
+        deleteSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        resetRoles();
     }
 
     public void onClickField(View view) {
@@ -515,9 +561,9 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     @Override
-    public void onClickOrderNum(int orderNum, Button numButton) {
+    public void onClickStartingOrderNum(int orderNum, Button numButton) {
         if (isReplacing) {
-            replaceMethod(orderNum, numButton);
+            checkSelectedStartingPlayer(orderNum, numButton);
         } else {
             selectNum(orderNum);
         }
@@ -531,6 +577,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
             CachedPlayersInfo.instance.deleteSubPlayer(orderType, listPosition);
             subMembersFragment.updatePlayerListView();
             setLayoutDefault();
+        } else if (isReplacing) {
+            checkSelectedSubPlayer(listPosition, numButton);
         } else {
             // overwrite mode
             currentSubListIndex = listPosition;

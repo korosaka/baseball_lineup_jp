@@ -116,6 +116,25 @@ public class DatabaseUsing {
         return cursor.getColumnIndex(columnName);
     }
 
+    public void exchangeSubPlayers(int orderType, SubPlayerListItemData player1, SubPlayerListItemData player2) {
+        updateSubPlayer(
+                orderType,
+                player1.getId(),
+                player2.getPitcher(),
+                player2.getBatter(),
+                player2.getRunner(),
+                player2.getFielder(),
+                player2.getName());
+        updateSubPlayer(
+                orderType,
+                player2.getId(),
+                player1.getPitcher(),
+                player1.getBatter(),
+                player1.getRunner(),
+                player1.getFielder(),
+                player1.getName());
+    }
+
     public void updateSubPlayer(
             int orderType, int id, boolean isPitcher, boolean isBatter, boolean isRunner, boolean isFielder, String name) {
 

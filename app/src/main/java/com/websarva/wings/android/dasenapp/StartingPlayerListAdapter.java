@@ -64,7 +64,7 @@ public class StartingPlayerListAdapter extends ArrayAdapter<StartingPlayerListIt
         }
         orderButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mListener.onClickOrderNum(orderNum, orderButton);
+                mListener.onClickStartingOrderNum(orderNum, orderButton);
             }
         });
 
@@ -104,6 +104,6 @@ public class StartingPlayerListAdapter extends ArrayAdapter<StartingPlayerListIt
 }
 
 interface StartingPlayerListAdapterListener {
-    void onClickOrderNum(int orderNum, Button numButton);
+    void onClickStartingOrderNum(int orderNum, Button numButton);
     void setDhPitcherButton(Button pitcherButton);
 }

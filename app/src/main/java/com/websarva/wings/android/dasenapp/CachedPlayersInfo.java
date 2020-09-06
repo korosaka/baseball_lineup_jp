@@ -66,11 +66,6 @@ public class CachedPlayersInfo {
         else subMembersDh.set(listIndex, newPlayer);
     }
 
-//    public SubPlayerListItemData getSubMember(int orderType, int positionNum) {
-//        if (orderType == FixedWords.NORMAL_ORDER) return subMembersNormal.get(positionNum);
-//        return subMembersDh.get(positionNum);
-//    }
-
     private void setNameNormal(int orderNum, String name) {
         startingNamesOfNormal[convertOrderNumToIndexNum(orderNum)] = name;
     }
