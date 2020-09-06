@@ -62,7 +62,7 @@ public class SubPlayerListAdapter extends ArrayAdapter<SubPlayerListItemData> {
 
         orderButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mListener.onClickSubOrderNum(playerItem, orderButton);
+                mListener.onClickSubOrderNum(position, playerItem, orderButton);
             }
         });
 
@@ -104,6 +104,6 @@ public class SubPlayerListAdapter extends ArrayAdapter<SubPlayerListItemData> {
 }
 
 interface SubPlayerListAdapterListener {
-    void onClickSubOrderNum(SubPlayerListItemData subMember, Button numButton);
+    void onClickSubOrderNum(int listPosition, SubPlayerListItemData subMember, Button numButton);
 }
 

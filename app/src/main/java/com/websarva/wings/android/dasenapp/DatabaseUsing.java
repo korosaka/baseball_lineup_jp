@@ -164,7 +164,7 @@ public class DatabaseUsing {
         SQLiteDatabase dbW = helper.getWritableDatabase();
 
         try {
-            deleteSqlData(orderType, orderNum, dbW);
+            deleteStartingPlayer(orderType, orderNum, dbW);
             insertSqlData(orderType, orderNum, dbW, name, position);
         } catch (Exception e) {
             Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
@@ -173,7 +173,21 @@ public class DatabaseUsing {
         }
     }
 
-    private void deleteSqlData(int orderType, int orderNum, SQLiteDatabase dbW) {
+    public void deleteSubPlayer(int orderType, int playerId) {
+        SQLiteDatabase dbW = helper.getWritableDatabase();
+        String deleteQuery = "DELETE FROM " + getSubTableName(orderType) + " WHERE " + FixedWords.COLUMN_PLAYER_ID + " = ?";
+        try {
+            SQLiteStatement stmt = dbW.compileStatement(deleteQuery);
+            stmt.bindLong(1, playerId);
+            stmt.executeUpdateDelete();
+        } catch (Exception e) {
+            Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
+        } finally {
+            dbW.close();
+        }
+    }
+
+    private void deleteStartingPlayer(int orderType, int orderNum, SQLiteDatabase dbW) {
         String sqlDelete = "DELETE FROM " + getStartingTableName(orderType) + " WHERE " + FixedWords.COLUMN_ORDER_NUMBER + " = ?";
         SQLiteStatement stmt = dbW.compileStatement(sqlDelete);
         stmt.bindLong(1, orderNum);

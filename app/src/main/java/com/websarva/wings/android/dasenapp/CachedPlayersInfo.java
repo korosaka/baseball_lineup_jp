@@ -1,7 +1,6 @@
 package com.websarva.wings.android.dasenapp;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CachedPlayersInfo {
 
@@ -27,6 +26,11 @@ public class CachedPlayersInfo {
                 subMembersDh.add(subMember);
                 break;
         }
+    }
+
+    public void deleteSubPlayer(int orderType, int listIndex) {
+        if (orderType == FixedWords.NORMAL_ORDER) subMembersNormal.remove(listIndex);
+        else subMembersDh.remove(listIndex);
     }
 
     public void clearSubArray(int orderType) {

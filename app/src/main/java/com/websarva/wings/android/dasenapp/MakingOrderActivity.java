@@ -36,6 +36,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private Button cancel;
     private Button replace;
     private Boolean isReplacing = false;
+    private Boolean isDeleting = false;
     private Boolean isFirstReplaceClicked = false;
     private TextView title;
     private int currentNum;
@@ -249,6 +250,14 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         clear.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.clear_button_background, null));
         replace.setEnabled(false);
         replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+
+        // TODO for sub
+        addSub.setEnabled(false);
+        addSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        orderSwitch.setEnabled(false);
+        orderSwitch.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        deleteSub.setEnabled(false);
+        deleteSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
     }
 
     public void onClickSave(View view) {
@@ -285,7 +294,17 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         clear.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
         replace.setEnabled(true);
         replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
+        // TODO sub
         resetRoles();
+        deleteSub.setEnabled(true);
+        deleteSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
+        addSub.setEnabled(true);
+        addSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
+        orderSwitch.setEnabled(true);
+        orderSwitch.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.replace_button_background, null));
+        title.setText(R.string.title);
+        title.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
+        isDeleting = false;
     }
 
     public void onClickClear(View view) {
@@ -382,6 +401,19 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     public void onClickDeleteSub(View view) {
+        isDeleting = true;
+        title.setText("select delete player!");
+        addSub.setEnabled(false);
+        addSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        orderSwitch.setEnabled(false);
+        orderSwitch.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        deleteSub.setEnabled(false);
+        deleteSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        replace.setEnabled(false);
+        replace.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        cancel.setEnabled(true);
+        cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
+        title.setTextColor(Color.parseColor(FixedWords.COLOR_EMPHASIZING));
     }
 
     private void showStartingOrder() {
@@ -416,7 +448,6 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         } else {
             transaction.hide(lineupFragment);
             transaction.show(subMembersFragment);
-
         }
         transaction.commit();
     }
@@ -438,8 +469,13 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     // TODO
     @Override
-    public void onClickSubOrderNum(SubPlayerListItemData subMember, Button numButton) {
-
+    public void onClickSubOrderNum(int listPosition, SubPlayerListItemData subMember, Button numButton) {
+        if (isDeleting) {
+            databaseUsing.deleteSubPlayer(orderType, subMember.getId());
+            CachedPlayersInfo.instance.deleteSubPlayer(orderType, listPosition);
+            subMembersFragment.updatePlayerListView();
+            setLayoutDefault();
+        }
     }
 
     /**
