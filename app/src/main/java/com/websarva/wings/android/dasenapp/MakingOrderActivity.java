@@ -345,16 +345,20 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
         clear.setEnabled(true);
         clear.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.clear_button_background, null));
-        exchange.setEnabled(false);
-        exchange.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        makeButtonDisable(exchange);
+        makeButtonDisable(orderSwitch);
+        if (showingOrder.equals(FixedWords.SUB_MEMBERS)) adjustViewForSub();
+    }
 
-        // TODO for sub
-        addSub.setEnabled(false);
-        addSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
-        orderSwitch.setEnabled(false);
-        orderSwitch.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
-        deleteSub.setEnabled(false);
-        deleteSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+    private void adjustViewForSub() {
+        rolesBox.setVisibility(View.VISIBLE);
+        makeButtonDisable(addSub);
+        makeButtonDisable(deleteSub);
+    }
+
+    private void makeButtonDisable(Button button) {
+        button.setEnabled(false);
+        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
     }
 
     public void onClickSave(View view) {
@@ -394,24 +398,23 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         etName.setFocusable(false);
         etName.setFocusableInTouchMode(false);
         etName.setEnabled(false);
-        record.setEnabled(false);
-        record.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
-        cancel.setEnabled(false);
-        cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
-        clear.setEnabled(false);
-        clear.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        makeButtonDisable(record);
+        makeButtonDisable(cancel);
+        makeButtonDisable(clear);
         exchange.setEnabled(true);
         exchange.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
-        // TODO sub
-        resetRoles();
-        deleteSub.setEnabled(true);
-        deleteSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
-        addSub.setEnabled(true);
-        addSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
         orderSwitch.setEnabled(true);
         orderSwitch.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
         title.setText(R.string.title);
         title.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
+
+        // TODO sub
+        resetRoles();
+        rolesBox.setVisibility(View.GONE);
+        deleteSub.setEnabled(true);
+        deleteSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
+        addSub.setEnabled(true);
+        addSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
         isDeleting = false;
     }
 
@@ -428,17 +431,13 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     public void onClickExchange(View view) {
         isExchanging = true;
-        exchange.setEnabled(false);
-        exchange.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
         cancel.setEnabled(true);
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
         title.setText(R.string.require_exchange_title);
         title.setTextColor(Color.parseColor(FixedWords.COLOR_EMPHASIZING));
-
-        addSub.setEnabled(false);
-        addSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
-        deleteSub.setEnabled(false);
-        deleteSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        makeButtonDisable(exchange);
+        makeButtonDisable(addSub);
+        makeButtonDisable(deleteSub);
         resetRoles();
     }
 
@@ -468,8 +467,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         title.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
         exchange.setEnabled(true);
         exchange.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
-        cancel.setEnabled(false);
-        cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        makeButtonDisable(cancel);
     }
 
     public void onClickSwitchOrder(View view) {
@@ -543,17 +541,13 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     public void onClickDeleteSub(View view) {
         isDeleting = true;
         title.setText("select delete player!");
-        addSub.setEnabled(false);
-        addSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
-        orderSwitch.setEnabled(false);
-        orderSwitch.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
-        deleteSub.setEnabled(false);
-        deleteSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
-        exchange.setEnabled(false);
-        exchange.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        title.setTextColor(Color.parseColor(FixedWords.COLOR_EMPHASIZING));
         cancel.setEnabled(true);
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
-        title.setTextColor(Color.parseColor(FixedWords.COLOR_EMPHASIZING));
+        makeButtonDisable(addSub);
+        makeButtonDisable(orderSwitch);
+        makeButtonDisable(deleteSub);
+        makeButtonDisable(exchange);
     }
 
     private void showStartingOrder() {
@@ -574,7 +568,6 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         tvSelectNum.setVisibility(View.GONE);
         spinner.setVisibility(View.GONE);
         subLabel.setVisibility(View.VISIBLE);
-        rolesBox.setVisibility(View.VISIBLE);
         addSub.setVisibility(View.VISIBLE);
         deleteSub.setVisibility(View.VISIBLE);
         orderSwitch.setText("先発表示");
