@@ -101,7 +101,7 @@ public class SubPlayerListAdapter extends ArrayAdapter<SubPlayerListItemData> {
     }
 
     private void setRoleOff(TextView roleLabel) {
-        roleLabel.setTextColor(Color.parseColor(FixedWords.COLOR_OFF_BLACK));
+        roleLabel.setTextColor(Color.parseColor(FixedWords.COLOR_OFF_WHITE));
         roleLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.role_off_background, null));
     }
 
