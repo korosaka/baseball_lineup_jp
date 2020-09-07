@@ -31,7 +31,8 @@ public class FieldActivity extends BaseAdActivity {
     private int playerNumber = 0;
     private int maxDh = 0;
     private static int displayCount = 0;
-    private static final int INTERSTITIAL_AD_FREQUENCY = 4;
+    private static final int FIRST_TIME = 1;
+    private static final int INTERSTITIAL_AD_FREQUENCY = 5;
     private int orderType;
 
     @Override
@@ -74,7 +75,7 @@ public class FieldActivity extends BaseAdActivity {
     }
 
     private Boolean shouldShowInterstitial() {
-        return displayCount % INTERSTITIAL_AD_FREQUENCY == 0;
+        return (displayCount == FIRST_TIME) || (displayCount % INTERSTITIAL_AD_FREQUENCY == 0);
     }
 
     private void bindLayout() {

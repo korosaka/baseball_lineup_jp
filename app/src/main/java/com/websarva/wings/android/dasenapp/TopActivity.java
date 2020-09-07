@@ -1,7 +1,6 @@
 package com.websarva.wings.android.dasenapp;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
