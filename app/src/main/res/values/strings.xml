@@ -13,8 +13,15 @@
     <string name="seventh">７番</string>
     <string name="eighth">８番</string>
     <string name="ninth">９番</string>
-    <string name="pitcher">P</string>
+    <string name="pitcher_initial">P</string>
+    <string name="role">起用</string>
+    <string name="role_pitcher">投手</string>
+    <string name="role_batter">代打</string>
+    <string name="role_runner">代走</string>
+    <string name="role_fielder">守備</string>
     <string name="pitcher_text">(投)</string>
+    <string name="sub_label">控</string>
+    <string name="sub">控え</string>
     <string name="hyphen_5">-----</string>
     <string name="hyphen_4">----</string>
     <string name="save">登録</string>
@@ -23,6 +30,8 @@
     <string name="sub_title">ベンチ入り選手</string>
     <string name="display_starting">先発表示</string>
     <string name="display_sub">控え表示</string>
+    <string name="add_sub">控え追加</string>
+    <string name="delete_sub">控え削除</string>
     <string-array name="positions">
         <item>----</item>
         <item>(投)</item>

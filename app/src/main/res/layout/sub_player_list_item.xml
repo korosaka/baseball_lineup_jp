@@ -11,7 +11,7 @@
         android:layout_width="60sp"
         android:layout_height="wrap_content"
         android:background="@drawable/order_num_button_background"
-        android:text="控"
+        android:text="@string/sub_label"
         android:textSize="22sp"
         android:textStyle="bold" />
 
@@ -36,7 +36,7 @@
                 android:paddingTop="1dp"
                 android:paddingRight="5dp"
                 android:paddingBottom="1dp"
-                android:text="投手"
+                android:text="@string/role_pitcher"
                 android:textColor="#000000"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -51,7 +51,7 @@
                 android:paddingTop="1dp"
                 android:paddingRight="5dp"
                 android:paddingBottom="1dp"
-                android:text="代打"
+                android:text="@string/role_batter"
                 android:textColor="#000000"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -73,7 +73,7 @@
                 android:paddingTop="1dp"
                 android:paddingRight="5dp"
                 android:paddingBottom="1dp"
-                android:text="代走"
+                android:text="@string/role_runner"
                 android:textColor="#000000"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -88,7 +88,7 @@
                 android:paddingTop="1dp"
                 android:paddingRight="5dp"
                 android:paddingBottom="1dp"
-                android:text="守備"
+                android:text="@string/role_fielder"
                 android:textColor="#000000"
                 android:textSize="15sp"
                 android:textStyle="bold" />

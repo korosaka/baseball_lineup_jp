@@ -57,7 +57,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="20dp"
-                        android:text="控え"
+                        android:text="@string/sub"
                         android:textColor="#000000"
                         android:textSize="24sp"
                         android:textStyle="bold"
@@ -96,7 +96,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:text="起用"
+                        android:text="@string/role"
                         android:textColor="#000000"
                         android:textSize="22sp"
                         android:textStyle="bold" />
@@ -110,7 +110,7 @@
                         android:background="@drawable/role_off_background"
                         android:textColor="#696969"
                         android:onClick="onClickRolePitcher"
-                        android:text="投手"
+                        android:text="@string/role_pitcher"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -123,7 +123,7 @@
                         android:background="@drawable/role_off_background"
                         android:textColor="#696969"
                         android:onClick="onClickRoleBatter"
-                        android:text="代打"
+                        android:text="@string/role_batter"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -136,7 +136,7 @@
                         android:background="@drawable/role_off_background"
                         android:textColor="#696969"
                         android:onClick="onClickRoleRunner"
-                        android:text="代走"
+                        android:text="@string/role_runner"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -149,7 +149,7 @@
                         android:background="@drawable/role_off_background"
                         android:textColor="#696969"
                         android:onClick="onClickRoleFielder"
-                        android:text="守備"
+                        android:text="@string/role_fielder"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -267,7 +267,7 @@
                     android:layout_weight="1.0"
                     android:background="@drawable/exchange_button_background"
                     android:onClick="onClickSwitchOrder"
-                    android:text="控え表示"
+                    android:text="@string/display_sub"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -280,7 +280,7 @@
                     android:layout_weight="1.0"
                     android:background="@drawable/exchange_button_background"
                     android:onClick="onClickAddSub"
-                    android:text="控え追加"
+                    android:text="@string/add_sub"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -293,7 +293,7 @@
                     android:layout_weight="1.0"
                     android:background="@drawable/exchange_button_background"
                     android:onClick="onClickDeleteSub"
-                    android:text="控え削除"
+                    android:text="@string/delete_sub"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
