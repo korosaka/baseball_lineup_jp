@@ -20,7 +20,9 @@
     <string name="save">登録</string>
     <string name="clear">クリア</string>
     <string name="title"><u>Starting Member</u></string>
-    <string name="subtitle">~Starting Member~（サブ）</string>
+    <string name="sub_title">ベンチ入り選手</string>
+    <string name="display_starting">先発表示</string>
+    <string name="display_sub">控え表示</string>
     <string-array name="positions">
         <item>----</item>
         <item>(投)</item>

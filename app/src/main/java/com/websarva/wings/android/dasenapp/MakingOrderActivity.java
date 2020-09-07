@@ -406,8 +406,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         exchange.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
         orderSwitch.setEnabled(true);
         orderSwitch.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
-        title.setText(R.string.title);
-        title.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
+        resetTitle();
 
         // TODO sub
         resetRoles();
@@ -464,8 +463,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private void cancelExchanging() {
         if (isFirstExchangeClicked) cancelFirstClick(firstClickedButton);
         isExchanging = false;
-        title.setText(R.string.title);
-        title.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
+        resetTitle();
         exchange.setEnabled(true);
         exchange.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
         makeButtonDisable(cancel);
@@ -585,7 +583,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         rolesBox.setVisibility(View.GONE);
         addSub.setVisibility(View.GONE);
         deleteSub.setVisibility(View.GONE);
-        orderSwitch.setText("控え表示");
+        orderSwitch.setText(R.string.display_sub);
+        if (!isExchanging) resetTitle();
     }
 
     private void showSubMembers() {
@@ -596,7 +595,19 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         subLabel.setVisibility(View.VISIBLE);
         addSub.setVisibility(View.VISIBLE);
         deleteSub.setVisibility(View.VISIBLE);
-        orderSwitch.setText("先発表示");
+        orderSwitch.setText(R.string.display_starting);
+        if (!isExchanging) resetTitle();
+    }
+
+    private void resetTitle() {
+        title.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
+        if (showingOrder.equals(FixedWords.Starting_ORDER)) title.setText(R.string.title);
+        else {
+            String subPlayerTitle =
+                    getString(R.string.sub_title) + FixedWords.SPACE +
+                            CachedPlayersInfo.instance.getSubMembers(orderType).size() + FixedWords.JP_PEOPLE;
+            title.setText(subPlayerTitle);
+        }
     }
 
     private void switchOrder(boolean isStartingLineup) {

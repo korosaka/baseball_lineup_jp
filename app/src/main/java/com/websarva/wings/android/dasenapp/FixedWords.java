@@ -15,6 +15,7 @@ public class FixedWords {
     public static final String SUB_MEMBERS = "subMembers";
 
     public static final String JP_NUMBER = "番";
+    public static final String JP_PEOPLE = "人";
     public static final String PITCHER_INITIAL = "P";
     public static final String PITCHER = "(投)";
     public static final String CATCHER = "(捕)";
