@@ -86,7 +86,7 @@
                     android:layout_marginRight="14dp"
                     android:gravity="center"
                     android:background="@drawable/outfielder_name_background"
-                    android:text="@string/unselected"
+                    android:text="@string/hyphen_5"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -127,7 +127,7 @@
                         android:layout_height="32sp"
                         android:gravity="center"
                         android:background="@drawable/outfielder_name_background"
-                        android:text="@string/unselected"
+                        android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -156,7 +156,7 @@
                         android:layout_height="32sp"
                         android:background="@drawable/outfielder_name_background"
                         android:gravity="center"
-                        android:text="@string/unselected"
+                        android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -195,7 +195,7 @@
                         android:layout_height="32sp"
                         android:gravity="center"
                         android:background="@drawable/infielder_name_background"
-                        android:text="@string/unselected"
+                        android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -224,7 +224,7 @@
                         android:gravity="center"
                         android:layout_marginRight="18dp"
                         android:background="@drawable/infielder_name_background"
-                        android:text="@string/unselected"
+                        android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -264,7 +264,7 @@
                         android:layout_height="32sp"
                         android:gravity="center"
                         android:background="@drawable/infielder_name_background"
-                        android:text="@string/unselected"
+                        android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -292,7 +292,7 @@
                         android:layout_width="100sp"
                         android:layout_height="32sp"
                         android:gravity="center"
-                        android:text="@string/unselected"
+                        android:text="@string/hyphen_5"
                         android:background="@drawable/infielder_name_background"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -323,7 +323,7 @@
                     android:gravity="center"
                     android:layout_marginRight="13dp"
                     android:background="@drawable/pitcher_name_background"
-                    android:text="@string/unselected"
+                    android:text="@string/hyphen_5"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -363,7 +363,7 @@
                         android:layout_height="32sp"
                         android:gravity="center"
                         android:background="@drawable/dh_name_background"
-                        android:text="@string/unselected"
+                        android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -392,7 +392,7 @@
                         android:layout_height="32sp"
                         android:gravity="center"
                         android:background="@drawable/dh_name_background"
-                        android:text="@string/unselected"
+                        android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -427,7 +427,7 @@
                         android:layout_height="32sp"
                         android:gravity="center"
                         android:background="@drawable/dh_name_background"
-                        android:text="@string/unselected"
+                        android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -456,7 +456,7 @@
                         android:layout_height="32sp"
                         android:gravity="center"
                         android:background="@drawable/dh_name_background"
-                        android:text="@string/unselected"
+                        android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -491,7 +491,7 @@
                         android:layout_height="32sp"
                         android:gravity="center"
                         android:background="@drawable/dh_name_background"
-                        android:text="@string/unselected"
+                        android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -520,7 +520,7 @@
                         android:layout_height="32sp"
                         android:gravity="center"
                         android:background="@drawable/dh_name_background"
-                        android:text="@string/unselected"
+                        android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -550,7 +550,7 @@
                     android:gravity="center"
                     android:layout_marginRight="13dp"
                     android:background="@drawable/catcher_name_background"
-                    android:text="@string/unselected"
+                    android:text="@string/hyphen_5"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />

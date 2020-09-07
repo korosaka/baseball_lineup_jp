@@ -11,208 +11,285 @@ public class DatabaseUsing {
     private DatabaseHelper helper;
 
     public DatabaseUsing(Context context) {
-        //データベースからデータを取り出してきて表示する処理
-        //データベースヘルパーオブジェクト生成
         helper = new DatabaseHelper(context);
     }
 
-    /**
-     * スタメン情報を取得
-     *
-     * @param k 1 -> DH無し(9)
-     *          2 -> DH制(10)
-     *          3 -> 全員打(10)
-     *          4 -> 全員打(11)
-     *          5 -> 全員打(12)
-     *          6 -> 全員打(13)
-     *          7 -> 全員打(14)
-     *          8 -> 全員打(15)
-     */
-    public void getPlayersInfo(int k) {
+    public void getPlayersInfo(int orderType) {
 
-        int players = 9;
-        switch (k) {
-            case FixedWords.DEFAULT:
-                players = 9;
+        int numberOfPlayers = FixedWords.NUMBER_OF_LINEUP_NORMAL;
+        switch (orderType) {
+            case FixedWords.NORMAL_ORDER:
                 break;
-            case FixedWords.DH:
-                players = 10;
-                break;
-            case FixedWords.ALL10:
-                players = 10;
-                break;
-            case FixedWords.ALL11:
-                players = 11;
-                break;
-            case FixedWords.ALL12:
-                players = 12;
-                break;
-            case FixedWords.ALL13:
-                players = 13;
-                break;
-            case FixedWords.ALL14:
-                players = 14;
-                break;
-            case FixedWords.ALL15:
-                players = 15;
+            case FixedWords.DH_ORDER:
+                numberOfPlayers = FixedWords.NUMBER_OF_LINEUP_DH;
                 break;
         }
 
-        for (int j = 0; j < players; j++) {
-            getDatabaseInfo(k, j);
+        for (int orderNum = 1; orderNum <= numberOfPlayers; orderNum++) {
+            putStartingPlayersInCache(orderType, orderNum);
         }
+
+    }
+
+    public void putSubPlayersInCache(int orderType) {
+
+        CachedPlayersInfo.instance.clearSubArray(orderType);
+        String selectQuery = "SELECT * FROM " + getSubTableName(orderType);
+        SQLiteDatabase dbR = helper.getReadableDatabase();
+        Cursor cursor = null;
+
+        try {
+            cursor = dbR.rawQuery(selectQuery, null);
+            while (cursor.moveToNext()) {
+                SubPlayerListItemData subPlayer =
+                        new SubPlayerListItemData(
+                                cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_PLAYER_ID)),
+                                translateDigitBool(cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_IS_PITCHER))),
+                                translateDigitBool(cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_IS_BATTER))),
+                                translateDigitBool(cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_IS_RUNNER))),
+                                translateDigitBool(cursor.getInt(getColumnIndex(cursor, FixedWords.COLUMN_IS_FIELDER))),
+                                cursor.getString(getColumnIndex(cursor, FixedWords.COLUMN_NAME)));
+
+                CachedPlayersInfo.instance.addSubMember(orderType, subPlayer);
+            }
+        } catch (Exception e) {
+            Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
+        } finally {
+            dbR.close();
+            if (cursor != null) cursor.close();
+        }
+
+    }
+
+    private boolean translateDigitBool(int digitBool) {
+        return digitBool == FixedWords.DIGIT_TRUE;
     }
 
     /**
      * DBから登録データ取得
      */
-    public void getDatabaseInfo(int version, int num) {
+    public void putStartingPlayersInCache(int orderType, int orderNum) {
 
         String playerName;
         String playerPosition;
-
-        //ヘルパーから接続オブジェクト取得
+        String sqlSelect = makeSelectQuery(orderType);
         SQLiteDatabase dbR = helper.getReadableDatabase();
+        Cursor cursor = null;
+
         try {
-            //SQL文字列作成➡︎検索・表示
-            //SELECT文の文字列作成
-            String sqlSelect = "SELECT playerName,position FROM lineup WHERE number = " + (version * 100 + num);
-            //sql実行（カーソルオブジェクト（実行結果そのもの？）が戻り値）
-            Cursor cursor = dbR.rawQuery(sqlSelect, null);
-            //cursor.moveToNext() ➡︎データない時（移動ができなかった時）はfalseになる
+            cursor = dbR.rawQuery(sqlSelect, new String[]{String.valueOf(orderNum)});
+            // if there isn't any data, return false
             if (cursor.moveToNext()) {
-                //カラムのインデックス値取得
-                int idxName = cursor.getColumnIndex("playerName");
-                int idxPosition = cursor.getColumnIndex("position");
-                //カラムのインデックス値を元に実際のデータ取得
-                playerName = cursor.getString(idxName);
-                playerPosition = cursor.getString(idxPosition);
-                //名前の空白登録は未登録にする
-                if (playerName.equals("")) {
-                    playerName = "-----";
-                }
+                playerName = cursor.getString(getNameIndex(cursor));
+                playerPosition = cursor.getString(getPositionIndex(cursor));
+                if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
+            } else {
+                playerName = FixedWords.HYPHEN_5;
+                playerPosition = FixedWords.HYPHEN_4;
             }
-            //データが無かった時
-            else {
-                playerName = "-----";
-                playerPosition = "----";
-            }
-            setPlayerCachedInfo(version, num, playerName, playerPosition);
-        }
-        //catchないとエラー出る　
-        catch (Exception e) {
-            //エラーメッセージ出す
-            Log.e("キャッチ", "エラー", e);
+            CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, orderNum, playerPosition, playerName);
+        } catch (Exception e) {
+            Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
         } finally {
-            //解放
             dbR.close();
+            if (cursor != null) cursor.close();
         }
-
     }
 
-    /**
-     * 1つ(1人)ずつデータベースに登録されている情報をキャッシュ
-     *
-     * @param version
-     * @param num
-     * @param name
-     * @param position
-     */
-    private void setPlayerCachedInfo(int version, int num, String name, String position) {
-        switch (version) {
-            case FixedWords.DEFAULT:
-                CachedPlayerNamesInfo.instance.setNameNormal(num, name);
-                CachedPlayerPositionsInfo.instance.setPositionNormal(num, position);
-                break;
-            case FixedWords.DH:
-                CachedPlayerNamesInfo.instance.setNameDh(num, name);
-                CachedPlayerPositionsInfo.instance.setPositionDh(num, position);
-                break;
-            case FixedWords.ALL10:
-                CachedPlayerNamesInfo.instance.setNameAll10(num, name);
-                CachedPlayerPositionsInfo.instance.setPositionAll10(num, position);
-                break;
-            case FixedWords.ALL11:
-                CachedPlayerNamesInfo.instance.setNameAll11(num, name);
-                CachedPlayerPositionsInfo.instance.setPositionAll11(num, position);
-                break;
-            case FixedWords.ALL12:
-                CachedPlayerNamesInfo.instance.setNameAll12(num, name);
-                CachedPlayerPositionsInfo.instance.setPositionAll12(num, position);
-                break;
-            case FixedWords.ALL13:
-                CachedPlayerNamesInfo.instance.setNameAll13(num, name);
-                CachedPlayerPositionsInfo.instance.setPositionAll13(num, position);
-                break;
-            case FixedWords.ALL14:
-                CachedPlayerNamesInfo.instance.setNameAll14(num, name);
-                CachedPlayerPositionsInfo.instance.setPositionAll14(num, position);
-                break;
-            case FixedWords.ALL15:
-                CachedPlayerNamesInfo.instance.setNameAll15(num, name);
-                CachedPlayerPositionsInfo.instance.setPositionAll15(num, position);
-                break;
-        }
-
+    private String makeSelectQuery(int orderType) {
+        return "SELECT " + FixedWords.COLUMN_NAME + ", " + FixedWords.COLUMN_POSITION +
+                " FROM " + getStartingTableName(orderType) +
+                " WHERE " + FixedWords.COLUMN_ORDER_NUMBER + " = ?";
     }
 
-    /**
-     * データベースへ登録処理(削除→登録)
-     */
-    public void setDatabaseInfo(int num, String name, String position) {
+    // TODO refactor (use getColumnIndex)
+    private int getNameIndex(Cursor cursor) {
+        return cursor.getColumnIndex(FixedWords.COLUMN_NAME);
+    }
+
+    // TODO refactor (use getColumnIndex)
+    private int getPositionIndex(Cursor cursor) {
+        return cursor.getColumnIndex(FixedWords.COLUMN_POSITION);
+    }
+
+    private int getColumnIndex(Cursor cursor, String columnName) {
+        return cursor.getColumnIndex(columnName);
+    }
+
+    public void exchangeSubPlayers(int orderType, SubPlayerListItemData player1, SubPlayerListItemData player2) {
+        updateSubPlayer(
+                orderType,
+                player1.getId(),
+                player2.getPitcher(),
+                player2.getBatter(),
+                player2.getRunner(),
+                player2.getFielder(),
+                player2.getName());
+        updateSubPlayer(
+                orderType,
+                player2.getId(),
+                player1.getPitcher(),
+                player1.getBatter(),
+                player1.getRunner(),
+                player1.getFielder(),
+                player1.getName());
+    }
+
+    public void updateSubPlayer(
+            int orderType, int id, boolean isPitcher, boolean isBatter, boolean isRunner, boolean isFielder, String name) {
 
         SQLiteDatabase dbW = helper.getWritableDatabase();
-        int currentVersion = CurrentOrderVersion.instance.getCurrentVersion();
-
+        String updateQuery = makeUpdateSubQuery(orderType);
         try {
-            //今あるデータ削除➡その後インサート
-
-            deleteSqlData(currentVersion, num, dbW);
-            insertSqlData(currentVersion, num, dbW, name, position);
+            SQLiteStatement stmt = dbW.compileStatement(updateQuery);
+            stmt.bindLong(1, translateBoolToDigit(isPitcher));
+            stmt.bindLong(2, translateBoolToDigit(isBatter));
+            stmt.bindLong(3, translateBoolToDigit(isRunner));
+            stmt.bindLong(4, translateBoolToDigit(isFielder));
+            stmt.bindString(5, name);
+            stmt.bindLong(6, id);
+            stmt.executeUpdateDelete();
         } catch (Exception e) {
-            Log.d("error", "例外発生");
+            Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
         } finally {
-            //データ接続プブジェクト解放
             dbW.close();
         }
     }
 
-    /**
-     * 削除処理
-     * @param version
-     * @param num
-     * @param dbW
-     */
-    private void deleteSqlData(int version, int num, SQLiteDatabase dbW) {
-        //削除用文字列
-        String sqlDelete = "DELETE FROM lineup WHERE number = ?";
-        //上記文字列からPreparedStatement取得（SQLを実行するためのインターフェース）
-        SQLiteStatement stmt = dbW.compileStatement(sqlDelete);
-        //変数バインド（数字は何番目の？に入れるか,？に入れるもの）（kはオプション選択によって変わる）
-        stmt.bindLong(1, version * 100 + num);
-        //削除SQL実行
-        stmt.executeUpdateDelete();
+    private String makeUpdateSubQuery(int orderType) {
+        return "UPDATE " + getSubTableName(orderType) +
+                " SET " + FixedWords.COLUMN_IS_PITCHER + " = ?, " +
+                FixedWords.COLUMN_IS_BATTER + " = ?, " +
+                FixedWords.COLUMN_IS_RUNNER + " = ?, " +
+                FixedWords.COLUMN_IS_FIELDER + " = ?, " +
+                FixedWords.COLUMN_NAME + " = ?" +
+                " WHERE " + FixedWords.COLUMN_PLAYER_ID + " = ?;";
+    }
+
+
+    public void registerSubPlayer(
+            int orderType, boolean isPitcher, boolean isBatter, boolean isRunner, boolean isFielder, String name) {
+
+        SQLiteDatabase dbW = helper.getWritableDatabase();
+        String insertQuery = makeSubInsertQuery(orderType);
+
+        try {
+            SQLiteStatement stmt = dbW.compileStatement(insertQuery);
+            stmt.bindLong(1, translateBoolToDigit(isPitcher));
+            stmt.bindLong(2, translateBoolToDigit(isBatter));
+            stmt.bindLong(3, translateBoolToDigit(isRunner));
+            stmt.bindLong(4, translateBoolToDigit(isFielder));
+            stmt.bindString(5, name);
+
+            stmt.executeInsert();
+        } catch (Exception e) {
+            Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
+        } finally {
+            dbW.close();
+        }
+
+    }
+
+    private int translateBoolToDigit(boolean bool) {
+        if (bool) return FixedWords.DIGIT_TRUE;
+        return FixedWords.DIGIT_FALSE;
+    }
+
+    private String makeSubInsertQuery(int orderType) {
+        return "INSERT INTO " +
+                getSubTableName(orderType) + "(" +
+                FixedWords.COLUMN_IS_PITCHER + ", " +
+                FixedWords.COLUMN_IS_BATTER + ", " +
+                FixedWords.COLUMN_IS_RUNNER + ", " +
+                FixedWords.COLUMN_IS_FIELDER + ", " +
+                FixedWords.COLUMN_NAME +
+                ") VALUES(?,?,?,?,?)";
     }
 
     /**
-     * 登録処理
-     * @param version
-     * @param num
-     * @param dbW
-     * @param name
-     * @param position
+     * store data in DB (delete → register)
      */
-    private void insertSqlData(int version, int num, SQLiteDatabase dbW, String name, String position) {
-        //インサート用文字
-        String sqlInsert = "INSERT INTO lineup(_id, number, playerName, position) VALUES(?,?,?,?)";
-        //PreparedStatement取得 (stmtは削除で使ったものの再利用)
+    public void registerStartingPlayer(int orderNum, String name, String position, int orderType) {
+
+        SQLiteDatabase dbW = helper.getWritableDatabase();
+
+        try {
+            deleteStartingPlayer(orderType, orderNum, dbW);
+            insertSqlData(orderType, orderNum, dbW, name, position);
+        } catch (Exception e) {
+            Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
+        } finally {
+            dbW.close();
+        }
+    }
+
+    public void deleteSubPlayer(int orderType, int playerId) {
+        SQLiteDatabase dbW = helper.getWritableDatabase();
+        String deleteQuery = "DELETE FROM " + getSubTableName(orderType) + " WHERE " + FixedWords.COLUMN_PLAYER_ID + " = ?";
+        try {
+            SQLiteStatement stmt = dbW.compileStatement(deleteQuery);
+            stmt.bindLong(1, playerId);
+            stmt.executeUpdateDelete();
+        } catch (Exception e) {
+            Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
+        } finally {
+            dbW.close();
+        }
+    }
+
+    private void deleteStartingPlayer(int orderType, int orderNum, SQLiteDatabase dbW) {
+        String sqlDelete = "DELETE FROM " + getStartingTableName(orderType) + " WHERE " + FixedWords.COLUMN_ORDER_NUMBER + " = ?";
+        SQLiteStatement stmt = dbW.compileStatement(sqlDelete);
+        stmt.bindLong(1, orderNum);
+        stmt.executeUpdateDelete();
+    }
+
+    private String getStartingTableName(int orderType) {
+        String tableName = FixedWords.NORMAL_ORDER_TABLE;
+        switch (orderType) {
+            case FixedWords.NORMAL_ORDER:
+                break;
+            case FixedWords.DH_ORDER:
+                tableName = FixedWords.DH_ORDER_TABLE;
+                break;
+        }
+        return tableName;
+    }
+
+    private String getSubTableName(int orderType) {
+        String tableName = FixedWords.NORMAL_SUB_TABLE;
+        switch (orderType) {
+            case FixedWords.NORMAL_ORDER:
+                break;
+            case FixedWords.DH_ORDER:
+                tableName = FixedWords.DH_SUB_TABLE;
+                break;
+        }
+        return tableName;
+    }
+
+
+    private void insertSqlData(int orderType, int orderNum, SQLiteDatabase dbW, String name, String position) {
+        String sqlInsert = makeInsertQuery(orderType);
+        int indexOrderNum = 1;
+        int indexPlayerName = 2;
+        int indexPlayerPosition = 3;
+
         SQLiteStatement stmt = dbW.compileStatement(sqlInsert);
-        //_id(primary key) は設定不要らしい
-        stmt.bindLong(2, version * 100 + num);
-        stmt.bindString(3, name);
-        stmt.bindString(4, position);
-        //インサートSQL実行
+        stmt.bindLong(indexOrderNum, orderNum);
+        stmt.bindString(indexPlayerName, name);
+        stmt.bindString(indexPlayerPosition, position);
+
         stmt.executeInsert();
+    }
+
+    private String makeInsertQuery(int orderType) {
+        return "INSERT INTO " +
+                getStartingTableName(orderType) + "(" +
+                FixedWords.COLUMN_ORDER_NUMBER + ", " +
+                FixedWords.COLUMN_NAME + ", " +
+                FixedWords.COLUMN_POSITION +
+                ") VALUES(?,?,?)";
     }
 
 

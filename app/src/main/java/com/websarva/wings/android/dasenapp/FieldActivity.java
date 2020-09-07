@@ -31,13 +31,17 @@ public class FieldActivity extends BaseAdActivity {
     private int playerNumber = 0;
     private int maxDh = 0;
     private static int displayCount = 0;
-    private static final int INTERSTITIAL_AD_FREQUENCY = 4;
+    private static final int FIRST_TIME = 1;
+    private static final int INTERSTITIAL_AD_FREQUENCY = 5;
+    private int orderType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_field);
         setAdView(findViewById(R.id.ad_view_container_on_field));
         super.onCreate(savedInstanceState);
+
+        orderType = getIntent().getIntExtra(FixedWords.ORDER_TYPE, FixedWords.NORMAL_ORDER);
         prepareInterstitialAd();
         bindLayout();
         setPlayerCount();
@@ -71,7 +75,7 @@ public class FieldActivity extends BaseAdActivity {
     }
 
     private Boolean shouldShowInterstitial() {
-        return displayCount % INTERSTITIAL_AD_FREQUENCY == 0;
+        return (displayCount == FIRST_TIME) || (displayCount % INTERSTITIAL_AD_FREQUENCY == 0);
     }
 
     private void bindLayout() {
@@ -116,37 +120,13 @@ public class FieldActivity extends BaseAdActivity {
     }
 
     private void setPlayerCount() {
-        switch (CurrentOrderVersion.instance.getCurrentVersion()) {
-            case FixedWords.DEFAULT:
+        switch (orderType) {
+            case FixedWords.NORMAL_ORDER:
                 playerNumber = 9;
                 break;
-            case FixedWords.DH:
+            case FixedWords.DH_ORDER:
                 playerNumber = 10;
                 maxDh = 1;
-                break;
-            case FixedWords.ALL10:
-                playerNumber = 10;
-                maxDh = 1;
-                break;
-            case FixedWords.ALL11:
-                playerNumber = 11;
-                maxDh = 2;
-                break;
-            case FixedWords.ALL12:
-                playerNumber = 12;
-                maxDh = 3;
-                break;
-            case FixedWords.ALL13:
-                playerNumber = 13;
-                maxDh = 4;
-                break;
-            case FixedWords.ALL14:
-                playerNumber = 14;
-                maxDh = 5;
-                break;
-            case FixedWords.ALL15:
-                playerNumber = 15;
-                maxDh = 6;
                 break;
         }
     }
@@ -154,41 +134,41 @@ public class FieldActivity extends BaseAdActivity {
     private void setPlayers() {
         int dhCount = 0;
         //ある打順の守備位置dataがどこかのポジションと合致すれば、その打順登録名を守備フィールドに
-        for (int i = 0; i < playerNumber; i++) {
-            switch (CachedPlayerPositionsInfo.instance.getAppropriatePosition(i)) {
-                case "(投)":
-                    if (CurrentOrderVersion.instance.getCurrentVersion() == FixedWords.DH)
-                        setText(position1, orderPitcher, i, true);
+        for (int orderNum = 1; orderNum <= playerNumber; orderNum++) {
+            switch (CachedPlayersInfo.instance.getPositionFromCache(orderType, orderNum)) {
+                case FixedWords.PITCHER:
+                    if (orderType == FixedWords.DH_ORDER)
+                        setText(position1, orderPitcher, orderNum, true);
                     else
-                        setText(position1, orderPitcher, i, false);
+                        setText(position1, orderPitcher, orderNum, false);
                     break;
-                case "(捕)":
-                    setText(position2, orderCatcher, i, false);
+                case FixedWords.CATCHER:
+                    setText(position2, orderCatcher, orderNum, false);
                     break;
-                case "(一)":
-                    setText(position3, orderFirst, i, false);
+                case FixedWords.FIRST_BASE:
+                    setText(position3, orderFirst, orderNum, false);
                     break;
-                case "(二)":
-                    setText(position4, orderSecond, i, false);
+                case FixedWords.SECOND_BASE:
+                    setText(position4, orderSecond, orderNum, false);
                     break;
-                case "(三)":
-                    setText(position5, orderThird, i, false);
+                case FixedWords.THIRD_BASE:
+                    setText(position5, orderThird, orderNum, false);
                     break;
-                case "(遊)":
-                    setText(position6, orderShort, i, false);
+                case FixedWords.SHORT_STOP:
+                    setText(position6, orderShort, orderNum, false);
                     break;
-                case "(左)":
-                    setText(position7, orderLeft, i, false);
+                case FixedWords.LEFT:
+                    setText(position7, orderLeft, orderNum, false);
                     break;
-                case "(中)":
-                    setText(position8, orderCenter, i, false);
+                case FixedWords.CENTER:
+                    setText(position8, orderCenter, orderNum, false);
                     break;
-                case "(右)":
-                    setText(position9, orderRight, i, false);
+                case FixedWords.RIGHT:
+                    setText(position9, orderRight, orderNum, false);
                     break;
-                case "(DH)":
+                case FixedWords.DH:
                     if (dhCount >= maxDh) dhCount = 0;
-                    setText(dh[dhCount], orderDh[dhCount], i, false);
+                    setText(dh[dhCount], orderDh[dhCount], orderNum, false);
                     dhCount++;
                     break;
                 default:
@@ -197,11 +177,11 @@ public class FieldActivity extends BaseAdActivity {
         }
     }
 
-    private void setText(TextView name, TextView order, int num, boolean dhPitcher) {
-        String playerName = customNameSpace(CachedPlayerNamesInfo.instance.getAppropriateName(num));
+    private void setText(TextView name, TextView order, int orderNum, boolean dhPitcher) {
+        String playerName = customNameSpace(CachedPlayersInfo.instance.getNameFromCache(orderType, orderNum));
         name.setText(playerName);
-        if (dhPitcher) order.setText("[P]");
-        else order.setText("[" + (num + 1) + "]");
+        if (dhPitcher) order.setText(("[" + FixedWords.PITCHER_INITIAL + "]"));
+        else order.setText(("[" + orderNum + "]"));
 
 
         int textSize;

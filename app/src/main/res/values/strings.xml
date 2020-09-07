@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">〜野球スタメンアプリ〜</string>
+    <string name="app_name">野球スタメンアプリ</string>
+    <string name="app_title1">野球スタメン</string>
+    <string name="app_title2">作成アプリ</string>
+    <string name="non_dh_version">DHなし</string>
+    <string name="dh_version">DHあり</string>
     <string name="first">１番</string>
     <string name="second">２番</string>
     <string name="third">３番</string>
@@ -9,15 +13,25 @@
     <string name="seventh">７番</string>
     <string name="eighth">８番</string>
     <string name="ninth">９番</string>
-    <string name="pitcher">P</string>
+    <string name="pitcher_initial">P</string>
+    <string name="role">起用</string>
+    <string name="role_pitcher">投手</string>
+    <string name="role_batter">代打</string>
+    <string name="role_runner">代走</string>
+    <string name="role_fielder">守備</string>
     <string name="pitcher_text">(投)</string>
-    <string name="unselected">-----</string>
-    <string name="current_num">----</string>
-    <string name="position">----</string>
+    <string name="sub_label">控</string>
+    <string name="sub">控え</string>
+    <string name="hyphen_5">-----</string>
+    <string name="hyphen_4">----</string>
     <string name="save">登録</string>
     <string name="clear">クリア</string>
     <string name="title"><u>Starting Member</u></string>
-    <string name="subtitle">~Starting Member~（サブ）</string>
+    <string name="sub_title">ベンチ入り選手</string>
+    <string name="display_starting">先発表示</string>
+    <string name="display_sub">控え表示</string>
+    <string name="add_sub">控え追加</string>
+    <string name="delete_sub">控え削除</string>
     <string-array name="positions">
         <item>----</item>
         <item>(投)</item>
@@ -67,11 +81,13 @@
     <string name="yes">はい</string>
     <string name="order">ノーマル</string>
     <string name="subOrder">DH</string>
-    <string name="field">守備画面表示</string>
+    <string name="field">守備画面</string>
     <string name="back">戻る</string>
     <string name="cancel">キャンセル</string>
-    <string name="replace">入れ替え</string>
-    <string name="replace_title">入れ替える２つの打順を選んでください</string>
+    <string name="exchange">入れ替え</string>
+    <string name="require_exchange_title">入れ替える２つの打順を選んでください</string>
+    <string name="require_delete_title">削除する選手を選んでください</string>
+    <string name="announce_limit_sub">控え登録が上限です。</string>
     <string name="share">LINE/Twitter</string>
     <string name="no_order">[-]</string>
     <!-- TODO: Remove or change this placeholder text -->
