@@ -65,8 +65,6 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     //ここからmain
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO debug
-//        android.os.Debug.waitForDebugger();
         setContentView(R.layout.activity_making_order);
         setAdView(findViewById(R.id.ad_view_container_on_order));
         super.onCreate(savedInstanceState);
