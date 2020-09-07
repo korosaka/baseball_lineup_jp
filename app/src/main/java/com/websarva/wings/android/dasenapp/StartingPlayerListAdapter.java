@@ -56,7 +56,6 @@ public class StartingPlayerListAdapter extends ArrayAdapter<StartingPlayerListIt
 
         if (orderNum == FixedWords.DH_PITCHER_ORDER) {
             orderButton.setText(FixedWords.PITCHER_INITIAL);
-            mListener.setDhPitcherButton(orderButton);
             positionText.setTextColor(Color.parseColor(FixedWords.COLOR_PITCHER_TEXT));
         } else {
             String orderNumJP = orderNum + FixedWords.JP_NUMBER;
@@ -105,5 +104,4 @@ public class StartingPlayerListAdapter extends ArrayAdapter<StartingPlayerListIt
 
 interface StartingPlayerListAdapterListener {
     void onClickStartingOrderNum(int orderNum, Button numButton);
-    void setDhPitcherButton(Button pitcherButton);
 }

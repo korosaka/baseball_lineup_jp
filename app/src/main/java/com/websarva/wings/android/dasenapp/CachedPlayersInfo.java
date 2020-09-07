@@ -6,7 +6,7 @@ public class CachedPlayersInfo {
 
     public static CachedPlayersInfo instance = new CachedPlayersInfo();
 
-    // TODO should treat as starting players[] ??
+    // TODO should treat as starting players[] like sub??
     private String[] startingNamesOfNormal = new String[FixedWords.NUMBER_OF_LINEUP_NORMAL];
     private String[] startingNamesOfDh = new String[FixedWords.NUMBER_OF_LINEUP_DH];
 

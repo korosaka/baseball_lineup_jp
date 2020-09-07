@@ -1,22 +1,20 @@
 package com.websarva.wings.android.dasenapp;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO remake like sub ? at least make parent class
 public class StartingLineupFragment extends Fragment {
 
     protected ListView playerList;

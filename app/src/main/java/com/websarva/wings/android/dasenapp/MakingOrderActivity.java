@@ -52,7 +52,6 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private DatabaseUsing databaseUsing;
     private StartingLineupFragment lineupFragment;
     private SubMembersFragment subMembersFragment;
-    private Button dhPitcherButton;
     private int orderType;
     private String showingOrder;
 
@@ -249,23 +248,38 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     private void exchangeStartingPlayers(int firstSelectedOrderNum, int secondSelectedOrderNum) {
 
-        // 最初に選択した選手のところに後から選択した選手を上書き
-        databaseUsing.registerStartingPlayer(firstSelectedOrderNum,
-                CachedPlayersInfo.instance.getNameFromCache(orderType, secondSelectedOrderNum),
-                CachedPlayersInfo.instance.getPositionFromCache(orderType, secondSelectedOrderNum),
-                orderType);
-
-        // 後に選択した選手の場所に最初の選手を登録
-        databaseUsing.registerStartingPlayer(secondSelectedOrderNum,
-                CachedPlayersInfo.instance.getNameFromCache(orderType, firstSelectedOrderNum),
-                CachedPlayersInfo.instance.getPositionFromCache(orderType, firstSelectedOrderNum),
-                orderType);
+        if (isContainingDhPitcher(firstSelectedOrderNum, secondSelectedOrderNum)) {
+            // only name will be exchanged
+            databaseUsing.registerStartingPlayer(firstSelectedOrderNum,
+                    CachedPlayersInfo.instance.getNameFromCache(orderType, secondSelectedOrderNum),
+                    CachedPlayersInfo.instance.getPositionFromCache(orderType, firstSelectedOrderNum),
+                    orderType);
+            databaseUsing.registerStartingPlayer(secondSelectedOrderNum,
+                    CachedPlayersInfo.instance.getNameFromCache(orderType, firstSelectedOrderNum),
+                    CachedPlayersInfo.instance.getPositionFromCache(orderType, secondSelectedOrderNum),
+                    orderType);
+        } else {
+            // 最初に選択した選手のところに後から選択した選手を上書き
+            databaseUsing.registerStartingPlayer(firstSelectedOrderNum,
+                    CachedPlayersInfo.instance.getNameFromCache(orderType, secondSelectedOrderNum),
+                    CachedPlayersInfo.instance.getPositionFromCache(orderType, secondSelectedOrderNum),
+                    orderType);
+            // 後に選択した選手の場所に最初の選手を登録
+            databaseUsing.registerStartingPlayer(secondSelectedOrderNum,
+                    CachedPlayersInfo.instance.getNameFromCache(orderType, firstSelectedOrderNum),
+                    CachedPlayersInfo.instance.getPositionFromCache(orderType, firstSelectedOrderNum),
+                    orderType);
+        }
 
         // キャッシュデータもデータベースの内容に合わせる(入れ替え後のデータに更新する)
         databaseUsing.putStartingPlayersInCache(orderType, firstSelectedOrderNum);
         databaseUsing.putStartingPlayersInCache(orderType, secondSelectedOrderNum);
 
         updateInListView(firstSelectedOrderNum, secondSelectedOrderNum);
+    }
+
+    private boolean isContainingDhPitcher(int num1, int num2) {
+        return (num1 == FixedWords.NUMBER_OF_LINEUP_DH || num2 == FixedWords.NUMBER_OF_LINEUP_DH);
     }
 
     private void updateInListView(int firstSelectedOrderNum, int secondSelectedOrderNum) {
@@ -413,7 +427,6 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     public void onClickExchange(View view) {
-        if (orderType == FixedWords.DH_ORDER) setPitcherButtonEnable(false);
         isExchanging = true;
         exchange.setEnabled(false);
         exchange.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
@@ -457,14 +470,6 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         exchange.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
         cancel.setEnabled(false);
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
-        if (orderType == FixedWords.DH_ORDER) setPitcherButtonEnable(true);
-    }
-
-    private void setPitcherButtonEnable(boolean enable) {
-        dhPitcherButton.setEnabled(enable);
-        int backgroundId = R.drawable.order_num_button_background;
-        if (!enable) backgroundId = R.drawable.disable_button_background;
-        dhPitcherButton.setBackground(ResourcesCompat.getDrawable(getResources(), backgroundId, null));
     }
 
     public void onClickSwitchOrder(View view) {
@@ -620,13 +625,6 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         }
     }
 
-    /**
-     * for replacing on DH order (disable pitcher button)
-     */
-    @Override
-    public void setDhPitcherButton(Button pitcherButton) {
-        this.dhPitcherButton = pitcherButton;
-    }
 
     @Override
     void keyBackFunction() {
