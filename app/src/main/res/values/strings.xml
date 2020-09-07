@@ -76,6 +76,7 @@
     <string name="exchange">入れ替え</string>
     <string name="require_exchange_title">入れ替える２つの打順を選んでください</string>
     <string name="require_delete_title">削除する選手を選んでください</string>
+    <string name="announce_limit_sub">控え登録が上限です。</string>
     <string name="share">LINE/Twitter</string>
     <string name="no_order">[-]</string>
     <!-- TODO: Remove or change this placeholder text -->

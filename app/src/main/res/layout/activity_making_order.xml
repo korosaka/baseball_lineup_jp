@@ -107,7 +107,8 @@
                         android:layout_height="36sp"
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
-                        android:background="@drawable/role_pitcher_on_background"
+                        android:background="@drawable/role_off_background"
+                        android:textColor="#696969"
                         android:onClick="onClickRolePitcher"
                         android:text="投手"
                         android:textSize="18sp"
@@ -119,7 +120,8 @@
                         android:layout_height="36sp"
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
-                        android:background="@drawable/role_batter_on_background"
+                        android:background="@drawable/role_off_background"
+                        android:textColor="#696969"
                         android:onClick="onClickRoleBatter"
                         android:text="代打"
                         android:textSize="18sp"
@@ -131,7 +133,8 @@
                         android:layout_height="36sp"
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
-                        android:background="@drawable/role_runner_on_background"
+                        android:background="@drawable/role_off_background"
+                        android:textColor="#696969"
                         android:onClick="onClickRoleRunner"
                         android:text="代走"
                         android:textSize="18sp"
@@ -143,7 +146,8 @@
                         android:layout_height="36sp"
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
-                        android:background="@drawable/role_fielder_on_background"
+                        android:background="@drawable/role_off_background"
+                        android:textColor="#696969"
                         android:onClick="onClickRoleFielder"
                         android:text="守備"
                         android:textSize="18sp"
@@ -245,7 +249,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="15dp">
+                android:layout_marginBottom="10dp">
 
             </FrameLayout>
 
@@ -299,7 +303,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="80dp">
+                android:layout_marginBottom="200dp">
 
                 <Button
                     android:layout_width="0dp"

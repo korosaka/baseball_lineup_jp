@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
@@ -549,8 +550,18 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
 
     public void onClickAddSub(View view) {
+        if (isSubLimit()) {
+            Toast.makeText(this, R.string.announce_limit_sub, Toast.LENGTH_SHORT).show();
+            return;
+        }
         currentSubListIndex = CachedPlayersInfo.instance.getSubMembers(orderType).size();
         requireInputtingPlayer(FixedWords.EMPTY);
+    }
+
+    private boolean isSubLimit() {
+        int limitSubPlayer = 16;
+        if (orderType == FixedWords.DH_ORDER) limitSubPlayer = 15;
+        return (CachedPlayersInfo.instance.getSubMembers(orderType).size() >= limitSubPlayer);
     }
 
     public void onClickDeleteSub(View view) {
