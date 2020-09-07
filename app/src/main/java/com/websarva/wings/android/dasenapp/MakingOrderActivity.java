@@ -503,33 +503,48 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         switch (role) {
             case FixedWords.ROLE_PITCHER:
                 isRolePitcher = isRole;
-                if (isRolePitcher)
-                    rolePitcher.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
-                else
-                    rolePitcher.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+                if (isRolePitcher) setRoleOn(rolePitcher, role);
+                else setRoleOff(rolePitcher);
                 break;
             case FixedWords.ROLE_BATTER:
                 isRoleBatter = isRole;
-                if (isRoleBatter)
-                    roleBatter.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
-                else
-                    roleBatter.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+                if (isRoleBatter) setRoleOn(roleBatter, role);
+                else setRoleOff(roleBatter);
                 break;
             case FixedWords.ROLE_RUNNER:
                 isRoleRunner = isRole;
-                if (isRoleRunner)
-                    roleRunner.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
-                else
-                    roleRunner.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+                if (isRoleRunner) setRoleOn(roleRunner, role);
+                else setRoleOff(roleRunner);
                 break;
             case FixedWords.ROLE_FIELDER:
                 isRoleFielder = isRole;
-                if (isRoleFielder)
-                    roleFielder.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
-                else
-                    roleFielder.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+                if (isRoleFielder) setRoleOn(roleFielder, role);
+                else setRoleOff(roleFielder);
                 break;
         }
+    }
+
+    private void setRoleOn(Button roleButton, String role) {
+        roleButton.setTextColor(Color.parseColor(FixedWords.COLOR_BLACK));
+        switch (role) {
+            case FixedWords.ROLE_PITCHER:
+                rolePitcher.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.role_pitcher_on_background, null));
+                break;
+            case FixedWords.ROLE_BATTER:
+                roleBatter.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.role_batter_on_background, null));
+                break;
+            case FixedWords.ROLE_RUNNER:
+                roleRunner.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.role_runner_on_background, null));
+                break;
+            case FixedWords.ROLE_FIELDER:
+                roleFielder.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.role_fielder_on_background, null));
+                break;
+        }
+    }
+
+    private void setRoleOff(Button roleButton) {
+        roleButton.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.role_off_background, null));
+        roleButton.setTextColor(Color.parseColor(FixedWords.COLOR_OFF_BLACK));
     }
 
 
@@ -540,7 +555,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     public void onClickDeleteSub(View view) {
         isDeleting = true;
-        title.setText("select delete player!");
+        title.setText(R.string.require_delete_title);
         title.setTextColor(Color.parseColor(FixedWords.COLOR_EMPHASIZING));
         cancel.setEnabled(true);
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));

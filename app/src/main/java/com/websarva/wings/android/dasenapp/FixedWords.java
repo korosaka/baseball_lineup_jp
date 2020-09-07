@@ -44,6 +44,7 @@ public class FixedWords {
     public static final String COLOR_EMPHASIZING = "#ff3300";
     public static final String COLOR_WHITE = "#ffffff";
     public static final String COLOR_BLACK = "#000000";
+    public static final String COLOR_OFF_BLACK = "#696969";
 
     public static final String DATABASE_NAME = "lineup.db";
     public static final String OLD_ORDER_TABLE = "lineup";

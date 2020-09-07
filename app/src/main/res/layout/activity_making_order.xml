@@ -25,7 +25,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
                     android:background="@drawable/share_button_background"
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -79,13 +81,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
                     android:layout_marginRight="5dp"
-                    android:layout_marginBottom="5dp"
                     android:background="@drawable/share_button_background"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingLeft="5dp"
-                    android:paddingRight="5dp">
+                    android:paddingTop="3dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="3dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -94,15 +98,16 @@
                         android:layout_marginRight="10dp"
                         android:text="起用"
                         android:textColor="#000000"
-                        android:textSize="24sp"
+                        android:textSize="22sp"
                         android:textStyle="bold" />
 
                     <Button
                         android:id="@+id/use_pitcher_button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="36sp"
+                        android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
-                        android:background="@drawable/disable_button_background"
+                        android:background="@drawable/role_pitcher_on_background"
                         android:onClick="onClickRolePitcher"
                         android:text="投手"
                         android:textSize="18sp"
@@ -111,9 +116,10 @@
                     <Button
                         android:id="@+id/use_batter_button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="36sp"
+                        android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
-                        android:background="@drawable/disable_button_background"
+                        android:background="@drawable/role_batter_on_background"
                         android:onClick="onClickRoleBatter"
                         android:text="代打"
                         android:textSize="18sp"
@@ -122,9 +128,10 @@
                     <Button
                         android:id="@+id/use_runner_button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="36sp"
+                        android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
-                        android:background="@drawable/disable_button_background"
+                        android:background="@drawable/role_runner_on_background"
                         android:onClick="onClickRoleRunner"
                         android:text="代走"
                         android:textSize="18sp"
@@ -133,9 +140,10 @@
                     <Button
                         android:id="@+id/use_fielder_button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="36sp"
+                        android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
-                        android:background="@drawable/disable_button_background"
+                        android:background="@drawable/role_fielder_on_background"
                         android:onClick="onClickRoleFielder"
                         android:text="守備"
                         android:textSize="18sp"
@@ -147,9 +155,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_margin="5dp"
                     android:gravity="center"
                     android:orientation="horizontal">
 
