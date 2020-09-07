@@ -1,11 +1,11 @@
 package com.websarva.wings.android.dasenapp;
 
-public class PlayerListItemData {
+public class StartingPlayerListItemData {
     private int orderNumber;
     private String position;
     private String name;
 
-    public PlayerListItemData(int orderNum, String position, String name) {
+    public StartingPlayerListItemData(int orderNum, String position, String name) {
         this.orderNumber = orderNum;
         this.position = position;
         this.name = name;

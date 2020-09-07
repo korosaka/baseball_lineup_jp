@@ -10,6 +10,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     private static final int DATABASE_VERSION = 2;
     private static final int PREVIOUS_DB_VERSION = 1;
+    // TODO refactor
     private static final String CREATE_NORMAL_ORDER_TABLE =
             "CREATE TABLE " +
                     FixedWords.NORMAL_ORDER_TABLE + "(" +
@@ -22,6 +23,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     FixedWords.COLUMN_ORDER_NUMBER + " INTEGER PRIMARY KEY, " +
                     FixedWords.COLUMN_NAME + " TEXT, " +
                     FixedWords.COLUMN_POSITION + " TEXT);";
+
+    private static final String CREATE_NORMAL_SUB_MEMBERS_TABLE =
+            "CREATE TABLE " +
+                    FixedWords.NORMAL_SUB_TABLE + "(" +
+                    FixedWords.COLUMN_PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    FixedWords.COLUMN_IS_PITCHER + " INTEGER DEFAULT 0, " +
+                    FixedWords.COLUMN_IS_BATTER + " INTEGER DEFAULT 0, " +
+                    FixedWords.COLUMN_IS_RUNNER + " INTEGER DEFAULT 0, " +
+                    FixedWords.COLUMN_IS_FIELDER + " INTEGER DEFAULT 0, " +
+                    FixedWords.COLUMN_NAME + " TEXT);";
+
+    private static final String CREATE_DH_SUB_MEMBERS_TABLE =
+            "CREATE TABLE " +
+                    FixedWords.DH_SUB_TABLE + "(" +
+                    FixedWords.COLUMN_PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    FixedWords.COLUMN_IS_PITCHER + " INTEGER DEFAULT 0, " +
+                    FixedWords.COLUMN_IS_BATTER + " INTEGER DEFAULT 0, " +
+                    FixedWords.COLUMN_IS_RUNNER + " INTEGER DEFAULT 0, " +
+                    FixedWords.COLUMN_IS_FIELDER + " INTEGER DEFAULT 0, " +
+                    FixedWords.COLUMN_NAME + " TEXT);";
+
 
 
     public DatabaseHelper(Context context) {
@@ -36,6 +58,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_NORMAL_ORDER_TABLE);
         db.execSQL(CREATE_DH_ORDER_TABLE);
+        db.execSQL(CREATE_NORMAL_SUB_MEMBERS_TABLE);
+        db.execSQL(CREATE_DH_SUB_MEMBERS_TABLE);
     }
 
     @Override
@@ -43,6 +67,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion == PREVIOUS_DB_VERSION) deleteOldTable(db);
         db.execSQL(CREATE_NORMAL_ORDER_TABLE);
         db.execSQL(CREATE_DH_ORDER_TABLE);
+        db.execSQL(CREATE_NORMAL_SUB_MEMBERS_TABLE);
+        db.execSQL(CREATE_DH_SUB_MEMBERS_TABLE);
     }
 
     private void deleteOldTable(SQLiteDatabase db) {

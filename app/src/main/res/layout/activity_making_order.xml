@@ -25,7 +25,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
                     android:background="@drawable/share_button_background"
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -49,6 +51,18 @@
                         android:layout_height="wrap_content"
                         android:entries="@array/positions" />
 
+                    <TextView
+                        android:id="@+id/sub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="20dp"
+                        android:text="@string/sub"
+                        android:textColor="#000000"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
                     <EditText
                         android:id="@+id/etName"
                         android:layout_width="0dp"
@@ -63,11 +77,89 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/role_box_for_sub"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
                     android:layout_marginRight="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/share_button_background"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="3dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/role"
+                        android:textColor="#000000"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/use_pitcher_button"
+                        android:layout_width="0dp"
+                        android:layout_height="36sp"
+                        android:layout_marginRight="3dp"
+                        android:layout_weight="1.0"
+                        android:background="@drawable/role_off_background"
+                        android:textColor="#696969"
+                        android:onClick="onClickRolePitcher"
+                        android:text="@string/role_pitcher"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/use_batter_button"
+                        android:layout_width="0dp"
+                        android:layout_height="36sp"
+                        android:layout_marginRight="3dp"
+                        android:layout_weight="1.0"
+                        android:background="@drawable/role_off_background"
+                        android:textColor="#696969"
+                        android:onClick="onClickRoleBatter"
+                        android:text="@string/role_batter"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/use_runner_button"
+                        android:layout_width="0dp"
+                        android:layout_height="36sp"
+                        android:layout_marginRight="3dp"
+                        android:layout_weight="1.0"
+                        android:background="@drawable/role_off_background"
+                        android:textColor="#696969"
+                        android:onClick="onClickRoleRunner"
+                        android:text="@string/role_runner"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/use_fielder_button"
+                        android:layout_width="0dp"
+                        android:layout_height="36sp"
+                        android:layout_marginRight="3dp"
+                        android:layout_weight="1.0"
+                        android:background="@drawable/role_off_background"
+                        android:textColor="#696969"
+                        android:onClick="onClickRoleFielder"
+                        android:text="@string/role_fielder"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -98,13 +190,13 @@
                         android:textStyle="bold" />
 
                     <Button
-                        android:id="@+id/replace"
+                        android:id="@+id/exchange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.0"
-                        android:background="@drawable/replace_button_background"
-                        android:onClick="onClickReplace"
-                        android:text="@string/replace"
+                        android:background="@drawable/exchange_button_background"
+                        android:onClick="onClickExchange"
+                        android:text="@string/exchange"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -156,15 +248,75 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp">
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp">
 
             </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/order_switch_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/exchange_button_background"
+                    android:onClick="onClickSwitchOrder"
+                    android:text="@string/display_sub"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/add_sub_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/exchange_button_background"
+                    android:onClick="onClickAddSub"
+                    android:text="@string/add_sub"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/delete_sub_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/exchange_button_background"
+                    android:onClick="onClickDeleteSub"
+                    android:text="@string/delete_sub"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="200dp">
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/back_button_background"
+                    android:onClick="onClickBackToTop"
+                    android:text="@string/back"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <Button
                     android:layout_width="0dp"
@@ -192,26 +344,7 @@
                     android:textColor="#000000"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="80dp">
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginRight="3dp"
-                    android:layout_weight="1.0"
-                    android:background="@drawable/back_button_background"
-                    android:onClick="onClickBackToTop"
-                    android:text="@string/back"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>

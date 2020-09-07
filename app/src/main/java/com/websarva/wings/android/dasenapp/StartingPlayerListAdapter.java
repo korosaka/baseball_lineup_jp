@@ -13,14 +13,14 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
+public class StartingPlayerListAdapter extends ArrayAdapter<StartingPlayerListItemData> {
 
-    private List<PlayerListItemData> playerItems;
+    private List<StartingPlayerListItemData> playerItems;
     private int mResource;
     private LayoutInflater mInflater;
-    private PlayerListAdapterListener mListener;
+    private StartingPlayerListAdapterListener mListener;
 
-    public PlayerListAdapter(Context context, int resource, List<PlayerListItemData> items, PlayerListAdapterListener listener) {
+    public StartingPlayerListAdapter(Context context, int resource, List<StartingPlayerListItemData> items, StartingPlayerListAdapterListener listener) {
         super(context, resource, items);
 
         playerItems = items;
@@ -51,12 +51,11 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
     }
 
     private void preparePlayerItemView(
-            PlayerListItemData playerItem, Button orderButton, TextView positionText, TextView nameText) {
+            StartingPlayerListItemData playerItem, Button orderButton, TextView positionText, TextView nameText) {
         int orderNum = playerItem.getItemOrderNumber();
 
         if (orderNum == FixedWords.DH_PITCHER_ORDER) {
             orderButton.setText(FixedWords.PITCHER_INITIAL);
-            mListener.setDhPitcherButton(orderButton);
             positionText.setTextColor(Color.parseColor(FixedWords.COLOR_PITCHER_TEXT));
         } else {
             String orderNumJP = orderNum + FixedWords.JP_NUMBER;
@@ -64,7 +63,7 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
         }
         orderButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mListener.onClickOrderNum(orderNum, orderButton);
+                mListener.onClickStartingOrderNum(orderNum, orderButton);
             }
         });
 
@@ -103,7 +102,6 @@ public class PlayerListAdapter extends ArrayAdapter<PlayerListItemData> {
 
 }
 
-interface PlayerListAdapterListener {
-    void onClickOrderNum(int orderNum, Button numButton);
-    void setDhPitcherButton(Button pitcherButton);
+interface StartingPlayerListAdapterListener {
+    void onClickStartingOrderNum(int orderNum, Button numButton);
 }

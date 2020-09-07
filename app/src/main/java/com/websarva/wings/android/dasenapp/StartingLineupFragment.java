@@ -1,26 +1,25 @@
 package com.websarva.wings.android.dasenapp;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
-import androidx.core.content.res.ResourcesCompat;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO remake like sub ? at least make parent class
 public class StartingLineupFragment extends Fragment {
 
     protected ListView playerList;
-    protected PlayerListAdapter listAdapter;
-    protected List<PlayerListItemData> players;
+    protected StartingPlayerListAdapter listAdapter;
+    protected List<StartingPlayerListItemData> players;
     // TODO after ++ -- (for special rule)
     protected int numberOfPlayer;
     protected int orderType;
@@ -49,7 +48,7 @@ public class StartingLineupFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_starting_lineup, container, false);
         playerList = view.findViewById(R.id.starting_player_list);
@@ -57,22 +56,22 @@ public class StartingLineupFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         players = new ArrayList<>();
         for (int oderNumber = 1; oderNumber <= numberOfPlayer; oderNumber++) {
-            PlayerListItemData playerItem =
-                    new PlayerListItemData(
+            StartingPlayerListItemData playerItem =
+                    new StartingPlayerListItemData(
                             oderNumber,
                             CachedPlayersInfo.instance.getPositionFromCache(orderType, oderNumber),
                             CachedPlayersInfo.instance.getNameFromCache(orderType, oderNumber));
             players.add(playerItem);
         }
         listAdapter =
-                new PlayerListAdapter(
+                new StartingPlayerListAdapter(
                         getContext(),
-                        R.layout.player_list_item,
+                        R.layout.starting_player_list_item,
                         players,
                         (MakingOrderActivity) getActivity());
         playerList.setAdapter(listAdapter);
@@ -80,24 +79,14 @@ public class StartingLineupFragment extends Fragment {
     }
 
     public void updatePlayerListView(int orderNum, String name, String position) {
-        PlayerListItemData newPlayerItem =
-                new PlayerListItemData(orderNum, position, name);
+        StartingPlayerListItemData newPlayerItem =
+                new StartingPlayerListItemData(orderNum, position, name);
         players.set(convertOrderNumToListIndex(orderNum), newPlayerItem);
         listAdapter.notifyDataSetChanged();
     }
 
     private int convertOrderNumToListIndex(int orderNum) {
         return orderNum - 1;
-    }
-
-    public void highLightButton(Button button) {
-        button.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
-        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.emphasized_button_background, null));
-    }
-
-    public void setButtonDefault(Button button) {
-        button.setTextColor(Color.parseColor(FixedWords.COLOR_BLACK));
-        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.order_num_button_background, null));
     }
 
     /**
