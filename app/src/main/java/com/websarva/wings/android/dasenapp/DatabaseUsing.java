@@ -14,7 +14,7 @@ public class DatabaseUsing {
         helper = new DatabaseHelper(context);
     }
 
-    public void getPlayersInfo(int orderType) {
+    public void getPlayersFromDB(int orderType) {
 
         int numberOfPlayers = FixedWords.NUMBER_OF_LINEUP_NORMAL;
         switch (orderType) {
@@ -30,6 +30,7 @@ public class DatabaseUsing {
             putStartingPlayersInCache(orderType, orderNum);
         }
 
+        putSubPlayersInCache(orderType);
     }
 
     public void putSubPlayersInCache(int orderType) {

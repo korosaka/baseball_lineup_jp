@@ -70,8 +70,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
         orderType = getIntent().getIntExtra(FixedWords.ORDER_TYPE, FixedWords.NORMAL_ORDER);
         databaseUsing = new DatabaseUsing(this);
-        databaseUsing.getPlayersInfo(orderType);
-        databaseUsing.putSubPlayersInCache(orderType);
+        databaseUsing.getPlayersFromDB(orderType);
         bindLayout();
         setEdit();
         setOrderFragment();
