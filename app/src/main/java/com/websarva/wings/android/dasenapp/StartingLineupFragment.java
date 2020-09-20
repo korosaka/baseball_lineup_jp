@@ -11,15 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
 
 // TODO remake like sub ? at least make parent class
 public class StartingLineupFragment extends Fragment {
 
     protected ListView playerList;
     protected StartingPlayerListAdapter listAdapter;
-    protected List<StartingPlayerListItemData> players;
     // TODO after ++ -- (for special rule)
     protected int numberOfPlayer;
     protected int orderType;
@@ -59,34 +56,18 @@ public class StartingLineupFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        players = new ArrayList<>();
-        for (int oderNumber = 1; oderNumber <= numberOfPlayer; oderNumber++) {
-            StartingPlayerListItemData playerItem =
-                    new StartingPlayerListItemData(
-                            oderNumber,
-                            CachedPlayersInfo.instance.getPositionFromCache(orderType, oderNumber),
-                            CachedPlayersInfo.instance.getNameFromCache(orderType, oderNumber));
-            players.add(playerItem);
-        }
         listAdapter =
                 new StartingPlayerListAdapter(
                         getContext(),
                         R.layout.starting_player_list_item,
-                        players,
+                        CachedPlayersInfo.instance.getStartingMembers(orderType),
                         (MakingOrderActivity) getActivity());
         playerList.setAdapter(listAdapter);
         setListViewHeightBasedOnChildren(playerList);
     }
 
-    public void updatePlayerListView(int orderNum, String name, String position) {
-        StartingPlayerListItemData newPlayerItem =
-                new StartingPlayerListItemData(orderNum, position, name);
-        players.set(convertOrderNumToListIndex(orderNum), newPlayerItem);
+    public void updatePlayerListView() {
         listAdapter.notifyDataSetChanged();
-    }
-
-    private int convertOrderNumToListIndex(int orderNum) {
-        return orderNum - 1;
     }
 
     /**

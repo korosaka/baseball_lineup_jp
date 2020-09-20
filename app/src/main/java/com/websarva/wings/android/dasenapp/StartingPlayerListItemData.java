@@ -11,15 +11,15 @@ public class StartingPlayerListItemData {
         this.name = name;
     }
 
-    public int getItemOrderNumber() {
+    public int getOrderNum() {
         return orderNumber;
     }
 
-    public String getItemPosition() {
+    public String getPosition() {
         return position;
     }
 
-    public String getItemName() {
+    public String getName() {
         return name;
     }
 }

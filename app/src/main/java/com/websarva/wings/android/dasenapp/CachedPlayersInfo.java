@@ -6,16 +6,22 @@ public class CachedPlayersInfo {
 
     public static CachedPlayersInfo instance = new CachedPlayersInfo();
 
-    // TODO should treat as starting players[] like sub??
-    private String[] startingNamesOfNormal = new String[FixedWords.NUMBER_OF_LINEUP_NORMAL];
-    private String[] startingNamesOfDh = new String[FixedWords.NUMBER_OF_LINEUP_DH];
-
-    private String[] startingPositionsOfNormal = new String[FixedWords.NUMBER_OF_LINEUP_NORMAL];
-    private String[] startingPositionsOfDh = new String[FixedWords.NUMBER_OF_LINEUP_DH];
+    private ArrayList<StartingPlayerListItemData> startingMembersNormal = new ArrayList<>();
+    private ArrayList<StartingPlayerListItemData> startingMembersDh = new ArrayList<>();
 
     private ArrayList<SubPlayerListItemData> subMembersNormal = new ArrayList<>();
     private ArrayList<SubPlayerListItemData> subMembersDh = new ArrayList<>();
 
+    public void addStartingMember(int orderType, StartingPlayerListItemData startingMember) {
+        switch (orderType) {
+            case FixedWords.NORMAL_ORDER:
+                startingMembersNormal.add(startingMember);
+                break;
+            case FixedWords.DH_ORDER:
+                startingMembersDh.add(startingMember);
+                break;
+        }
+    }
 
     public void addSubMember(int orderType, SubPlayerListItemData subMember) {
         switch (orderType) {
@@ -28,6 +34,18 @@ public class CachedPlayersInfo {
         }
     }
 
+
+    private boolean isStartingMemberInitialised(int orderType) {
+        switch (orderType) {
+            case FixedWords.NORMAL_ORDER:
+                return startingMembersNormal.size() == FixedWords.NUMBER_OF_LINEUP_NORMAL;
+            case FixedWords.DH_ORDER:
+                return startingMembersDh.size() == FixedWords.NUMBER_OF_LINEUP_DH;
+        }
+        return false;
+    }
+
+
     public void deleteSubPlayer(int orderType, int listIndex) {
         if (orderType == FixedWords.NORMAL_ORDER) subMembersNormal.remove(listIndex);
         else subMembersDh.remove(listIndex);
@@ -36,6 +54,20 @@ public class CachedPlayersInfo {
     public void clearSubArray(int orderType) {
         if (orderType == FixedWords.NORMAL_ORDER) subMembersNormal.clear();
         else subMembersDh.clear();
+    }
+
+    public void clearStartingArray(int orderType) {
+        if (orderType == FixedWords.NORMAL_ORDER) startingMembersNormal.clear();
+        else startingMembersDh.clear();
+    }
+
+    public ArrayList<StartingPlayerListItemData> getStartingMembers(int orderType) {
+        if (orderType == FixedWords.NORMAL_ORDER) return startingMembersNormal;
+        return startingMembersDh;
+    }
+
+    public StartingPlayerListItemData getStartingMember(int orderType, int orderNum) {
+        return getStartingMembers(orderType).get(convertOrderNumToIndexNum(orderNum));
     }
 
     public ArrayList<SubPlayerListItemData> getSubMembers(int orderType) {
@@ -66,86 +98,17 @@ public class CachedPlayersInfo {
         else subMembersDh.set(listIndex, newPlayer);
     }
 
-    private void setNameNormal(int orderNum, String name) {
-        startingNamesOfNormal[convertOrderNumToIndexNum(orderNum)] = name;
-    }
-
-    private void setNameDh(int orderNum, String name) {
-        startingNamesOfDh[convertOrderNumToIndexNum(orderNum)] = name;
-    }
-
-    private void setNameToCache(int orderType, int orderNum, String name) {
-        switch (orderType) {
-            case FixedWords.NORMAL_ORDER:
-                setNameNormal(orderNum, name);
-                break;
-            case FixedWords.DH_ORDER:
-                setNameDh(orderNum, name);
-                break;
-        }
-    }
-
-    private void setPositionNormal(int orderNum, String position) {
-        startingPositionsOfNormal[convertOrderNumToIndexNum(orderNum)] = position;
-    }
-
-    private void setPositionDh(int orderNum, String position) {
-        startingPositionsOfDh[convertOrderNumToIndexNum(orderNum)] = position;
-    }
-
-    private void setPositionToCache(int orderType, int orderNum, String position) {
-        switch (orderType) {
-            case FixedWords.NORMAL_ORDER:
-                setPositionNormal(orderNum, position);
-                break;
-            case FixedWords.DH_ORDER:
-                setPositionDh(orderNum, position);
-                break;
-        }
-    }
-
     public void setPlayerInfoToCache(int orderType, int orderNum, String position, String name) {
-        setNameToCache(orderType, orderNum, name);
-        setPositionToCache(orderType, orderNum, position);
+        StartingPlayerListItemData newPlayer =
+                new StartingPlayerListItemData(orderNum, position, name);
+
+        if (!isStartingMemberInitialised(orderType)) addStartingMember(orderType, newPlayer);
+
+        if (orderType == FixedWords.NORMAL_ORDER)
+            startingMembersNormal.set(convertOrderNumToIndexNum(orderNum), newPlayer);
+        else
+            startingMembersDh.set(convertOrderNumToIndexNum(orderNum), newPlayer);
     }
-
-
-    private String getNameNormal(int orderNum) {
-        return startingNamesOfNormal[convertOrderNumToIndexNum(orderNum)];
-    }
-
-    private String getNameDh(int orderNum) {
-        return startingNamesOfDh[convertOrderNumToIndexNum(orderNum)];
-    }
-
-    public String getNameFromCache(int orderType, int orderNum) {
-        switch (orderType) {
-            case FixedWords.NORMAL_ORDER:
-                return getNameNormal(orderNum);
-            case FixedWords.DH_ORDER:
-                return getNameDh(orderNum);
-        }
-        return FixedWords.EMPTY;
-    }
-
-    private String getPositionNormal(int orderNum) {
-        return startingPositionsOfNormal[convertOrderNumToIndexNum(orderNum)];
-    }
-
-    private String getPositionDh(int orderNum) {
-        return startingPositionsOfDh[convertOrderNumToIndexNum(orderNum)];
-    }
-
-    public String getPositionFromCache(int orderType, int orderNum) {
-        switch (orderType) {
-            case FixedWords.NORMAL_ORDER:
-                return getPositionNormal(orderNum);
-            case FixedWords.DH_ORDER:
-                return getPositionDh(orderNum);
-        }
-        return FixedWords.EMPTY;
-    }
-
 
     private int convertOrderNumToIndexNum(int orderNum) {
         return orderNum - 1;

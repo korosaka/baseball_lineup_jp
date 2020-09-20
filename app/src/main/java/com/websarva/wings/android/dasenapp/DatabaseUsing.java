@@ -25,6 +25,7 @@ public class DatabaseUsing {
                 break;
         }
 
+        CachedPlayersInfo.instance.clearStartingArray(orderType);
         for (int orderNum = 1; orderNum <= numberOfPlayers; orderNum++) {
             putStartingPlayersInCache(orderType, orderNum);
         }

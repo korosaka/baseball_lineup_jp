@@ -52,7 +52,7 @@ public class StartingPlayerListAdapter extends ArrayAdapter<StartingPlayerListIt
 
     private void preparePlayerItemView(
             StartingPlayerListItemData playerItem, Button orderButton, TextView positionText, TextView nameText) {
-        int orderNum = playerItem.getItemOrderNumber();
+        int orderNum = playerItem.getOrderNum();
 
         if (orderNum == FixedWords.DH_PITCHER_ORDER) {
             orderButton.setText(FixedWords.PITCHER_INITIAL);
@@ -67,8 +67,8 @@ public class StartingPlayerListAdapter extends ArrayAdapter<StartingPlayerListIt
             }
         });
 
-        positionText.setText(playerItem.getItemPosition());
-        nameText.setText(customNameSpace(playerItem.getItemName()));
+        positionText.setText(playerItem.getPosition());
+        nameText.setText(customNameSpace(playerItem.getName()));
         changeTextSize(nameText);
     }
 

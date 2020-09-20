@@ -180,13 +180,15 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     private void exchangeStartingAndSubPlayers(int subNum, int startingNum) {
+        StartingPlayerListItemData selectedStartingPlayer =
+                CachedPlayersInfo.instance.getStartingMember(orderType, startingNum);
         SubPlayerListItemData selectedSubPlayer =
                 CachedPlayersInfo.instance.getSubMembers(orderType).get(subNum);
         // into starting DB
         databaseUsing.registerStartingPlayer(
                 startingNum,
                 selectedSubPlayer.getName(),
-                CachedPlayersInfo.instance.getPositionFromCache(orderType, startingNum),
+                selectedStartingPlayer.getPosition(),
                 orderType);
         // into sub DB
         databaseUsing.updateSubPlayer(
@@ -196,13 +198,11 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
                 selectedSubPlayer.getBatter(),
                 selectedSubPlayer.getRunner(),
                 selectedSubPlayer.getFielder(),
-                CachedPlayersInfo.instance.getNameFromCache(orderType, startingNum));
+                selectedStartingPlayer.getName()
+        );
 
         databaseUsing.putStartingPlayersInCache(orderType, startingNum);
-        lineupFragment.updatePlayerListView(
-                startingNum,
-                CachedPlayersInfo.instance.getNameFromCache(orderType, startingNum),
-                CachedPlayersInfo.instance.getPositionFromCache(orderType, startingNum));
+        lineupFragment.updatePlayerListView();
         databaseUsing.putSubPlayersInCache(orderType);
         subMembersFragment.updatePlayerListView();
 
@@ -247,26 +247,35 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     private void exchangeStartingPlayers(int firstSelectedOrderNum, int secondSelectedOrderNum) {
 
+        StartingPlayerListItemData playerFirst =
+                CachedPlayersInfo.instance.getStartingMember(orderType, firstSelectedOrderNum);
+        StartingPlayerListItemData playerSecond =
+                CachedPlayersInfo.instance.getStartingMember(orderType, secondSelectedOrderNum);
+
         if (isContainingDhPitcher(firstSelectedOrderNum, secondSelectedOrderNum)) {
             // only name will be exchanged
-            databaseUsing.registerStartingPlayer(firstSelectedOrderNum,
-                    CachedPlayersInfo.instance.getNameFromCache(orderType, secondSelectedOrderNum),
-                    CachedPlayersInfo.instance.getPositionFromCache(orderType, firstSelectedOrderNum),
+            databaseUsing.registerStartingPlayer(
+                    firstSelectedOrderNum,
+                    playerSecond.getName(),
+                    playerFirst.getPosition(),
                     orderType);
-            databaseUsing.registerStartingPlayer(secondSelectedOrderNum,
-                    CachedPlayersInfo.instance.getNameFromCache(orderType, firstSelectedOrderNum),
-                    CachedPlayersInfo.instance.getPositionFromCache(orderType, secondSelectedOrderNum),
+            databaseUsing.registerStartingPlayer(
+                    secondSelectedOrderNum,
+                    playerFirst.getName(),
+                    playerSecond.getPosition(),
                     orderType);
         } else {
             // 最初に選択した選手のところに後から選択した選手を上書き
-            databaseUsing.registerStartingPlayer(firstSelectedOrderNum,
-                    CachedPlayersInfo.instance.getNameFromCache(orderType, secondSelectedOrderNum),
-                    CachedPlayersInfo.instance.getPositionFromCache(orderType, secondSelectedOrderNum),
+            databaseUsing.registerStartingPlayer(
+                    firstSelectedOrderNum,
+                    playerSecond.getName(),
+                    playerSecond.getPosition(),
                     orderType);
             // 後に選択した選手の場所に最初の選手を登録
-            databaseUsing.registerStartingPlayer(secondSelectedOrderNum,
-                    CachedPlayersInfo.instance.getNameFromCache(orderType, firstSelectedOrderNum),
-                    CachedPlayersInfo.instance.getPositionFromCache(orderType, firstSelectedOrderNum),
+            databaseUsing.registerStartingPlayer(
+                    secondSelectedOrderNum,
+                    playerFirst.getName(),
+                    playerFirst.getPosition(),
                     orderType);
         }
 
@@ -274,26 +283,21 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         databaseUsing.putStartingPlayersInCache(orderType, firstSelectedOrderNum);
         databaseUsing.putStartingPlayersInCache(orderType, secondSelectedOrderNum);
 
-        updateInListView(firstSelectedOrderNum, secondSelectedOrderNum);
+        lineupFragment.updatePlayerListView();
     }
 
     private boolean isContainingDhPitcher(int num1, int num2) {
         return (num1 == FixedWords.NUMBER_OF_LINEUP_DH || num2 == FixedWords.NUMBER_OF_LINEUP_DH);
     }
 
-    private void updateInListView(int firstSelectedOrderNum, int secondSelectedOrderNum) {
-        lineupFragment.updatePlayerListView(firstSelectedOrderNum,
-                CachedPlayersInfo.instance.getNameFromCache(orderType, firstSelectedOrderNum),
-                CachedPlayersInfo.instance.getPositionFromCache(orderType, firstSelectedOrderNum));
-        lineupFragment.updatePlayerListView(secondSelectedOrderNum,
-                CachedPlayersInfo.instance.getNameFromCache(orderType, secondSelectedOrderNum),
-                CachedPlayersInfo.instance.getPositionFromCache(orderType, secondSelectedOrderNum));
-    }
-
     private void selectNum(int orderNum) {
+        StartingPlayerListItemData selectedPlayer =
+                CachedPlayersInfo.instance.getStartingMember(orderType, orderNum);
+
         readyInputtingStartingPlayer(orderNum,
-                CachedPlayersInfo.instance.getPositionFromCache(orderType, orderNum),
-                CachedPlayersInfo.instance.getNameFromCache(orderType, orderNum));
+                selectedPlayer.getPosition(),
+                selectedPlayer.getName()
+        );
         currentStartingNum = orderNum;
     }
 
@@ -368,7 +372,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
             if (currentStartingNum == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
             databaseUsing.registerStartingPlayer(currentStartingNum, playerName, position, orderType);
             CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, currentStartingNum, position, playerName);
-            lineupFragment.updatePlayerListView(currentStartingNum, playerName, position);
+            lineupFragment.updatePlayerListView();
         } else {
             if (isNewlyAddSub()) {
                 databaseUsing.registerSubPlayer(
