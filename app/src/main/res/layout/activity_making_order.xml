@@ -102,53 +102,53 @@
                         android:textStyle="bold" />
 
                     <Button
-                        android:id="@+id/use_pitcher_button"
+                        android:id="@+id/role_pitcher_button"
                         android:layout_width="0dp"
                         android:layout_height="36sp"
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
                         android:background="@drawable/role_off_background"
                         android:textColor="#696969"
-                        android:onClick="onClickRolePitcher"
+                        android:onClick="onClickRoleButton"
                         android:text="@string/role_pitcher"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <Button
-                        android:id="@+id/use_batter_button"
+                        android:id="@+id/role_batter_button"
                         android:layout_width="0dp"
                         android:layout_height="36sp"
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
                         android:background="@drawable/role_off_background"
                         android:textColor="#696969"
-                        android:onClick="onClickRoleBatter"
+                        android:onClick="onClickRoleButton"
                         android:text="@string/role_batter"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <Button
-                        android:id="@+id/use_runner_button"
+                        android:id="@+id/role_runner_button"
                         android:layout_width="0dp"
                         android:layout_height="36sp"
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
                         android:background="@drawable/role_off_background"
                         android:textColor="#696969"
-                        android:onClick="onClickRoleRunner"
+                        android:onClick="onClickRoleButton"
                         android:text="@string/role_runner"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <Button
-                        android:id="@+id/use_fielder_button"
+                        android:id="@+id/role_fielder_button"
                         android:layout_width="0dp"
                         android:layout_height="36sp"
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
                         android:background="@drawable/role_off_background"
                         android:textColor="#696969"
-                        android:onClick="onClickRoleFielder"
+                        android:onClick="onClickRoleButton"
                         android:text="@string/role_fielder"
                         android:textSize="18sp"
                         android:textStyle="bold" />

@@ -1,9 +1,8 @@
 package com.websarva.wings.android.dasenapp;
 
-public class StartingPlayerListItemData {
+public class StartingPlayerListItemData extends BasePlayerListItemData {
     private int orderNumber;
     private String position;
-    private String name;
 
     public StartingPlayerListItemData(int orderNum, String position, String name) {
         this.orderNumber = orderNum;
@@ -11,15 +10,12 @@ public class StartingPlayerListItemData {
         this.name = name;
     }
 
-    public int getItemOrderNumber() {
+    public int getOrderNum() {
         return orderNumber;
     }
 
-    public String getItemPosition() {
+    public String getPosition() {
         return position;
     }
 
-    public String getItemName() {
-        return name;
-    }
 }
