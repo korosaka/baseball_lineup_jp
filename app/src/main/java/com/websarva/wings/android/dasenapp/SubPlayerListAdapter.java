@@ -3,11 +3,9 @@ package com.websarva.wings.android.dasenapp;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.util.List;
@@ -26,12 +24,8 @@ public class SubPlayerListAdapter extends BasePlayerListAdapter {
         mListener = listener;
     }
 
-
-    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = inflateView(convertView);
-
+    void customView(int position, View view) {
         Button orderButton = view.findViewById(R.id.sub_order_button);
         TextView pitcherLabel = view.findViewById(R.id.pitcher_label);
         TextView batterLabel = view.findViewById(R.id.batter_label);
@@ -49,8 +43,6 @@ public class SubPlayerListAdapter extends BasePlayerListAdapter {
 
         nameText.setText(customNameSpace(playerItem.getName()));
         changeTextSize(nameText);
-
-        return view;
     }
 
     private void highLightRoleLabels(

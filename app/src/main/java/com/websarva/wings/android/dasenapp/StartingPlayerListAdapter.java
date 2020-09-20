@@ -3,11 +3,8 @@ package com.websarva.wings.android.dasenapp;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 
 import java.util.List;
 
@@ -23,19 +20,13 @@ public class StartingPlayerListAdapter extends BasePlayerListAdapter {
         mListener = listener;
     }
 
-
-    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = inflateView(convertView);
-
+    void customView(int position, View view) {
         Button orderButton = view.findViewById(R.id.order_button);
         TextView positionText = view.findViewById(R.id.position_text);
         TextView nameText = view.findViewById(R.id.name_text);
 
         preparePlayerItemView(playerItems.get(position), orderButton, positionText, nameText);
-
-        return view;
     }
 
     private void preparePlayerItemView(

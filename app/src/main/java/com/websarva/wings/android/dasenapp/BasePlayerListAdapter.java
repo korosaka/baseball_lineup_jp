@@ -3,8 +3,11 @@ package com.websarva.wings.android.dasenapp;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import java.util.List;
 
@@ -19,6 +22,16 @@ abstract class BasePlayerListAdapter extends ArrayAdapter<BasePlayerListItemData
         mResource = resource;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+
+    @NonNull
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View view = inflateView(convertView);
+        customView(position, view);
+        return view;
+    }
+
+    abstract void customView(int position, View view);
 
     protected View inflateView(View convertView) {
         if (convertView != null) return convertView;
