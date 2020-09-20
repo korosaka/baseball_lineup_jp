@@ -1,12 +1,11 @@
 package com.websarva.wings.android.dasenapp;
 
-public class SubPlayerListItemData {
+public class SubPlayerListItemData extends BasePlayerListItemData {
     private int id;
     private Boolean isPitcher;
     private Boolean isBatter;
     private Boolean isRunner;
     private Boolean isFielder;
-    private String name;
 
     public SubPlayerListItemData(
             int id,
@@ -26,10 +25,6 @@ public class SubPlayerListItemData {
 
     public int getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Boolean getBatter() {

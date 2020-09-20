@@ -2,10 +2,8 @@ package com.websarva.wings.android.dasenapp;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -13,19 +11,15 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-public class StartingPlayerListAdapter extends ArrayAdapter<StartingPlayerListItemData> {
+public class StartingPlayerListAdapter extends BasePlayerListAdapter {
 
     private List<StartingPlayerListItemData> playerItems;
-    private int mResource;
-    private LayoutInflater mInflater;
     private StartingPlayerListAdapterListener mListener;
 
-    public StartingPlayerListAdapter(Context context, int resource, List<StartingPlayerListItemData> items, StartingPlayerListAdapterListener listener) {
-        super(context, resource, items);
+    public StartingPlayerListAdapter(Context context, int resource, List<? extends BasePlayerListItemData> items, StartingPlayerListAdapterListener listener) {
+        super(context, resource, (List<BasePlayerListItemData>) items);
 
-        playerItems = items;
-        mResource = resource;
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        playerItems = (List<StartingPlayerListItemData>) items;
         mListener = listener;
     }
 
@@ -33,13 +27,7 @@ public class StartingPlayerListAdapter extends ArrayAdapter<StartingPlayerListIt
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view;
-
-        if (convertView != null) {
-            view = convertView;
-        } else {
-            view = mInflater.inflate(mResource, null);
-        }
+        View view = inflateView(convertView);
 
         Button orderButton = view.findViewById(R.id.order_button);
         TextView positionText = view.findViewById(R.id.position_text);
@@ -70,34 +58,6 @@ public class StartingPlayerListAdapter extends ArrayAdapter<StartingPlayerListIt
         positionText.setText(playerItem.getPosition());
         nameText.setText(customNameSpace(playerItem.getName()));
         changeTextSize(nameText);
-    }
-
-    private void changeTextSize(TextView textView) {
-        int lengthOfText = textView.length();
-        int textSize;
-        switch (lengthOfText) {
-            case 6:
-                textSize = 24;
-                break;
-            case 7:
-                textSize = 20;
-                break;
-            default:
-                textSize = 28;
-                break;
-        }
-        textView.setTextSize(textSize);
-    }
-
-    private String customNameSpace(String playerName) {
-        switch (playerName.length()) {
-            case 2:
-                return playerName.charAt(0) + FixedWords.SPACE + FixedWords.SPACE + FixedWords.SPACE + playerName.charAt(1);
-            case 3:
-                return playerName.charAt(0) + FixedWords.SPACE + playerName.charAt(1) + FixedWords.SPACE + playerName.charAt(2);
-            default:
-                return playerName;
-        }
     }
 
 }

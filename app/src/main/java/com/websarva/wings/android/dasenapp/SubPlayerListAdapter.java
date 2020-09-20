@@ -2,10 +2,8 @@ package com.websarva.wings.android.dasenapp;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,21 +12,17 @@ import androidx.core.content.res.ResourcesCompat;
 
 import java.util.List;
 
-public class SubPlayerListAdapter extends ArrayAdapter<SubPlayerListItemData> {
+public class SubPlayerListAdapter extends BasePlayerListAdapter {
 
     private Context mContext;
     private List<SubPlayerListItemData> playerItems;
-    private int mResource;
-    private LayoutInflater mInflater;
     private SubPlayerListAdapterListener mListener;
 
-    public SubPlayerListAdapter(Context context, int resource, List<SubPlayerListItemData> items, SubPlayerListAdapterListener listener) {
-        super(context, resource, items);
+    public SubPlayerListAdapter(Context context, int resource, List<? extends BasePlayerListItemData> items, SubPlayerListAdapterListener listener) {
+        super(context, resource, (List<BasePlayerListItemData>) items);
 
         mContext = context;
-        playerItems = items;
-        mResource = resource;
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        playerItems = (List<SubPlayerListItemData>) items;
         mListener = listener;
     }
 
@@ -36,13 +30,7 @@ public class SubPlayerListAdapter extends ArrayAdapter<SubPlayerListItemData> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view;
-
-        if (convertView != null) {
-            view = convertView;
-        } else {
-            view = mInflater.inflate(mResource, null);
-        }
+        View view = inflateView(convertView);
 
         Button orderButton = view.findViewById(R.id.sub_order_button);
         TextView pitcherLabel = view.findViewById(R.id.pitcher_label);
@@ -104,35 +92,6 @@ public class SubPlayerListAdapter extends ArrayAdapter<SubPlayerListItemData> {
         roleLabel.setTextColor(Color.parseColor(FixedWords.COLOR_OFF_WHITE));
         roleLabel.setBackground(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.role_off_background, null));
     }
-
-    private void changeTextSize(TextView textView) {
-        int lengthOfText = textView.length();
-        int textSize;
-        switch (lengthOfText) {
-            case 6:
-                textSize = 24;
-                break;
-            case 7:
-                textSize = 20;
-                break;
-            default:
-                textSize = 28;
-                break;
-        }
-        textView.setTextSize(textSize);
-    }
-
-    private String customNameSpace(String playerName) {
-        switch (playerName.length()) {
-            case 2:
-                return playerName.charAt(0) + FixedWords.SPACE + FixedWords.SPACE + FixedWords.SPACE + playerName.charAt(1);
-            case 3:
-                return playerName.charAt(0) + FixedWords.SPACE + playerName.charAt(1) + FixedWords.SPACE + playerName.charAt(2);
-            default:
-                return playerName;
-        }
-    }
-
 
 }
 
