@@ -10,41 +10,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     private static final int DATABASE_VERSION = 2;
     private static final int PREVIOUS_DB_VERSION = 1;
-    // TODO refactor
-    private static final String CREATE_NORMAL_ORDER_TABLE =
-            "CREATE TABLE " +
-                    FixedWords.NORMAL_ORDER_TABLE + "(" +
-                    FixedWords.COLUMN_ORDER_NUMBER + " INTEGER PRIMARY KEY, " +
-                    FixedWords.COLUMN_NAME + " TEXT, " +
-                    FixedWords.COLUMN_POSITION + " TEXT);";
-    private static final String CREATE_DH_ORDER_TABLE =
-            "CREATE TABLE " +
-                    FixedWords.DH_ORDER_TABLE + "(" +
-                    FixedWords.COLUMN_ORDER_NUMBER + " INTEGER PRIMARY KEY, " +
-                    FixedWords.COLUMN_NAME + " TEXT, " +
-                    FixedWords.COLUMN_POSITION + " TEXT);";
 
-    private static final String CREATE_NORMAL_SUB_MEMBERS_TABLE =
-            "CREATE TABLE " +
-                    FixedWords.NORMAL_SUB_TABLE + "(" +
-                    FixedWords.COLUMN_PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    FixedWords.COLUMN_IS_PITCHER + " INTEGER DEFAULT 0, " +
-                    FixedWords.COLUMN_IS_BATTER + " INTEGER DEFAULT 0, " +
-                    FixedWords.COLUMN_IS_RUNNER + " INTEGER DEFAULT 0, " +
-                    FixedWords.COLUMN_IS_FIELDER + " INTEGER DEFAULT 0, " +
-                    FixedWords.COLUMN_NAME + " TEXT);";
+    private final String CREATE_NORMAL_ORDER_TABLE = makeCreateStartingOrderQuery(FixedWords.NORMAL_ORDER);
+    private final String CREATE_DH_ORDER_TABLE = makeCreateStartingOrderQuery(FixedWords.DH_ORDER);
+    private final String CREATE_NORMAL_SUB_MEMBERS_TABLE = makeCreateSubMemberQuery(FixedWords.NORMAL_ORDER);
+    private final String CREATE_DH_SUB_MEMBERS_TABLE = makeCreateSubMemberQuery(FixedWords.DH_ORDER);
 
-    private static final String CREATE_DH_SUB_MEMBERS_TABLE =
-            "CREATE TABLE " +
-                    FixedWords.DH_SUB_TABLE + "(" +
-                    FixedWords.COLUMN_PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    FixedWords.COLUMN_IS_PITCHER + " INTEGER DEFAULT 0, " +
-                    FixedWords.COLUMN_IS_BATTER + " INTEGER DEFAULT 0, " +
-                    FixedWords.COLUMN_IS_RUNNER + " INTEGER DEFAULT 0, " +
-                    FixedWords.COLUMN_IS_FIELDER + " INTEGER DEFAULT 0, " +
-                    FixedWords.COLUMN_NAME + " TEXT);";
+    private String makeCreateStartingOrderQuery(int orderType) {
+        return "CREATE TABLE " +
+                getStartingTableName(orderType) + "(" +
+                FixedWords.COLUMN_ORDER_NUMBER + " INTEGER PRIMARY KEY, " +
+                FixedWords.COLUMN_NAME + " TEXT, " +
+                FixedWords.COLUMN_POSITION + " TEXT);";
+    }
 
-
+    private String makeCreateSubMemberQuery(int orderType) {
+        return "CREATE TABLE " +
+                getSubTableName(orderType) + "(" +
+                FixedWords.COLUMN_PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                FixedWords.COLUMN_IS_PITCHER + " INTEGER DEFAULT 0, " +
+                FixedWords.COLUMN_IS_BATTER + " INTEGER DEFAULT 0, " +
+                FixedWords.COLUMN_IS_RUNNER + " INTEGER DEFAULT 0, " +
+                FixedWords.COLUMN_IS_FIELDER + " INTEGER DEFAULT 0, " +
+                FixedWords.COLUMN_NAME + " TEXT);";
+    }
 
     public DatabaseHelper(Context context) {
         super(context, FixedWords.DATABASE_NAME, null, DATABASE_VERSION);
@@ -75,4 +64,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String deleteSql = "DROP TABLE IF EXISTS " + FixedWords.OLD_ORDER_TABLE + ";";
         db.execSQL(deleteSql);
     }
+
+    public String getStartingTableName(int orderType) {
+        String tableName = FixedWords.NORMAL_ORDER_TABLE;
+        switch (orderType) {
+            case FixedWords.NORMAL_ORDER:
+                break;
+            case FixedWords.DH_ORDER:
+                tableName = FixedWords.DH_ORDER_TABLE;
+                break;
+        }
+        return tableName;
+    }
+
+    public String getSubTableName(int orderType) {
+        String tableName = FixedWords.NORMAL_SUB_TABLE;
+        switch (orderType) {
+            case FixedWords.NORMAL_ORDER:
+                break;
+            case FixedWords.DH_ORDER:
+                tableName = FixedWords.DH_SUB_TABLE;
+                break;
+        }
+        return tableName;
+    }
+
 }

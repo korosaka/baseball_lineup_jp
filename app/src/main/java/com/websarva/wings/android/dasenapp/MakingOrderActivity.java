@@ -42,7 +42,6 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private String firstExchangeClickedOrder;
     private TextView title;
     private int currentStartingNum;
-    // TODO should have as a player ?
     private int currentSubListIndex;
     private int currentSubId;
     private Spinner spinner;
@@ -92,10 +91,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         rolesBox = findViewById(R.id.role_box_for_sub);
         addSub = findViewById(R.id.add_sub_button);
         deleteSub = findViewById(R.id.delete_sub_button);
-        rolePitcher = findViewById(R.id.use_pitcher_button);
-        roleBatter = findViewById(R.id.use_batter_button);
-        roleRunner = findViewById(R.id.use_runner_button);
-        roleFielder = findViewById(R.id.use_fielder_button);
+        rolePitcher = findViewById(R.id.role_pitcher_button);
+        roleBatter = findViewById(R.id.role_batter_button);
+        roleRunner = findViewById(R.id.role_runner_button);
+        roleFielder = findViewById(R.id.role_fielder_button);
         subLabel = findViewById(R.id.sub);
         orderSwitch = findViewById(R.id.order_switch_button);
         record = findViewById(R.id.record);
@@ -410,7 +409,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         orderSwitch.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
         resetTitle();
 
-        // TODO sub
+        setLayoutDefaultForSub();
+    }
+
+    private void setLayoutDefaultForSub() {
         resetRoles();
         rolesBox.setVisibility(View.GONE);
         deleteSub.setEnabled(true);
@@ -476,21 +478,21 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         else showStartingOrder();
     }
 
-    // TODO refactor ? (one method and switch (button id))
-    public void onClickRolePitcher(View view) {
-        setRole(!isRolePitcher, FixedWords.ROLE_PITCHER);
-    }
-
-    public void onClickRoleBatter(View view) {
-        setRole(!isRoleBatter, FixedWords.ROLE_BATTER);
-    }
-
-    public void onClickRoleRunner(View view) {
-        setRole(!isRoleRunner, FixedWords.ROLE_RUNNER);
-    }
-
-    public void onClickRoleFielder(View view) {
-        setRole(!isRoleFielder, FixedWords.ROLE_FIELDER);
+    public void onClickRoleButton(View view) {
+        switch (view.getId()) {
+            case R.id.role_pitcher_button:
+                setRole(!isRolePitcher, FixedWords.ROLE_PITCHER);
+                break;
+            case R.id.role_batter_button:
+                setRole(!isRoleBatter, FixedWords.ROLE_BATTER);
+                break;
+            case R.id.role_runner_button:
+                setRole(!isRoleRunner, FixedWords.ROLE_RUNNER);
+                break;
+            case R.id.role_fielder_button:
+                setRole(!isRoleFielder, FixedWords.ROLE_FIELDER);
+                break;
+        }
     }
 
     private void resetRoles() {
@@ -639,22 +641,24 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         }
     }
 
-    // TODO
     @Override
     public void onClickSubOrderNum(int listPosition, SubPlayerListItemData subMember, Button numButton) {
-        if (isDeleting) {
-            databaseUsing.deleteSubPlayer(orderType, subMember.getId());
-            CachedPlayersInfo.instance.deleteSubPlayer(orderType, listPosition);
-            subMembersFragment.updatePlayerListView();
-            setLayoutDefault();
-        } else if (isExchanging) {
-            checkSelectedSubPlayer(listPosition, numButton);
-        } else {
-            // overwrite mode
-            currentSubListIndex = listPosition;
-            currentSubId = subMember.getId();
-            readyInputtingSubPlayer(subMember);
-        }
+        if (isDeleting) deleteSubPlayer(listPosition, subMember);
+        else if (isExchanging) checkSelectedSubPlayer(listPosition, numButton);
+        else overWriteSubPlayer(listPosition, subMember);
+    }
+
+    private void deleteSubPlayer(int listPosition, SubPlayerListItemData subMember) {
+        databaseUsing.deleteSubPlayer(orderType, subMember.getId());
+        CachedPlayersInfo.instance.deleteSubPlayer(orderType, listPosition);
+        subMembersFragment.updatePlayerListView();
+        setLayoutDefault();
+    }
+
+    private void overWriteSubPlayer(int listPosition, SubPlayerListItemData subMember) {
+        currentSubListIndex = listPosition;
+        currentSubId = subMember.getId();
+        readyInputtingSubPlayer(subMember);
     }
 
 
