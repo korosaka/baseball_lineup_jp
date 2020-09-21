@@ -53,8 +53,10 @@ public class FixedWords {
     public static final String OLD_ORDER_TABLE = "lineup";
     public static final String NORMAL_ORDER_TABLE = "lineup_normal";
     public static final String DH_ORDER_TABLE = "lineup_dh";
+    public static final String SPECIAL_ORDER_TABLE = "lineup_special";
     public static final String NORMAL_SUB_TABLE = "sub_normal";
     public static final String DH_SUB_TABLE = "sub_dh";
+    public static final String SPECIAL_SUB_TABLE = "sub_special";
 
     public static final String COLUMN_ORDER_NUMBER = "order_number";
     public static final String COLUMN_NAME = "player_name";
