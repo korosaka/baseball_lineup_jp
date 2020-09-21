@@ -14,6 +14,12 @@ public class CachedPlayersInfo {
     private ArrayList<SubPlayerListItemData> subMembersDh = new ArrayList<>();
     private ArrayList<SubPlayerListItemData> subMembersSpecial = new ArrayList<>();
 
+    // for special starting order
+    private int currentNumOfSpecialLineupDB;
+    public void setCurrentNumOfSpecialLineupDB(int currentNumOfSpecialLineupDB) {
+        this.currentNumOfSpecialLineupDB = currentNumOfSpecialLineupDB;
+    }
+
     public void addStartingMember(int orderType, StartingPlayerListItemData startingMember) {
         switch (orderType) {
             case FixedWords.NORMAL_ORDER:
@@ -43,7 +49,6 @@ public class CachedPlayersInfo {
     }
 
 
-    // TODO about special
     private boolean isStartingMemberInitialised(int orderType) {
         switch (orderType) {
             case FixedWords.NORMAL_ORDER:
@@ -51,7 +56,7 @@ public class CachedPlayersInfo {
             case FixedWords.DH_ORDER:
                 return startingMembersDh.size() == FixedWords.NUMBER_OF_LINEUP_DH;
             case FixedWords.SPECIAL_ORDER:
-                return false;
+                return startingMembersSpecial.size() == currentNumOfSpecialLineupDB;
         }
         return false;
     }

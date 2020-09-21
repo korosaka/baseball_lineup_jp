@@ -2,6 +2,7 @@ package com.websarva.wings.android.dasenapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
@@ -22,6 +23,9 @@ public class DatabaseUsing {
                 break;
             case FixedWords.DH_ORDER:
                 numberOfPlayers = FixedWords.NUMBER_OF_LINEUP_DH;
+                break;
+            case FixedWords.SPECIAL_ORDER:
+                numberOfPlayers = countSpecialLineupPlayers();
                 break;
         }
 
@@ -257,6 +261,27 @@ public class DatabaseUsing {
                 FixedWords.COLUMN_NAME + ", " +
                 FixedWords.COLUMN_POSITION +
                 ") VALUES(?,?,?)";
+    }
+
+    public int countSpecialLineupPlayers() {
+        SQLiteDatabase dbR = helper.getReadableDatabase();
+        int count = (int) DatabaseUtils.queryNumEntries(dbR, FixedWords.SPECIAL_ORDER_TABLE);
+        CachedPlayersInfo.instance.setCurrentNumOfSpecialLineupDB(count);
+        dbR.close();
+        return count;
+    }
+
+    public boolean isSpecialLineupDBFilled() {
+        return countSpecialLineupPlayers() >= FixedWords.MIN_NUM_SPECIAL_PLAYER;
+    }
+
+    public void initSpecialLineupDB() {
+        String emptyName = FixedWords.HYPHEN_5;
+        String emptyPosition = FixedWords.HYPHEN_4;
+
+        for (int orderNum = 1; orderNum <= FixedWords.MIN_NUM_SPECIAL_PLAYER; orderNum++) {
+            registerStartingPlayer(orderNum, emptyName, emptyPosition, FixedWords.SPECIAL_ORDER);
+        }
     }
 
 
