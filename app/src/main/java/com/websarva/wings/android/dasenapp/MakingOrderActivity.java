@@ -553,7 +553,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         roleButton.setTextColor(Color.parseColor(FixedWords.COLOR_OFF_BLACK));
     }
 
-
+    // TODO 枠だけ追加にする？（スタメン追加処理に合わせる？）
     public void onClickAddSub(View view) {
         if (isSubLimit()) {
             Toast.makeText(this, R.string.announce_limit_sub, Toast.LENGTH_SHORT).show();
@@ -581,13 +581,32 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         makeButtonDisable(exchange);
     }
 
-    // TODO
     public void onClickAddStarting(View view) {
+        if (CachedPlayersInfo.instance.getCurrentNumOfSpecialLineupDB() >= 15) {
+            Toast.makeText(this, R.string.announce_max_limit_special, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        int addedOrderNum = CachedPlayersInfo.instance.getCurrentNumOfSpecialLineupDB() + 1;
+        String emptyName = FixedWords.HYPHEN_5;
+        String emptyPosition = FixedWords.HYPHEN_4;
+        databaseUsing.registerStartingPlayer(addedOrderNum, emptyName, emptyPosition, orderType);
+        databaseUsing.countSpecialLineupPlayers();
+        databaseUsing.putStartingPlayersInCache(orderType, addedOrderNum);
+        lineupFragment.updatePlayerListView();
     }
-    // TODO
-    public void onClickDeleteStarting(View view) {
 
+    public void onClickDeleteStarting(View view) {
+        if (CachedPlayersInfo.instance.getCurrentNumOfSpecialLineupDB() <= 9) {
+            Toast.makeText(this, R.string.announce_min_limit_special, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        databaseUsing.deleteStartingPlayerOnSpecial(
+                CachedPlayersInfo.instance.getCurrentNumOfSpecialLineupDB());
+        databaseUsing.countSpecialLineupPlayers();
+        CachedPlayersInfo.instance.deleteStartingPlayerOnSpecial();
+        lineupFragment.updatePlayerListView();
     }
 
     private void showStartingOrder() {

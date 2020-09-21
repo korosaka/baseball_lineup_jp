@@ -129,7 +129,7 @@ public class FieldActivity extends BaseAdActivity {
                 maxDh = 1;
                 break;
             case FixedWords.SPECIAL_ORDER:
-                playerNumber = CachedPlayersInfo.instance.getStartingMembers(FixedWords.SPECIAL_ORDER).size();
+                playerNumber = CachedPlayersInfo.instance.getCurrentNumOfSpecialLineupDB();
                 maxDh = playerNumber - FixedWords.MIN_NUM_SPECIAL_PLAYER;
                 break;
         }

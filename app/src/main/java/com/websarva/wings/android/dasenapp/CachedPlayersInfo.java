@@ -19,6 +19,9 @@ public class CachedPlayersInfo {
     public void setCurrentNumOfSpecialLineupDB(int currentNumOfSpecialLineupDB) {
         this.currentNumOfSpecialLineupDB = currentNumOfSpecialLineupDB;
     }
+    public int getCurrentNumOfSpecialLineupDB() {
+        return currentNumOfSpecialLineupDB;
+    }
 
     public void addStartingMember(int orderType, StartingPlayerListItemData startingMember) {
         switch (orderType) {
@@ -62,7 +65,6 @@ public class CachedPlayersInfo {
     }
 
     public void deleteStartingPlayerOnSpecial() {
-        if (!isStartingMemberInitialised(FixedWords.SPECIAL_ORDER)) return;
         int lastIndex = startingMembersSpecial.size() - 1;
         startingMembersSpecial.remove(lastIndex);
     }

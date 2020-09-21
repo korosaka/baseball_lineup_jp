@@ -51,4 +51,10 @@ public class StartingLineupFragment extends BaseMembersFragment {
                         (MakingOrderActivity) getActivity());
     }
 
+    @Override
+    public void updatePlayerListView() {
+        super.updatePlayerListView();
+        if (orderType == FixedWords.SPECIAL_ORDER) setListViewHeightBasedOnChildren(playerList);
+    }
+
 }

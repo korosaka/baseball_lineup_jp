@@ -237,6 +237,17 @@ public class DatabaseUsing {
         }
     }
 
+    public void deleteStartingPlayerOnSpecial(int orderNum) {
+        SQLiteDatabase dbW = helper.getWritableDatabase();
+        try {
+            deleteStartingPlayer(FixedWords.SPECIAL_ORDER, orderNum, dbW);
+        } catch (Exception e) {
+            Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
+        } finally {
+            dbW.close();
+        }
+    }
+
     private void deleteStartingPlayer(int orderType, int orderNum, SQLiteDatabase dbW) {
         String sqlDelete = "DELETE FROM " + helper.getStartingTableName(orderType) + " WHERE " + FixedWords.COLUMN_ORDER_NUMBER + " = ?";
         SQLiteStatement stmt = dbW.compileStatement(sqlDelete);
