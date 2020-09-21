@@ -33,6 +33,10 @@ public class TopActivity extends BaseActivity {
         startOrderActivity(FixedWords.DH_ORDER);
     }
 
+    public void onClickSpecial(View view) {
+        startOrderActivity(FixedWords.SPECIAL_ORDER);
+    }
+
     private void startOrderActivity(int orderType) {
         showProgress();
         Intent intent = new Intent(TopActivity.this, MakingOrderActivity.class);

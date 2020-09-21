@@ -4,6 +4,8 @@
     <string name="app_title2">作成アプリ</string>
     <string name="non_dh_version">DHなし</string>
     <string name="dh_version">DHあり</string>
+    <string name="special_version">特別ルール</string>
+    <string name="special_version_disable">特別ルール(有料)</string>
     <string name="first">１番</string>
     <string name="second">２番</string>
     <string name="third">３番</string>
