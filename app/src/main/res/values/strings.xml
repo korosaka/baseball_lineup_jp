@@ -34,6 +34,8 @@
     <string name="display_sub">控え表示</string>
     <string name="add_sub">控え追加</string>
     <string name="delete_sub">控え削除</string>
+    <string name="add_starting">先発追加</string>
+    <string name="delete_starting">先発削除</string>
     <string-array name="positions">
         <item>----</item>
         <item>(投)</item>

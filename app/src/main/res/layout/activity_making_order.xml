@@ -108,9 +108,9 @@
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
                         android:background="@drawable/role_off_background"
-                        android:textColor="#696969"
                         android:onClick="onClickRoleButton"
                         android:text="@string/role_pitcher"
+                        android:textColor="#696969"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -121,9 +121,9 @@
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
                         android:background="@drawable/role_off_background"
-                        android:textColor="#696969"
                         android:onClick="onClickRoleButton"
                         android:text="@string/role_batter"
+                        android:textColor="#696969"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -134,9 +134,9 @@
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
                         android:background="@drawable/role_off_background"
-                        android:textColor="#696969"
                         android:onClick="onClickRoleButton"
                         android:text="@string/role_runner"
+                        android:textColor="#696969"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -147,9 +147,9 @@
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
                         android:background="@drawable/role_off_background"
-                        android:textColor="#696969"
                         android:onClick="onClickRoleButton"
                         android:text="@string/role_fielder"
+                        android:textColor="#696969"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -296,6 +296,35 @@
                     android:text="@string/delete_sub"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/add_special_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/exchange_button_background"
+                    android:onClick="onClickAddStarting"
+                    android:text="@string/add_starting"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/delete_special_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/exchange_button_background"
+                    android:onClick="onClickDeleteStarting"
+                    android:text="@string/delete_starting"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
 
             </LinearLayout>
 

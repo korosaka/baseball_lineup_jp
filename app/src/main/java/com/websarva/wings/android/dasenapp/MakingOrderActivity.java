@@ -27,6 +27,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private LinearLayout rolesBox;
     private Button addSub;
     private Button deleteSub;
+    private Button addStarting;
+    private Button deleteStarting;
     private Button rolePitcher;
     private Button roleBatter;
     private Button roleRunner;
@@ -90,6 +92,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         rolesBox = findViewById(R.id.role_box_for_sub);
         addSub = findViewById(R.id.add_sub_button);
         deleteSub = findViewById(R.id.delete_sub_button);
+        addStarting = findViewById(R.id.add_special_button);
+        deleteStarting = findViewById(R.id.delete_special_button);
         rolePitcher = findViewById(R.id.role_pitcher_button);
         roleBatter = findViewById(R.id.role_batter_button);
         roleRunner = findViewById(R.id.role_runner_button);
@@ -577,6 +581,15 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         makeButtonDisable(exchange);
     }
 
+    // TODO
+    public void onClickAddStarting(View view) {
+
+    }
+    // TODO
+    public void onClickDeleteStarting(View view) {
+
+    }
+
     private void showStartingOrder() {
         switchOrder(true);
         showingOrder = FixedWords.Starting_ORDER;
@@ -588,6 +601,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         deleteSub.setVisibility(View.GONE);
         orderSwitch.setText(R.string.display_sub);
         if (!isExchanging) resetTitle();
+        if (orderType == FixedWords.SPECIAL_ORDER) {
+            addStarting.setVisibility(View.VISIBLE);
+            deleteStarting.setVisibility(View.VISIBLE);
+        }
     }
 
     private void showSubMembers() {
@@ -600,6 +617,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         deleteSub.setVisibility(View.VISIBLE);
         orderSwitch.setText(R.string.display_starting);
         if (!isExchanging) resetTitle();
+        if (orderType == FixedWords.SPECIAL_ORDER) {
+            addStarting.setVisibility(View.GONE);
+            deleteStarting.setVisibility(View.GONE);
+        }
     }
 
     private void resetTitle() {
