@@ -353,6 +353,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         clear.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.clear_button_background, null));
         makeButtonDisable(exchange);
         makeButtonDisable(orderSwitch);
+        if (orderType == FixedWords.SPECIAL_ORDER) {
+            makeButtonDisable(addStarting);
+            makeButtonDisable(deleteStarting);
+        }
         if (showingOrder.equals(FixedWords.SUB_MEMBERS)) adjustViewForSub();
     }
 
@@ -416,6 +420,12 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         orderSwitch.setEnabled(true);
         orderSwitch.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
         resetTitle();
+        if (orderType == FixedWords.SPECIAL_ORDER) {
+            addStarting.setEnabled(true);
+            addStarting.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
+            deleteStarting.setEnabled(true);
+            deleteStarting.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
+        }
 
         setLayoutDefaultForSub();
     }
@@ -447,6 +457,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
         title.setText(R.string.require_exchange_title);
         title.setTextColor(Color.parseColor(FixedWords.COLOR_EMPHASIZING));
+        if (orderType == FixedWords.SPECIAL_ORDER) {
+            makeButtonDisable(addStarting);
+            makeButtonDisable(deleteStarting);
+        }
         makeButtonDisable(exchange);
         makeButtonDisable(addSub);
         makeButtonDisable(deleteSub);
