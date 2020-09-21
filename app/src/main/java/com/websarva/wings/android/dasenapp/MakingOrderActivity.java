@@ -289,7 +289,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     private boolean isContainingDhPitcher(int num1, int num2) {
-        return (num1 == FixedWords.NUMBER_OF_LINEUP_DH || num2 == FixedWords.NUMBER_OF_LINEUP_DH);
+        return (orderType == FixedWords.DH_ORDER) &&
+                (num1 == FixedWords.NUMBER_OF_LINEUP_DH || num2 == FixedWords.NUMBER_OF_LINEUP_DH);
     }
 
     private void selectNum(int orderNum) {
@@ -371,7 +372,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
         if (showingOrder.equals(FixedWords.Starting_ORDER)) {
             String position = (String) spinner.getSelectedItem();
-            if (currentStartingNum == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
+            if (isDhPitcher()) position = FixedWords.PITCHER;
             databaseUsing.registerStartingPlayer(currentStartingNum, playerName, position, orderType);
             CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, currentStartingNum, position, playerName);
             lineupFragment.updatePlayerListView();
@@ -390,6 +391,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
             subMembersFragment.updatePlayerListView();
         }
         setLayoutDefault();
+    }
+
+    private boolean isDhPitcher() {
+        return (orderType == FixedWords.DH_ORDER) && (currentStartingNum == FixedWords.DH_PITCHER_ORDER);
     }
 
     private boolean isNewlyAddSub() {
