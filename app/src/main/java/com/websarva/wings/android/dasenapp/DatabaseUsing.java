@@ -17,6 +17,10 @@ public class DatabaseUsing {
 
     public void getPlayersFromDB(int orderType) {
 
+        if (orderType == FixedWords.SPECIAL_ORDER) {
+            if (!isSpecialLineupDBFilled()) initSpecialLineupDB();
+        }
+
         int numberOfPlayers = FixedWords.NUMBER_OF_LINEUP_NORMAL;
         switch (orderType) {
             case FixedWords.NORMAL_ORDER:
