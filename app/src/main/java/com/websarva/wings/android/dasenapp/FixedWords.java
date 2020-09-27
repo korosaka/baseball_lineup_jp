@@ -38,6 +38,7 @@ public class FixedWords {
     public static final String DATA_STORE = "dataStore";
 
     public static final int MIN_NUM_SPECIAL_PLAYER = 9;
+    public static final int MAX_NUM_SPECIAL_PLAYER = 15;
     public static final int NUMBER_OF_LINEUP_NORMAL = 9;
     public static final int NUMBER_OF_LINEUP_DH = 10;
     public static final int DH_PITCHER_ORDER = 10;

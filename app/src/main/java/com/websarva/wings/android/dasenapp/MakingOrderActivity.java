@@ -620,7 +620,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     public void onClickAddStarting(View view) {
-        if (CachedPlayersInfo.instance.getCurrentNumOfSpecialLineupDB() >= 15) {
+        if (CachedPlayersInfo.instance.getCurrentNumOfSpecialLineupDB() >= FixedWords.MAX_NUM_SPECIAL_PLAYER) {
             Toast.makeText(this, R.string.announce_max_limit_special, Toast.LENGTH_SHORT).show();
             return;
         }
