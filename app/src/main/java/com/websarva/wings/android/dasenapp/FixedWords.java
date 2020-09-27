@@ -9,9 +9,9 @@ public class FixedWords {
     public static final int NON_SELECTED = -1;
 
     public static final String ORDER_TYPE = "orderType";
-    public static final int NORMAL_ORDER = 1;
-    public static final int DH_ORDER = 2;
-    public static final int SPECIAL_ORDER = 3;
+    public static final int NORMAL_ORDER = 0;
+    public static final int DH_ORDER = 1;
+    public static final int SPECIAL_ORDER = 2;
     public static final String Starting_ORDER = "startingOrder";
     public static final String SUB_MEMBERS = "subMembers";
 

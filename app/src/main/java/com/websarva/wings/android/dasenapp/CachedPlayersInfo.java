@@ -9,10 +9,27 @@ public class CachedPlayersInfo {
     private ArrayList<StartingPlayerListItemData> startingMembersNormal = new ArrayList<>();
     private ArrayList<StartingPlayerListItemData> startingMembersDh = new ArrayList<>();
     private ArrayList<StartingPlayerListItemData> startingMembersSpecial = new ArrayList<>();
+    private ArrayList<ArrayList<StartingPlayerListItemData>> startingMembersArray = new ArrayList<>();
 
     private ArrayList<SubPlayerListItemData> subMembersNormal = new ArrayList<>();
     private ArrayList<SubPlayerListItemData> subMembersDh = new ArrayList<>();
     private ArrayList<SubPlayerListItemData> subMembersSpecial = new ArrayList<>();
+    private ArrayList<ArrayList<SubPlayerListItemData>> subMembersArray = new ArrayList<>();
+
+    /**
+     * index
+     * 0: Normal Order
+     * 1: DH Order
+     * 2: Special Order
+     */
+    public void initCachedArray() {
+        startingMembersArray.add(startingMembersNormal);
+        startingMembersArray.add(startingMembersDh);
+        startingMembersArray.add(startingMembersSpecial);
+        subMembersArray.add(subMembersNormal);
+        subMembersArray.add(subMembersDh);
+        subMembersArray.add(subMembersSpecial);
+    }
 
     // for special starting order
     private int currentNumOfSpecialLineupDB;
@@ -26,31 +43,11 @@ public class CachedPlayersInfo {
     }
 
     public void addStartingMember(int orderType, StartingPlayerListItemData startingMember) {
-        switch (orderType) {
-            case FixedWords.NORMAL_ORDER:
-                startingMembersNormal.add(startingMember);
-                break;
-            case FixedWords.DH_ORDER:
-                startingMembersDh.add(startingMember);
-                break;
-            case FixedWords.SPECIAL_ORDER:
-                startingMembersSpecial.add(startingMember);
-                break;
-        }
+        startingMembersArray.get(orderType).add(startingMember);
     }
 
     public void addSubMember(int orderType, SubPlayerListItemData subMember) {
-        switch (orderType) {
-            case FixedWords.NORMAL_ORDER:
-                subMembersNormal.add(subMember);
-                break;
-            case FixedWords.DH_ORDER:
-                subMembersDh.add(subMember);
-                break;
-            case FixedWords.SPECIAL_ORDER:
-                subMembersSpecial.add(subMember);
-                break;
-        }
+        subMembersArray.get(orderType).add(subMember);
     }
 
 
@@ -72,27 +69,19 @@ public class CachedPlayersInfo {
     }
 
     public void deleteSubPlayer(int orderType, int listIndex) {
-        if (orderType == FixedWords.NORMAL_ORDER) subMembersNormal.remove(listIndex);
-        else if (orderType == FixedWords.DH_ORDER) subMembersDh.remove(listIndex);
-        else subMembersSpecial.remove(listIndex);
+        subMembersArray.get(orderType).remove(listIndex);
     }
 
     public void clearStartingArray(int orderType) {
-        if (orderType == FixedWords.NORMAL_ORDER) startingMembersNormal.clear();
-        else if (orderType == FixedWords.DH_ORDER) startingMembersDh.clear();
-        else startingMembersSpecial.clear();
+        startingMembersArray.get(orderType).clear();
     }
 
     public void clearSubArray(int orderType) {
-        if (orderType == FixedWords.NORMAL_ORDER) subMembersNormal.clear();
-        else if (orderType == FixedWords.DH_ORDER) subMembersDh.clear();
-        else subMembersSpecial.clear();
+        subMembersArray.get(orderType).clear();
     }
 
     public ArrayList<StartingPlayerListItemData> getStartingMembers(int orderType) {
-        if (orderType == FixedWords.NORMAL_ORDER) return startingMembersNormal;
-        else if (orderType == FixedWords.DH_ORDER) return startingMembersDh;
-        else return startingMembersSpecial;
+        return startingMembersArray.get(orderType);
     }
 
     public StartingPlayerListItemData getStartingMember(int orderType, int orderNum) {
@@ -100,9 +89,7 @@ public class CachedPlayersInfo {
     }
 
     public ArrayList<SubPlayerListItemData> getSubMembers(int orderType) {
-        if (orderType == FixedWords.NORMAL_ORDER) return subMembersNormal;
-        else if (orderType == FixedWords.DH_ORDER) return subMembersDh;
-        else return subMembersSpecial;
+        return subMembersArray.get(orderType);
     }
 
     public void overwriteSubPlayer(
@@ -113,10 +100,7 @@ public class CachedPlayersInfo {
             boolean roleRunner,
             boolean roleFielder,
             String name) {
-        SubPlayerListItemData currentPlayer;
-        if (orderType == FixedWords.NORMAL_ORDER) currentPlayer = subMembersNormal.get(listIndex);
-        else if (orderType == FixedWords.DH_ORDER) currentPlayer = subMembersDh.get(listIndex);
-        else currentPlayer = subMembersSpecial.get(listIndex);
+        SubPlayerListItemData currentPlayer = subMembersArray.get(orderType).get(listIndex);
         SubPlayerListItemData newPlayer = new SubPlayerListItemData(
                 currentPlayer.getId(),
                 rolePitcher,
@@ -125,9 +109,7 @@ public class CachedPlayersInfo {
                 roleFielder,
                 name);
 
-        if (orderType == FixedWords.NORMAL_ORDER) subMembersNormal.set(listIndex, newPlayer);
-        else if (orderType == FixedWords.DH_ORDER) subMembersDh.set(listIndex, newPlayer);
-        else subMembersSpecial.set(listIndex, newPlayer);
+        subMembersArray.get(orderType).set(listIndex, newPlayer);
     }
 
     public void setPlayerInfoToCache(int orderType, int orderNum, String position, String name) {
@@ -135,13 +117,7 @@ public class CachedPlayersInfo {
                 new StartingPlayerListItemData(orderNum, position, name);
 
         if (!isStartingMemberInitialised(orderType)) addStartingMember(orderType, newPlayer);
-
-        if (orderType == FixedWords.NORMAL_ORDER)
-            startingMembersNormal.set(convertOrderNumToIndexNum(orderNum), newPlayer);
-        else if (orderType == FixedWords.DH_ORDER)
-            startingMembersDh.set(convertOrderNumToIndexNum(orderNum), newPlayer);
-        else
-            startingMembersSpecial.set(convertOrderNumToIndexNum(orderNum), newPlayer);
+        else startingMembersArray.get(orderType).set(convertOrderNumToIndexNum(orderNum), newPlayer);
     }
 
     private int convertOrderNumToIndexNum(int orderNum) {
