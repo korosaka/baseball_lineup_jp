@@ -16,9 +16,11 @@ public class CachedPlayersInfo {
 
     // for special starting order
     private int currentNumOfSpecialLineupDB;
+
     public void setCurrentNumOfSpecialLineupDB(int currentNumOfSpecialLineupDB) {
         this.currentNumOfSpecialLineupDB = currentNumOfSpecialLineupDB;
     }
+
     public int getCurrentNumOfSpecialLineupDB() {
         return currentNumOfSpecialLineupDB;
     }
@@ -71,25 +73,25 @@ public class CachedPlayersInfo {
 
     public void deleteSubPlayer(int orderType, int listIndex) {
         if (orderType == FixedWords.NORMAL_ORDER) subMembersNormal.remove(listIndex);
-        else if(orderType == FixedWords.DH_ORDER) subMembersDh.remove(listIndex);
+        else if (orderType == FixedWords.DH_ORDER) subMembersDh.remove(listIndex);
         else subMembersSpecial.remove(listIndex);
     }
 
     public void clearStartingArray(int orderType) {
         if (orderType == FixedWords.NORMAL_ORDER) startingMembersNormal.clear();
-        else if(orderType == FixedWords.DH_ORDER) startingMembersDh.clear();
+        else if (orderType == FixedWords.DH_ORDER) startingMembersDh.clear();
         else startingMembersSpecial.clear();
     }
 
     public void clearSubArray(int orderType) {
         if (orderType == FixedWords.NORMAL_ORDER) subMembersNormal.clear();
-        else if(orderType == FixedWords.DH_ORDER) subMembersDh.clear();
+        else if (orderType == FixedWords.DH_ORDER) subMembersDh.clear();
         else subMembersSpecial.clear();
     }
 
     public ArrayList<StartingPlayerListItemData> getStartingMembers(int orderType) {
         if (orderType == FixedWords.NORMAL_ORDER) return startingMembersNormal;
-        else if(orderType == FixedWords.DH_ORDER) return startingMembersDh;
+        else if (orderType == FixedWords.DH_ORDER) return startingMembersDh;
         else return startingMembersSpecial;
     }
 
@@ -99,7 +101,7 @@ public class CachedPlayersInfo {
 
     public ArrayList<SubPlayerListItemData> getSubMembers(int orderType) {
         if (orderType == FixedWords.NORMAL_ORDER) return subMembersNormal;
-        else if(orderType == FixedWords.DH_ORDER) return subMembersDh;
+        else if (orderType == FixedWords.DH_ORDER) return subMembersDh;
         else return subMembersSpecial;
     }
 
@@ -113,7 +115,8 @@ public class CachedPlayersInfo {
             String name) {
         SubPlayerListItemData currentPlayer;
         if (orderType == FixedWords.NORMAL_ORDER) currentPlayer = subMembersNormal.get(listIndex);
-        else currentPlayer = subMembersDh.get(listIndex);
+        else if (orderType == FixedWords.DH_ORDER) currentPlayer = subMembersDh.get(listIndex);
+        else currentPlayer = subMembersSpecial.get(listIndex);
         SubPlayerListItemData newPlayer = new SubPlayerListItemData(
                 currentPlayer.getId(),
                 rolePitcher,
@@ -123,7 +126,7 @@ public class CachedPlayersInfo {
                 name);
 
         if (orderType == FixedWords.NORMAL_ORDER) subMembersNormal.set(listIndex, newPlayer);
-        else if(orderType == FixedWords.DH_ORDER) subMembersDh.set(listIndex, newPlayer);
+        else if (orderType == FixedWords.DH_ORDER) subMembersDh.set(listIndex, newPlayer);
         else subMembersSpecial.set(listIndex, newPlayer);
     }
 
@@ -135,7 +138,7 @@ public class CachedPlayersInfo {
 
         if (orderType == FixedWords.NORMAL_ORDER)
             startingMembersNormal.set(convertOrderNumToIndexNum(orderNum), newPlayer);
-        else if(orderType == FixedWords.DH_ORDER)
+        else if (orderType == FixedWords.DH_ORDER)
             startingMembersDh.set(convertOrderNumToIndexNum(orderNum), newPlayer);
         else
             startingMembersSpecial.set(convertOrderNumToIndexNum(orderNum), newPlayer);

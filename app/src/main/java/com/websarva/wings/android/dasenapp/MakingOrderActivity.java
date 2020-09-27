@@ -135,6 +135,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         showStartingOrder();
     }
 
+    // TODO
     private void setPositionsSpinner() {
         switch (orderType) {
             case FixedWords.NORMAL_ORDER:
