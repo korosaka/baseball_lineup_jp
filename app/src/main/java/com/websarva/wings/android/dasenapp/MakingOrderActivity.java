@@ -375,26 +375,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     public void onClickSave(View view) {
         String playerName = etName.getText().toString();
         if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
-        if (showingOrder.equals(FixedWords.Starting_ORDER)) {
-            String position = (String) spinner.getSelectedItem();
-            if (isDhPitcher()) position = FixedWords.PITCHER;
-            databaseUsing.registerStartingPlayer(currentStartingNum, playerName, position, orderType);
-            CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, currentStartingNum, position, playerName);
-            lineupFragment.updatePlayerListView();
-        } else {
-            if (isNewlyAddSub()) {
-                databaseUsing.registerSubPlayer(
-                        orderType, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
-                databaseUsing.putSubPlayersInCache(orderType);
-            } else {
-                // overwrite mode
-                databaseUsing.updateSubPlayer(
-                        orderType, currentSubId, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
-                CachedPlayersInfo.instance.overwriteSubPlayer(
-                        orderType, currentSubListIndex, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
-            }
-            subMembersFragment.updatePlayerListView();
-        }
+        overWritePlayer(playerName);
         setLayoutDefault();
     }
 
@@ -402,8 +383,25 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         return (orderType == FixedWords.DH_ORDER) && (currentStartingNum == FixedWords.DH_PITCHER_ORDER);
     }
 
-    private boolean isNewlyAddSub() {
-        return currentSubListIndex == CachedPlayersInfo.instance.getSubMembers(orderType).size();
+    private void overWritePlayer(String playerName) {
+        if (showingOrder.equals(FixedWords.Starting_ORDER)) overWriteStarting(playerName);
+        else overWriteSub(playerName);
+    }
+
+    private void overWriteStarting(String playerName) {
+        String position = (String) spinner.getSelectedItem();
+        if (isDhPitcher()) position = FixedWords.PITCHER;
+        databaseUsing.registerStartingPlayer(currentStartingNum, playerName, position, orderType);
+        CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, currentStartingNum, position, playerName);
+        lineupFragment.updatePlayerListView();
+    }
+
+    private void overWriteSub(String playerName) {
+        databaseUsing.updateSubPlayer(
+                orderType, currentSubId, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
+        CachedPlayersInfo.instance.overwriteSubPlayer(
+                orderType, currentSubListIndex, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
+        subMembersFragment.updatePlayerListView();
     }
 
     private void setLayoutDefault() {
@@ -466,6 +464,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         makeButtonDisable(addSub);
         makeButtonDisable(deleteSub);
         resetRoles();
+        Toast.makeText(this, R.string.require_exchange_title, Toast.LENGTH_SHORT).show();
     }
 
     public void onClickField(View view) {
@@ -573,14 +572,20 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         roleButton.setTextColor(Color.parseColor(FixedWords.COLOR_OFF_BLACK));
     }
 
-    // TODO 枠だけ追加にする？（スタメン追加処理に合わせる？）
     public void onClickAddSub(View view) {
         if (isSubLimit()) {
             Toast.makeText(this, R.string.announce_limit_sub, Toast.LENGTH_SHORT).show();
             return;
         }
-        currentSubListIndex = CachedPlayersInfo.instance.getSubMembers(orderType).size();
-        requireInputtingPlayer(FixedWords.EMPTY);
+        addSubMaximum();
+    }
+
+    private void addSubMaximum() {
+        String emptyName = FixedWords.HYPHEN_5;
+        databaseUsing.registerSubPlayer(
+                orderType, false, false, false, false, emptyName);
+        databaseUsing.putSubPlayersInCache(orderType);
+        subMembersFragment.updatePlayerListView();
     }
 
     private boolean isSubLimit() {
@@ -595,10 +600,14 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         title.setTextColor(Color.parseColor(FixedWords.COLOR_EMPHASIZING));
         cancel.setEnabled(true);
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
+        cancel.setFocusable(true);
+        cancel.setFocusableInTouchMode(true);
+        cancel.requestFocus();
         makeButtonDisable(addSub);
         makeButtonDisable(orderSwitch);
         makeButtonDisable(deleteSub);
         makeButtonDisable(exchange);
+        Toast.makeText(this, R.string.require_delete_title, Toast.LENGTH_SHORT).show();
     }
 
     public void onClickAddStarting(View view) {
@@ -664,6 +673,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     private void resetTitle() {
         title.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
+        cancel.setFocusable(false);
+        cancel.setFocusableInTouchMode(false);
         if (showingOrder.equals(FixedWords.Starting_ORDER)) title.setText(R.string.title);
         else {
             String subPlayerTitle =
