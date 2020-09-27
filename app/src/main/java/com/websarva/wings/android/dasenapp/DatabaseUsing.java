@@ -92,10 +92,10 @@ public class DatabaseUsing {
             if (cursor.moveToNext()) {
                 playerName = cursor.getString(getColumnIndex(cursor, FixedWords.COLUMN_NAME));
                 playerPosition = cursor.getString(getColumnIndex(cursor, FixedWords.COLUMN_POSITION));
-                if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
+                if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.EMPTY_NAME;
             } else {
-                playerName = FixedWords.HYPHEN_5;
-                playerPosition = FixedWords.HYPHEN_4;
+                playerName = FixedWords.EMPTY_NAME;
+                playerPosition = FixedWords.EMPTY_POSITION;
             }
             CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, orderNum, playerPosition, playerName);
         } catch (Exception e) {
@@ -291,11 +291,8 @@ public class DatabaseUsing {
     }
 
     public void initSpecialLineupDB() {
-        String emptyName = FixedWords.HYPHEN_5;
-        String emptyPosition = FixedWords.HYPHEN_4;
-
         for (int orderNum = 1; orderNum <= FixedWords.MIN_NUM_SPECIAL_PLAYER; orderNum++) {
-            registerStartingPlayer(orderNum, emptyName, emptyPosition, FixedWords.SPECIAL_ORDER);
+            registerStartingPlayer(orderNum, FixedWords.EMPTY_NAME, FixedWords.EMPTY_POSITION, FixedWords.SPECIAL_ORDER);
         }
     }
 

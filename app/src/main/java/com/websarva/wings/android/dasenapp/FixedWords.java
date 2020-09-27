@@ -4,8 +4,8 @@ public class FixedWords {
 
     public static final String EMPTY = "";
     public static final String SPACE = " ";
-    public static final String HYPHEN_4 = "----";
-    public static final String HYPHEN_5 = "-----";
+    public static final String EMPTY_POSITION = "----";
+    public static final String EMPTY_NAME = "-----";
     public static final int NON_SELECTED = -1;
 
     public static final String ORDER_TYPE = "orderType";
@@ -36,7 +36,6 @@ public class FixedWords {
     public static final String CLOSE = "close";
 
     public static final String DATA_STORE = "dataStore";
-    public static final String NUMBER_OF_PLAYER = "numberOfPlayer";
 
     public static final int MIN_NUM_SPECIAL_PLAYER = 9;
     public static final int NUMBER_OF_LINEUP_NORMAL = 9;

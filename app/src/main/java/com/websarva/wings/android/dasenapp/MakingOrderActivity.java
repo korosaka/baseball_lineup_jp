@@ -325,7 +325,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         if (orderType == FixedWords.DH_ORDER &&
                 orderNum == FixedWords.DH_PITCHER_ORDER) {
             tvSelectNum.setText(FixedWords.PITCHER_INITIAL);
-            selectSpinnerItem(spinner, FixedWords.HYPHEN_4);
+            selectSpinnerItem(spinner, FixedWords.EMPTY_POSITION);
             spinner.setEnabled(false);
         }
     }
@@ -340,7 +340,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     private void requireInputtingPlayer(String name) {
         etName.setText(name);
-        if (etName.getText().toString().equals(FixedWords.HYPHEN_5))
+        if (etName.getText().toString().equals(FixedWords.EMPTY_NAME))
             etName.setText(FixedWords.EMPTY);
         etName.setEnabled(true);
         etName.setFocusable(true);
@@ -374,7 +374,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     public void onClickSave(View view) {
         String playerName = etName.getText().toString();
-        if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
+        if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.EMPTY_NAME;
         overWritePlayer(playerName);
         setLayoutDefault();
     }
@@ -581,9 +581,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     private void addSubMaximum() {
-        String emptyName = FixedWords.HYPHEN_5;
         databaseUsing.registerSubPlayer(
-                orderType, false, false, false, false, emptyName);
+                orderType, false, false, false, false, FixedWords.EMPTY_NAME);
         databaseUsing.putSubPlayersInCache(orderType);
         subMembersFragment.updatePlayerListView();
     }
@@ -617,9 +616,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         }
 
         int addedOrderNum = CachedPlayersInfo.instance.getCurrentNumOfSpecialLineupDB() + 1;
-        String emptyName = FixedWords.HYPHEN_5;
-        String emptyPosition = FixedWords.HYPHEN_4;
-        databaseUsing.registerStartingPlayer(addedOrderNum, emptyName, emptyPosition, orderType);
+        databaseUsing.registerStartingPlayer(addedOrderNum, FixedWords.EMPTY_NAME, FixedWords.EMPTY_POSITION, orderType);
         databaseUsing.countSpecialLineupPlayers();
         databaseUsing.putStartingPlayersInCache(orderType, addedOrderNum);
         lineupFragment.updatePlayerListView();
