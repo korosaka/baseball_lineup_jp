@@ -22,6 +22,7 @@ public class TopActivity extends BaseActivity {
         setContentView(R.layout.activity_top);
         normalOrderButton = findViewById(R.id.normal_order_button);
         dhOrderButton = findViewById(R.id.dh_order_button);
+        CachedPlayersInfo.instance.initCachedArray();
         if (!PrivacyPolicyFragment.isPolicyAgreed(this)) showPrivacyPolicy();
     }
 
