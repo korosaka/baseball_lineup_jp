@@ -135,16 +135,26 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         showStartingOrder();
     }
 
-    // TODO
     private void setPositionsSpinner() {
         switch (orderType) {
             case FixedWords.NORMAL_ORDER:
-                setSpinnerResource(getResources().getStringArray(R.array.positions));
+                setSpinnerResource(getResources().getStringArray(R.array.positions_normal));
                 break;
             case FixedWords.DH_ORDER:
                 setSpinnerResource(getResources().getStringArray(R.array.positions_dh));
                 break;
+            case FixedWords.SPECIAL_ORDER:
+                setSpinnerForSpecial();
+                break;
         }
+    }
+
+    private void setSpinnerForSpecial() {
+        if(CachedPlayersInfo.instance.getStartingMembers(FixedWords.SPECIAL_ORDER).size() == FixedWords.NUMBER_OF_LINEUP_NORMAL) {
+            setSpinnerResource(getResources().getStringArray(R.array.positions_normal));
+            return;
+        }
+        setSpinnerResource(getResources().getStringArray(R.array.positions_all));
     }
 
     private void checkSelectedStartingPlayer(int orderNum, Button numButton) {
@@ -620,6 +630,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         databaseUsing.countSpecialLineupPlayers();
         databaseUsing.putStartingPlayersInCache(orderType, addedOrderNum);
         lineupFragment.updatePlayerListView();
+        setSpinnerForSpecial();
     }
 
     public void onClickDeleteStarting(View view) {
@@ -633,6 +644,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         databaseUsing.countSpecialLineupPlayers();
         CachedPlayersInfo.instance.deleteStartingPlayerOnSpecial();
         lineupFragment.updatePlayerListView();
+        setSpinnerForSpecial();
     }
 
     private void showStartingOrder() {

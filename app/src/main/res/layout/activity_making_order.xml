@@ -49,7 +49,7 @@
                         android:id="@+id/position"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:entries="@array/positions" />
+                        android:entries="@array/positions_normal" />
 
                     <TextView
                         android:id="@+id/sub"
