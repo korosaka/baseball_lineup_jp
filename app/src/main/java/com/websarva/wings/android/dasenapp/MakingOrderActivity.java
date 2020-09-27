@@ -27,6 +27,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private LinearLayout rolesBox;
     private Button addSub;
     private Button deleteSub;
+    private Button addStarting;
+    private Button deleteStarting;
     private Button rolePitcher;
     private Button roleBatter;
     private Button roleRunner;
@@ -90,6 +92,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         rolesBox = findViewById(R.id.role_box_for_sub);
         addSub = findViewById(R.id.add_sub_button);
         deleteSub = findViewById(R.id.delete_sub_button);
+        addStarting = findViewById(R.id.add_special_button);
+        deleteStarting = findViewById(R.id.delete_special_button);
         rolePitcher = findViewById(R.id.role_pitcher_button);
         roleBatter = findViewById(R.id.role_batter_button);
         roleRunner = findViewById(R.id.role_runner_button);
@@ -134,12 +138,23 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private void setPositionsSpinner() {
         switch (orderType) {
             case FixedWords.NORMAL_ORDER:
-                setSpinnerResource(getResources().getStringArray(R.array.positions));
+                setSpinnerResource(getResources().getStringArray(R.array.positions_normal));
                 break;
             case FixedWords.DH_ORDER:
                 setSpinnerResource(getResources().getStringArray(R.array.positions_dh));
                 break;
+            case FixedWords.SPECIAL_ORDER:
+                setSpinnerForSpecial();
+                break;
         }
+    }
+
+    private void setSpinnerForSpecial() {
+        if(CachedPlayersInfo.instance.getStartingMembers(FixedWords.SPECIAL_ORDER).size() == FixedWords.NUMBER_OF_LINEUP_NORMAL) {
+            setSpinnerResource(getResources().getStringArray(R.array.positions_normal));
+            return;
+        }
+        setSpinnerResource(getResources().getStringArray(R.array.positions_all));
     }
 
     private void checkSelectedStartingPlayer(int orderNum, Button numButton) {
@@ -285,7 +300,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     private boolean isContainingDhPitcher(int num1, int num2) {
-        return (num1 == FixedWords.NUMBER_OF_LINEUP_DH || num2 == FixedWords.NUMBER_OF_LINEUP_DH);
+        return (orderType == FixedWords.DH_ORDER) &&
+                (num1 == FixedWords.NUMBER_OF_LINEUP_DH || num2 == FixedWords.NUMBER_OF_LINEUP_DH);
     }
 
     private void selectNum(int orderNum) {
@@ -319,7 +335,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         if (orderType == FixedWords.DH_ORDER &&
                 orderNum == FixedWords.DH_PITCHER_ORDER) {
             tvSelectNum.setText(FixedWords.PITCHER_INITIAL);
-            selectSpinnerItem(spinner, FixedWords.HYPHEN_4);
+            selectSpinnerItem(spinner, FixedWords.EMPTY_POSITION);
             spinner.setEnabled(false);
         }
     }
@@ -334,7 +350,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     private void requireInputtingPlayer(String name) {
         etName.setText(name);
-        if (etName.getText().toString().equals(FixedWords.HYPHEN_5))
+        if (etName.getText().toString().equals(FixedWords.EMPTY_NAME))
             etName.setText(FixedWords.EMPTY);
         etName.setEnabled(true);
         etName.setFocusable(true);
@@ -348,6 +364,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         clear.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.clear_button_background, null));
         makeButtonDisable(exchange);
         makeButtonDisable(orderSwitch);
+        if (orderType == FixedWords.SPECIAL_ORDER) {
+            makeButtonDisable(addStarting);
+            makeButtonDisable(deleteStarting);
+        }
         if (showingOrder.equals(FixedWords.SUB_MEMBERS)) adjustViewForSub();
     }
 
@@ -364,32 +384,34 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     public void onClickSave(View view) {
         String playerName = etName.getText().toString();
-        if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
-        if (showingOrder.equals(FixedWords.Starting_ORDER)) {
-            String position = (String) spinner.getSelectedItem();
-            if (currentStartingNum == FixedWords.DH_PITCHER_ORDER) position = FixedWords.PITCHER;
-            databaseUsing.registerStartingPlayer(currentStartingNum, playerName, position, orderType);
-            CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, currentStartingNum, position, playerName);
-            lineupFragment.updatePlayerListView();
-        } else {
-            if (isNewlyAddSub()) {
-                databaseUsing.registerSubPlayer(
-                        orderType, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
-                databaseUsing.putSubPlayersInCache(orderType);
-            } else {
-                // overwrite mode
-                databaseUsing.updateSubPlayer(
-                        orderType, currentSubId, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
-                CachedPlayersInfo.instance.overwriteSubPlayer(
-                        orderType, currentSubListIndex, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
-            }
-            subMembersFragment.updatePlayerListView();
-        }
+        if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.EMPTY_NAME;
+        overWritePlayer(playerName);
         setLayoutDefault();
     }
 
-    private boolean isNewlyAddSub() {
-        return currentSubListIndex == CachedPlayersInfo.instance.getSubMembers(orderType).size();
+    private boolean isDhPitcher() {
+        return (orderType == FixedWords.DH_ORDER) && (currentStartingNum == FixedWords.DH_PITCHER_ORDER);
+    }
+
+    private void overWritePlayer(String playerName) {
+        if (showingOrder.equals(FixedWords.Starting_ORDER)) overWriteStarting(playerName);
+        else overWriteSub(playerName);
+    }
+
+    private void overWriteStarting(String playerName) {
+        String position = (String) spinner.getSelectedItem();
+        if (isDhPitcher()) position = FixedWords.PITCHER;
+        databaseUsing.registerStartingPlayer(currentStartingNum, playerName, position, orderType);
+        CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, currentStartingNum, position, playerName);
+        lineupFragment.updatePlayerListView();
+    }
+
+    private void overWriteSub(String playerName) {
+        databaseUsing.updateSubPlayer(
+                orderType, currentSubId, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
+        CachedPlayersInfo.instance.overwriteSubPlayer(
+                orderType, currentSubListIndex, isRolePitcher, isRoleBatter, isRoleRunner, isRoleFielder, playerName);
+        subMembersFragment.updatePlayerListView();
     }
 
     private void setLayoutDefault() {
@@ -407,6 +429,12 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         orderSwitch.setEnabled(true);
         orderSwitch.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
         resetTitle();
+        if (orderType == FixedWords.SPECIAL_ORDER) {
+            addStarting.setEnabled(true);
+            addStarting.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
+            deleteStarting.setEnabled(true);
+            deleteStarting.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
+        }
 
         setLayoutDefaultForSub();
     }
@@ -438,10 +466,15 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
         title.setText(R.string.require_exchange_title);
         title.setTextColor(Color.parseColor(FixedWords.COLOR_EMPHASIZING));
+        if (orderType == FixedWords.SPECIAL_ORDER) {
+            makeButtonDisable(addStarting);
+            makeButtonDisable(deleteStarting);
+        }
         makeButtonDisable(exchange);
         makeButtonDisable(addSub);
         makeButtonDisable(deleteSub);
         resetRoles();
+        Toast.makeText(this, R.string.require_exchange_title, Toast.LENGTH_SHORT).show();
     }
 
     public void onClickField(View view) {
@@ -549,14 +582,19 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         roleButton.setTextColor(Color.parseColor(FixedWords.COLOR_OFF_BLACK));
     }
 
-
     public void onClickAddSub(View view) {
         if (isSubLimit()) {
             Toast.makeText(this, R.string.announce_limit_sub, Toast.LENGTH_SHORT).show();
             return;
         }
-        currentSubListIndex = CachedPlayersInfo.instance.getSubMembers(orderType).size();
-        requireInputtingPlayer(FixedWords.EMPTY);
+        addSubMaximum();
+    }
+
+    private void addSubMaximum() {
+        databaseUsing.registerSubPlayer(
+                orderType, false, false, false, false, FixedWords.EMPTY_NAME);
+        databaseUsing.putSubPlayersInCache(orderType);
+        subMembersFragment.updatePlayerListView();
     }
 
     private boolean isSubLimit() {
@@ -571,10 +609,42 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         title.setTextColor(Color.parseColor(FixedWords.COLOR_EMPHASIZING));
         cancel.setEnabled(true);
         cancel.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_button_background, null));
+        cancel.setFocusable(true);
+        cancel.setFocusableInTouchMode(true);
+        cancel.requestFocus();
         makeButtonDisable(addSub);
         makeButtonDisable(orderSwitch);
         makeButtonDisable(deleteSub);
         makeButtonDisable(exchange);
+        Toast.makeText(this, R.string.require_delete_title, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onClickAddStarting(View view) {
+        if (CachedPlayersInfo.instance.getCurrentNumOfSpecialLineupDB() >= FixedWords.MAX_NUM_SPECIAL_PLAYER) {
+            Toast.makeText(this, R.string.announce_max_limit_special, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int addedOrderNum = CachedPlayersInfo.instance.getCurrentNumOfSpecialLineupDB() + 1;
+        databaseUsing.registerStartingPlayer(addedOrderNum, FixedWords.EMPTY_NAME, FixedWords.EMPTY_POSITION, orderType);
+        databaseUsing.countSpecialLineupPlayers();
+        databaseUsing.putStartingPlayersInCache(orderType, addedOrderNum);
+        lineupFragment.updatePlayerListView();
+        setSpinnerForSpecial();
+    }
+
+    public void onClickDeleteStarting(View view) {
+        if (CachedPlayersInfo.instance.getCurrentNumOfSpecialLineupDB() <= 9) {
+            Toast.makeText(this, R.string.announce_min_limit_special, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        databaseUsing.deleteStartingPlayerOnSpecial(
+                CachedPlayersInfo.instance.getCurrentNumOfSpecialLineupDB());
+        databaseUsing.countSpecialLineupPlayers();
+        CachedPlayersInfo.instance.deleteStartingPlayerOnSpecial();
+        lineupFragment.updatePlayerListView();
+        setSpinnerForSpecial();
     }
 
     private void showStartingOrder() {
@@ -588,6 +658,10 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         deleteSub.setVisibility(View.GONE);
         orderSwitch.setText(R.string.display_sub);
         if (!isExchanging) resetTitle();
+        if (orderType == FixedWords.SPECIAL_ORDER) {
+            addStarting.setVisibility(View.VISIBLE);
+            deleteStarting.setVisibility(View.VISIBLE);
+        }
     }
 
     private void showSubMembers() {
@@ -600,10 +674,16 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         deleteSub.setVisibility(View.VISIBLE);
         orderSwitch.setText(R.string.display_starting);
         if (!isExchanging) resetTitle();
+        if (orderType == FixedWords.SPECIAL_ORDER) {
+            addStarting.setVisibility(View.GONE);
+            deleteStarting.setVisibility(View.GONE);
+        }
     }
 
     private void resetTitle() {
         title.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
+        cancel.setFocusable(false);
+        cancel.setFocusableInTouchMode(false);
         if (showingOrder.equals(FixedWords.Starting_ORDER)) title.setText(R.string.title);
         else {
             String subPlayerTitle =

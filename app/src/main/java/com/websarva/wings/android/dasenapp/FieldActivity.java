@@ -122,11 +122,15 @@ public class FieldActivity extends BaseAdActivity {
     private void setPlayerCount() {
         switch (orderType) {
             case FixedWords.NORMAL_ORDER:
-                playerNumber = 9;
+                playerNumber = FixedWords.NUMBER_OF_LINEUP_NORMAL;
                 break;
             case FixedWords.DH_ORDER:
-                playerNumber = 10;
+                playerNumber = FixedWords.NUMBER_OF_LINEUP_DH;
                 maxDh = 1;
+                break;
+            case FixedWords.SPECIAL_ORDER:
+                playerNumber = CachedPlayersInfo.instance.getCurrentNumOfSpecialLineupDB();
+                maxDh = playerNumber - FixedWords.MIN_NUM_SPECIAL_PLAYER;
                 break;
         }
     }

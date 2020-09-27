@@ -12,12 +12,19 @@ public class StartingPlayerListAdapter extends BasePlayerListAdapter {
 
     private List<StartingPlayerListItemData> playerItems;
     private StartingPlayerListAdapterListener mListener;
+    private int orderType;
 
-    public StartingPlayerListAdapter(Context context, int resource, List<? extends BasePlayerListItemData> items, StartingPlayerListAdapterListener listener) {
+    public StartingPlayerListAdapter(
+            Context context,
+            int resource,
+            List<? extends BasePlayerListItemData> items,
+            StartingPlayerListAdapterListener listener,
+            int orderType) {
         super(context, resource, (List<BasePlayerListItemData>) items);
 
-        playerItems = (List<StartingPlayerListItemData>) items;
-        mListener = listener;
+        this.playerItems = (List<StartingPlayerListItemData>) items;
+        this.mListener = listener;
+        this.orderType = orderType;
     }
 
     @Override
@@ -33,7 +40,7 @@ public class StartingPlayerListAdapter extends BasePlayerListAdapter {
             StartingPlayerListItemData playerItem, Button orderButton, TextView positionText, TextView nameText) {
         int orderNum = playerItem.getOrderNum();
 
-        if (orderNum == FixedWords.DH_PITCHER_ORDER) {
+        if (isDhPitcher(orderNum)) {
             orderButton.setText(FixedWords.PITCHER_INITIAL);
             positionText.setTextColor(Color.parseColor(FixedWords.COLOR_PITCHER_TEXT));
         } else {
@@ -49,6 +56,10 @@ public class StartingPlayerListAdapter extends BasePlayerListAdapter {
         positionText.setText(playerItem.getPosition());
         nameText.setText(customNameSpace(playerItem.getName()));
         changeTextSize(nameText);
+    }
+
+    private boolean isDhPitcher(int orderNum) {
+        return (orderType == FixedWords.DH_ORDER) && (orderNum == FixedWords.DH_PITCHER_ORDER);
     }
 
 }

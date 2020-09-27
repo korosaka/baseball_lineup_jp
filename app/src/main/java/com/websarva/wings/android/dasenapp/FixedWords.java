@@ -4,13 +4,14 @@ public class FixedWords {
 
     public static final String EMPTY = "";
     public static final String SPACE = " ";
-    public static final String HYPHEN_4 = "----";
-    public static final String HYPHEN_5 = "-----";
+    public static final String EMPTY_POSITION = "----";
+    public static final String EMPTY_NAME = "-----";
     public static final int NON_SELECTED = -1;
 
     public static final String ORDER_TYPE = "orderType";
     public static final int NORMAL_ORDER = 1;
     public static final int DH_ORDER = 2;
+    public static final int SPECIAL_ORDER = 3;
     public static final String Starting_ORDER = "startingOrder";
     public static final String SUB_MEMBERS = "subMembers";
 
@@ -35,8 +36,9 @@ public class FixedWords {
     public static final String CLOSE = "close";
 
     public static final String DATA_STORE = "dataStore";
-    public static final String NUMBER_OF_PLAYER = "numberOfPlayer";
 
+    public static final int MIN_NUM_SPECIAL_PLAYER = 9;
+    public static final int MAX_NUM_SPECIAL_PLAYER = 15;
     public static final int NUMBER_OF_LINEUP_NORMAL = 9;
     public static final int NUMBER_OF_LINEUP_DH = 10;
     public static final int DH_PITCHER_ORDER = 10;
@@ -52,8 +54,10 @@ public class FixedWords {
     public static final String OLD_ORDER_TABLE = "lineup";
     public static final String NORMAL_ORDER_TABLE = "lineup_normal";
     public static final String DH_ORDER_TABLE = "lineup_dh";
+    public static final String SPECIAL_ORDER_TABLE = "lineup_special";
     public static final String NORMAL_SUB_TABLE = "sub_normal";
     public static final String DH_SUB_TABLE = "sub_dh";
+    public static final String SPECIAL_SUB_TABLE = "sub_special";
 
     public static final String COLUMN_ORDER_NUMBER = "order_number";
     public static final String COLUMN_NAME = "player_name";

@@ -1,36 +1,13 @@
 package com.websarva.wings.android.dasenapp;
 
-import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class StartingLineupFragment extends BaseMembersFragment {
 
-    // TODO after ++ -- (for special rule)
-    private int numberOfPlayer;
-
     public static StartingLineupFragment newInstance(int orderType) {
         return (StartingLineupFragment) bundleOrderType(new StartingLineupFragment(), orderType);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setNumberOfPlayer();
-    }
-
-
-    private void setNumberOfPlayer() {
-        switch (orderType) {
-            case FixedWords.NORMAL_ORDER:
-                numberOfPlayer = FixedWords.NUMBER_OF_LINEUP_NORMAL;
-                break;
-            case FixedWords.DH_ORDER:
-                numberOfPlayer = FixedWords.NUMBER_OF_LINEUP_DH;
-                break;
-        }
     }
 
     @Override
@@ -48,7 +25,14 @@ public class StartingLineupFragment extends BaseMembersFragment {
                         getContext(),
                         R.layout.starting_player_list_item,
                         CachedPlayersInfo.instance.getStartingMembers(orderType),
-                        (MakingOrderActivity) getActivity());
+                        (MakingOrderActivity) getActivity(),
+                        orderType);
+    }
+
+    @Override
+    public void updatePlayerListView() {
+        super.updatePlayerListView();
+        if (orderType == FixedWords.SPECIAL_ORDER) setListViewHeightBasedOnChildren(playerList);
     }
 
 }

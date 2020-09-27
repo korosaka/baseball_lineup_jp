@@ -2,6 +2,7 @@ package com.websarva.wings.android.dasenapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
@@ -16,12 +17,19 @@ public class DatabaseUsing {
 
     public void getPlayersFromDB(int orderType) {
 
+        if (orderType == FixedWords.SPECIAL_ORDER) {
+            if (!isSpecialLineupDBFilled()) initSpecialLineupDB();
+        }
+
         int numberOfPlayers = FixedWords.NUMBER_OF_LINEUP_NORMAL;
         switch (orderType) {
             case FixedWords.NORMAL_ORDER:
                 break;
             case FixedWords.DH_ORDER:
                 numberOfPlayers = FixedWords.NUMBER_OF_LINEUP_DH;
+                break;
+            case FixedWords.SPECIAL_ORDER:
+                numberOfPlayers = countSpecialLineupPlayers();
                 break;
         }
 
@@ -84,10 +92,10 @@ public class DatabaseUsing {
             if (cursor.moveToNext()) {
                 playerName = cursor.getString(getColumnIndex(cursor, FixedWords.COLUMN_NAME));
                 playerPosition = cursor.getString(getColumnIndex(cursor, FixedWords.COLUMN_POSITION));
-                if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
+                if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.EMPTY_NAME;
             } else {
-                playerName = FixedWords.HYPHEN_5;
-                playerPosition = FixedWords.HYPHEN_4;
+                playerName = FixedWords.EMPTY_NAME;
+                playerPosition = FixedWords.EMPTY_POSITION;
             }
             CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, orderNum, playerPosition, playerName);
         } catch (Exception e) {
@@ -229,6 +237,17 @@ public class DatabaseUsing {
         }
     }
 
+    public void deleteStartingPlayerOnSpecial(int orderNum) {
+        SQLiteDatabase dbW = helper.getWritableDatabase();
+        try {
+            deleteStartingPlayer(FixedWords.SPECIAL_ORDER, orderNum, dbW);
+        } catch (Exception e) {
+            Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
+        } finally {
+            dbW.close();
+        }
+    }
+
     private void deleteStartingPlayer(int orderType, int orderNum, SQLiteDatabase dbW) {
         String sqlDelete = "DELETE FROM " + helper.getStartingTableName(orderType) + " WHERE " + FixedWords.COLUMN_ORDER_NUMBER + " = ?";
         SQLiteStatement stmt = dbW.compileStatement(sqlDelete);
@@ -257,6 +276,24 @@ public class DatabaseUsing {
                 FixedWords.COLUMN_NAME + ", " +
                 FixedWords.COLUMN_POSITION +
                 ") VALUES(?,?,?)";
+    }
+
+    public int countSpecialLineupPlayers() {
+        SQLiteDatabase dbR = helper.getReadableDatabase();
+        int count = (int) DatabaseUtils.queryNumEntries(dbR, FixedWords.SPECIAL_ORDER_TABLE);
+        CachedPlayersInfo.instance.setCurrentNumOfSpecialLineupDB(count);
+        dbR.close();
+        return count;
+    }
+
+    public boolean isSpecialLineupDBFilled() {
+        return countSpecialLineupPlayers() >= FixedWords.MIN_NUM_SPECIAL_PLAYER;
+    }
+
+    public void initSpecialLineupDB() {
+        for (int orderNum = 1; orderNum <= FixedWords.MIN_NUM_SPECIAL_PLAYER; orderNum++) {
+            registerStartingPlayer(orderNum, FixedWords.EMPTY_NAME, FixedWords.EMPTY_POSITION, FixedWords.SPECIAL_ORDER);
+        }
     }
 
 

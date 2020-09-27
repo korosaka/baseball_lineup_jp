@@ -4,6 +4,8 @@
     <string name="app_title2">作成アプリ</string>
     <string name="non_dh_version">DHなし</string>
     <string name="dh_version">DHあり</string>
+    <string name="special_version">特別ルール</string>
+    <string name="special_version_disable">特別ルール(有料)</string>
     <string name="first">１番</string>
     <string name="second">２番</string>
     <string name="third">３番</string>
@@ -32,7 +34,9 @@
     <string name="display_sub">控え表示</string>
     <string name="add_sub">控え追加</string>
     <string name="delete_sub">控え削除</string>
-    <string-array name="positions">
+    <string name="add_starting">先発追加</string>
+    <string name="delete_starting">先発削除</string>
+    <string-array name="positions_normal">
         <item>----</item>
         <item>(投)</item>
         <item>(捕)</item>
@@ -85,9 +89,11 @@
     <string name="back">戻る</string>
     <string name="cancel">キャンセル</string>
     <string name="exchange">入れ替え</string>
-    <string name="require_exchange_title">入れ替える２つの打順を選んでください</string>
+    <string name="require_exchange_title">入れ替える選手を選んでください</string>
     <string name="require_delete_title">削除する選手を選んでください</string>
     <string name="announce_limit_sub">控え登録が上限です。</string>
+    <string name="announce_max_limit_special">先発登録が上限です。</string>
+    <string name="announce_min_limit_special">9人が下限人数です。</string>
     <string name="share">LINE/Twitter</string>
     <string name="no_order">[-]</string>
     <!-- TODO: Remove or change this placeholder text -->
