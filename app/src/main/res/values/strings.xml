@@ -6,6 +6,8 @@
     <string name="dh_version">DHあり</string>
     <string name="special_version">特別ルール</string>
     <string name="special_version_disable">特別ルール(有料)</string>
+    <string name="purchase">購入</string>
+    <string name="ask_purchase">購入手続きに移りますか？</string>
     <string name="first">１番</string>
     <string name="second">２番</string>
     <string name="third">３番</string>

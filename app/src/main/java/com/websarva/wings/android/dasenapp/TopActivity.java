@@ -1,10 +1,12 @@
 package com.websarva.wings.android.dasenapp;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,15 +17,52 @@ public class TopActivity extends BaseActivity {
 
     private Button normalOrderButton;
     private Button dhOrderButton;
+    private Button specialOrderButton;
+    private Button purchaseButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        bindView();
+        checkPurchaseStatement();
+        CachedPlayersInfo.instance.initCachedArray();
+        if (!PrivacyPolicyFragment.isPolicyAgreed(this)) showPrivacyPolicy();
+    }
+
+    private void bindView() {
         setContentView(R.layout.activity_top);
         normalOrderButton = findViewById(R.id.normal_order_button);
         dhOrderButton = findViewById(R.id.dh_order_button);
-        CachedPlayersInfo.instance.initCachedArray();
-        if (!PrivacyPolicyFragment.isPolicyAgreed(this)) showPrivacyPolicy();
+        specialOrderButton = findViewById(R.id.special_order_button);
+        purchaseButton = findViewById(R.id.purchase_button);
+    }
+
+    private boolean isSpecialOrderPurchased() {
+        return new MySharedPreferences(this).getBoolean(FixedWords.PURCHASE_SPECIAL_ORDER);
+    }
+
+    private void checkPurchaseStatement() {
+        if (isSpecialOrderPurchased()) {
+            purchaseButton.setVisibility(View.GONE);
+        } else {
+            specialOrderButton.setText(R.string.special_version_disable);
+            specialOrderButton.setTextColor(Color.parseColor(FixedWords.COLOR_OFF_BLACK));
+            specialOrderButton.setEnabled(false);
+            specialOrderButton
+                    .setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+        }
+    }
+
+    public void onClickPurchase(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_CustomButtonDialog);
+        builder.setMessage(getResources().getString(R.string.ask_purchase));
+        builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // TODO
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.cancel), null);
+        builder.show();
     }
 
     public void onClickNonDH(View view) {
@@ -48,6 +87,7 @@ public class TopActivity extends BaseActivity {
     private void showProgress() {
         normalOrderButton.setEnabled(false);
         dhOrderButton.setEnabled(false);
+        if (isSpecialOrderPurchased()) specialOrderButton.setEnabled(false);
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
@@ -58,6 +98,7 @@ public class TopActivity extends BaseActivity {
             public void run() {
                 normalOrderButton.setEnabled(true);
                 dhOrderButton.setEnabled(true);
+                if (isSpecialOrderPurchased()) specialOrderButton.setEnabled(true);
                 progressDialog.dismiss();
             }
         }, 2000);

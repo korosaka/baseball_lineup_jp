@@ -59,7 +59,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.1" />
+        android:layout_weight="0.15" />
 
     <Button
         android:id="@+id/dh_order_button"
@@ -77,7 +77,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.1" />
+        android:layout_weight="0.15" />
 
     <Button
         android:id="@+id/special_order_button"
@@ -91,6 +91,19 @@
         android:textColor="#fff"
         android:textSize="24sp"
         android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/purchase_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/special_button_background"
+        android:onClick="onClickPurchase"
+        android:text="@string/purchase"
+        android:textColor="#fff"
+        android:textSize="24sp" />
 
     <View
         android:layout_width="match_parent"
