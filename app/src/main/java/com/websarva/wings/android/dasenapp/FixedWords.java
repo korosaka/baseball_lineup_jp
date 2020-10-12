@@ -84,4 +84,6 @@ public class FixedWords {
 
     public static final String ERROR_LOG_TAG = "errorTag";
     public static final String ERROR_LOG_MESSAGE = "error happened!";
+
+    public static final String ITEM_ID_ALL_HITTER = "baseball_order_all_hitter";
 }
