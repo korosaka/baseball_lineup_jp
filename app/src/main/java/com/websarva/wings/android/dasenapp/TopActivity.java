@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.billingclient.api.AcknowledgePurchaseParams;
@@ -45,6 +46,7 @@ public class TopActivity extends BaseActivity
     private Button dhOrderButton;
     private Button specialOrderButton;
     private Button purchaseButton;
+    private TextView explanationText;
     private ProgressDialog progressDialog;
 
     private BillingClient billingClient;
@@ -119,6 +121,7 @@ public class TopActivity extends BaseActivity
         dhOrderButton = findViewById(R.id.dh_order_button);
         specialOrderButton = findViewById(R.id.special_order_button);
         purchaseButton = findViewById(R.id.purchase_button);
+        explanationText = findViewById(R.id.explanation_special);
     }
 
     private boolean isSpecialOrderPurchased() {
@@ -128,6 +131,7 @@ public class TopActivity extends BaseActivity
     private void checkPurchaseStatement() {
         if (isSpecialOrderPurchased()) {
             purchaseButton.setVisibility(View.GONE);
+            explanationText.setVisibility(View.GONE);
         } else {
             specialOrderButton.setText(R.string.special_version_disable);
             specialOrderButton.setTextColor(Color.parseColor(FixedWords.COLOR_OFF_BLACK));
@@ -289,6 +293,17 @@ public class TopActivity extends BaseActivity
         }
 
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onClickExplanation(View view) {
+        explainSpecial();
+    }
+
+    private void explainSpecial() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_CustomButtonDialog);
+        builder.setMessage(getResources().getString(R.string.about_special));
+        builder.setNegativeButton(getResources().getString(R.string.close), null);
+        builder.show();
     }
 
     // TODO reload purchase history

@@ -6,6 +6,8 @@
     <string name="dh_version">DHあり</string>
     <string name="special_version">特別ルール</string>
     <string name="special_version_disable">特別ルール(有料)</string>
+    <string name="what_is_special"><u>特別ルールとは？</u></string>
+    <string name="about_special">いわゆる”全員打ち”です。\nDH枠を増やし、9人以上(最大15人)でスタメンを組むことができます。\n例: スタメン13人の場合、打順は1〜13番、DHが4人になります。\n\n<u>価格: 440円(税込)</u></string>
     <string name="purchase">購入</string>
     <string name="ask_purchase">購入手続きに移りますか？</string>
     <string name="first">１番</string>
