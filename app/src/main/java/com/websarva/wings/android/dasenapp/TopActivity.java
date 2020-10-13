@@ -22,6 +22,8 @@ import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchaseHistoryRecord;
+import com.android.billingclient.api.PurchaseHistoryResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
@@ -37,7 +39,7 @@ import java.util.List;
  * https://developer.android.com/google/play/billing/release-notes?hl=ja
  * https://qiita.com/takahirom/items/4d597b00f500efb3dc7f
  * https://qiita.com/watanaby0/items/deb60166753533fb00b1
- * https://qiita.com/takahirom/items/4d597b00f500efb3dc7f
+ * https://qiita.com/takahirom/items/ed2cf675e91309b649c0
  */
 public class TopActivity extends BaseActivity
         implements PurchasesUpdatedListener, AcknowledgePurchaseResponseListener {
@@ -55,21 +57,20 @@ public class TopActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bindView();
-        checkPurchaseStatement();
-        CachedPlayersInfo.instance.initCachedArray();
         initProgressDialog();
+        CachedPlayersInfo.instance.initCachedArray();
+        checkPurchaseStatement();
         if (!PrivacyPolicyFragment.isPolicyAgreed(this)) showPrivacyPolicy();
     }
 
-    private void prepareBillingClient() {
+    private void connectBillingClient() {
         billingClient = BillingClient.newBuilder(this).setListener(this).enablePendingPurchases().build();
         billingClient.startConnection(new BillingClientStateListener() {
             @Override
             public void onBillingSetupFinished(BillingResult billingResult) {
                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
                     // The BillingClient is ready. You can query purchases here.
-                    // TODO
-                    getItemDetail();
+                    progressDialog.dismiss();
                 }
             }
 
@@ -78,6 +79,7 @@ public class TopActivity extends BaseActivity
                 // Try to restart the connection on the next request to
                 // Google Play by calling the startConnection() method.
                 // TODO
+                showToastMessage("BillingService was Disconnected");
                 progressDialog.dismiss();
             }
         });
@@ -133,6 +135,9 @@ public class TopActivity extends BaseActivity
             purchaseButton.setVisibility(View.GONE);
             explanationText.setVisibility(View.GONE);
         } else {
+            progressDialog.show();
+            connectBillingClient();
+
             specialOrderButton.setText(R.string.special_version_disable);
             specialOrderButton.setTextColor(Color.parseColor(FixedWords.COLOR_OFF_BLACK));
             specialOrderButton.setEnabled(false);
@@ -141,13 +146,24 @@ public class TopActivity extends BaseActivity
         }
     }
 
+    private void enableSpecialOrder() {
+        purchaseButton.setVisibility(View.GONE);
+        explanationText.setVisibility(View.GONE);
+
+        specialOrderButton.setText(R.string.special_version);
+        specialOrderButton.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
+        specialOrderButton.setEnabled(true);
+        specialOrderButton
+                .setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.special_button_background, null));
+    }
+
     public void onClickPurchase(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_CustomButtonDialog);
         builder.setMessage(getResources().getString(R.string.ask_purchase));
         builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 progressDialog.show();
-                prepareBillingClient();
+                getItemDetail();
             }
         });
         builder.setNegativeButton(getResources().getString(R.string.cancel), null);
@@ -230,7 +246,8 @@ public class TopActivity extends BaseActivity
                 && purchases != null) {
             for (Purchase purchase : purchases) {
                 if (purchase.getSku().equals(FixedWords.ITEM_ID_ALL_HITTER)) {
-                    new MySharedPreferences(this).storeBoolean(true, FixedWords.PURCHASE_SPECIAL_ORDER);
+                    savePurchaseRecord();;
+                    enableSpecialOrder();
                 }
                 handlePurchase(purchase);
             }
@@ -246,7 +263,7 @@ public class TopActivity extends BaseActivity
                                 .build();
                 billingClient.acknowledgePurchase(acknowledgePurchaseParams, this);
             } else {
-                Toast.makeText(this, "already acknowledged", Toast.LENGTH_SHORT).show();
+                showToastMessage("already acknowledged");
             }
         }
     }
@@ -292,7 +309,7 @@ public class TopActivity extends BaseActivity
                 break;
         }
 
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        showToastMessage(message);
     }
 
     public void onClickExplanation(View view) {
@@ -306,6 +323,52 @@ public class TopActivity extends BaseActivity
         builder.show();
     }
 
-    // TODO reload purchase history
+    public void onClickReloadPurchaseHistory(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_CustomButtonDialog);
+        builder.setMessage(getResources().getString(R.string.ask_purchase_experience));
+        builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                progressDialog.show();
+                reloadPurchaseHistory();
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.cancel), null);
+        builder.show();
+    }
+
+    private void reloadPurchaseHistory() {
+        billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP,
+                new PurchaseHistoryResponseListener() {
+                    @Override
+                    public void onPurchaseHistoryResponse(BillingResult billingResult, List<PurchaseHistoryRecord> purchasesList) {
+                        int responseCode = billingResult.getResponseCode();
+                        if (responseCode == BillingClient.BillingResponseCode.OK) {
+                            if (purchasesList == null || purchasesList.size() == 0) {
+                                showToastMessage(getResources().getString(R.string.no_purchase));
+                            } else {
+                                for (PurchaseHistoryRecord purchase : purchasesList) {
+                                    // Process the result.
+                                    if (purchase.getSku().equals(FixedWords.ITEM_ID_ALL_HITTER)) {
+                                        savePurchaseRecord();
+                                        enableSpecialOrder();
+                                        showToastMessage(getResources().getString(R.string.reloaded_purchase));
+                                    }
+                                }
+                            }
+                        } else {
+                            showToastMessage(getResources().getString(R.string.no_purchase));
+                        }
+                        progressDialog.dismiss();
+                    }
+                });
+    }
+
+    private void savePurchaseRecord() {
+        new MySharedPreferences(this).storeBoolean(true, FixedWords.PURCHASE_SPECIAL_ORDER);
+    }
+
+    private void showToastMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
 
 }
