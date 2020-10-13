@@ -45,6 +45,7 @@ public class TopActivity extends BaseActivity
     private Button dhOrderButton;
     private Button specialOrderButton;
     private Button purchaseButton;
+    private ProgressDialog progressDialog;
 
     private BillingClient billingClient;
 
@@ -54,11 +55,12 @@ public class TopActivity extends BaseActivity
         bindView();
         checkPurchaseStatement();
         CachedPlayersInfo.instance.initCachedArray();
+        initProgressDialog();
         if (!PrivacyPolicyFragment.isPolicyAgreed(this)) showPrivacyPolicy();
     }
 
     private void prepareBillingClient() {
-        billingClient = BillingClient.newBuilder(this).setListener(this).build();
+        billingClient = BillingClient.newBuilder(this).setListener(this).enablePendingPurchases().build();
         billingClient.startConnection(new BillingClientStateListener() {
             @Override
             public void onBillingSetupFinished(BillingResult billingResult) {
@@ -74,6 +76,7 @@ public class TopActivity extends BaseActivity
                 // Try to restart the connection on the next request to
                 // Google Play by calling the startConnection() method.
                 // TODO
+                progressDialog.dismiss();
             }
         });
     }
@@ -95,6 +98,7 @@ public class TopActivity extends BaseActivity
                                 launchBillingFlow(skuDetails);
                             }
                         }
+                        progressDialog.dismiss();
                     }
                 });
     }
@@ -138,7 +142,7 @@ public class TopActivity extends BaseActivity
         builder.setMessage(getResources().getString(R.string.ask_purchase));
         builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // TODO
+                progressDialog.show();
                 prepareBillingClient();
             }
         });
@@ -165,15 +169,23 @@ public class TopActivity extends BaseActivity
         startActivity(intent);
     }
 
+    private void initProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+    }
+
     private void showProgress() {
+        // prevent double tap
         normalOrderButton.setEnabled(false);
         dhOrderButton.setEnabled(false);
         if (isSpecialOrderPurchased()) specialOrderButton.setEnabled(false);
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
         progressDialog.show();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -182,7 +194,7 @@ public class TopActivity extends BaseActivity
                 if (isSpecialOrderPurchased()) specialOrderButton.setEnabled(true);
                 progressDialog.dismiss();
             }
-        }, 2000);
+        }, 1000);
     }
 
     private void showPrivacyPolicy() {
@@ -240,7 +252,7 @@ public class TopActivity extends BaseActivity
         int responseCode = billingResult.getResponseCode();
 
         String message = "nothing";
-        switch(responseCode){
+        switch (responseCode) {
             case BillingClient.BillingResponseCode.OK:
                 message = "OK";
                 break;
