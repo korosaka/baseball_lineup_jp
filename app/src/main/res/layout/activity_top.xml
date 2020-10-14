@@ -129,22 +129,18 @@
             android:textColor="#fff"
             android:textSize="22sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="10dp"
-            android:onClick="onClickReloadPurchaseHistory"
-            android:text="@string/purchase_history_reload"
-            android:textColor="#6633ff"
-            android:textSize="16sp" />
-
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="@string/confirm_connection"
+        android:textSize="14sp"
+        android:layout_height="wrap_content"/>
 
 
 </LinearLayout>

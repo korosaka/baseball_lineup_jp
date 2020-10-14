@@ -69,8 +69,7 @@ public class TopActivity extends BaseActivity
             @Override
             public void onBillingSetupFinished(BillingResult billingResult) {
                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                    // The BillingClient is ready. You can query purchases here.
-                    progressDialog.dismiss();
+                    reloadPurchaseHistory();
                 }
             }
 
@@ -97,18 +96,22 @@ public class TopActivity extends BaseActivity
                     @Override
                     public void onSkuDetailsResponse(BillingResult billingResult,
                                                      List<SkuDetails> skuDetailsList) {
+                        showToastMessage("onSkuDetailsResponse");
                         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && skuDetailsList != null) {
                             for (SkuDetails skuDetails : skuDetailsList) {
                                 launchBillingFlow(skuDetails);
+                                // even if user has already purchased, this process is called
                             }
                         }
                         progressDialog.dismiss();
                     }
                 });
+
+        /* TODO if no response, show "通信環境をお確かめください"*/
     }
 
     /**
-     * after this method, onPurchasesUpdated will be called
+     * after this method, onPurchasesUpdated will be called (if user purchase)
      */
     private void launchBillingFlow(SkuDetails skuDetails) {
         BillingFlowParams flowParams = BillingFlowParams.newBuilder()
@@ -124,6 +127,7 @@ public class TopActivity extends BaseActivity
         specialOrderButton = findViewById(R.id.special_order_button);
         purchaseButton = findViewById(R.id.purchase_button);
         explanationText = findViewById(R.id.explanation_special);
+//        reloadHistoryText = findViewById(R.id.reload_history);
     }
 
     private boolean isSpecialOrderPurchased() {
@@ -132,29 +136,34 @@ public class TopActivity extends BaseActivity
 
     private void checkPurchaseStatement() {
         if (isSpecialOrderPurchased()) {
-            purchaseButton.setVisibility(View.GONE);
-            explanationText.setVisibility(View.GONE);
+            dismissPurchasingViews();
         } else {
-            progressDialog.show();
-            connectBillingClient();
-
             specialOrderButton.setText(R.string.special_version_disable);
             specialOrderButton.setTextColor(Color.parseColor(FixedWords.COLOR_OFF_BLACK));
             specialOrderButton.setEnabled(false);
             specialOrderButton
                     .setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
+
+            progressDialog.show();
+            connectBillingClient();
+
         }
     }
 
     private void enableSpecialOrder() {
-        purchaseButton.setVisibility(View.GONE);
-        explanationText.setVisibility(View.GONE);
+        dismissPurchasingViews();
 
         specialOrderButton.setText(R.string.special_version);
         specialOrderButton.setTextColor(Color.parseColor(FixedWords.COLOR_WHITE));
         specialOrderButton.setEnabled(true);
         specialOrderButton
                 .setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.special_button_background, null));
+    }
+
+    private void dismissPurchasingViews() {
+        purchaseButton.setVisibility(View.GONE);
+        explanationText.setVisibility(View.GONE);
+//        reloadHistoryText.setVisibility(View.GONE);
     }
 
     public void onClickPurchase(View view) {
@@ -272,6 +281,7 @@ public class TopActivity extends BaseActivity
     public void onAcknowledgePurchaseResponse(BillingResult billingResult) {
         int responseCode = billingResult.getResponseCode();
 
+        // TODO test
         String message = "nothing";
         switch (responseCode) {
             case BillingClient.BillingResponseCode.OK:
@@ -323,19 +333,6 @@ public class TopActivity extends BaseActivity
         builder.show();
     }
 
-    public void onClickReloadPurchaseHistory(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_CustomButtonDialog);
-        builder.setMessage(getResources().getString(R.string.ask_purchase_experience));
-        builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                progressDialog.show();
-                reloadPurchaseHistory();
-            }
-        });
-        builder.setNegativeButton(getResources().getString(R.string.cancel), null);
-        builder.show();
-    }
-
     private void reloadPurchaseHistory() {
         billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP,
                 new PurchaseHistoryResponseListener() {
@@ -356,6 +353,7 @@ public class TopActivity extends BaseActivity
                                 }
                             }
                         } else {
+                            // TODO dismiss(for test)
                             showToastMessage(getResources().getString(R.string.no_purchase));
                         }
                         progressDialog.dismiss();
