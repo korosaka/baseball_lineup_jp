@@ -272,7 +272,7 @@ public class TopActivity extends BaseActivity
                 && purchases != null) {
             for (Purchase purchase : purchases) {
                 if (purchase.getSku().equals(FixedWords.ITEM_ID_ALL_HITTER)) {
-                    savePurchaseRecord();;
+                    savePurchaseRecord();
                     enableSpecialOrder();
                 }
                 handlePurchase(purchase);
