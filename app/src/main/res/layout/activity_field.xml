@@ -61,7 +61,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.05" />
+                android:layout_weight="0.3" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -71,9 +71,10 @@
 
                 <TextView
                     android:id="@+id/center_order"
-                    android:layout_width="wrap_content"
+                    android:layout_width="30sp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="1dp"
+                    android:gravity="center"
+                    android:maxLines="1"
                     android:text="@string/no_order"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -84,8 +85,9 @@
                     android:layout_width="100sp"
                     android:layout_height="32sp"
                     android:layout_marginRight="14dp"
-                    android:gravity="center"
                     android:background="@drawable/outfielder_name_background"
+                    android:gravity="center"
+                    android:maxLines="1"
                     android:text="@string/hyphen_5"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -97,7 +99,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.03" />
+                android:layout_weight="0.3" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -108,14 +110,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="center_vertical|start"
-                    android:paddingLeft="3dp">
+                    android:gravity="center_vertical|start">
 
                     <TextView
                         android:id="@+id/left_order"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -125,8 +127,9 @@
                         android:id="@+id/left"
                         android:layout_width="100sp"
                         android:layout_height="32sp"
-                        android:gravity="center"
                         android:background="@drawable/outfielder_name_background"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -138,13 +141,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:gravity="center_vertical|end"
-                    android:paddingRight="12dp">
+                    android:paddingRight="15dp">
 
                     <TextView
                         android:id="@+id/right_order"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -156,6 +160,7 @@
                         android:layout_height="32sp"
                         android:background="@drawable/outfielder_name_background"
                         android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -166,7 +171,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.06" />
+                android:layout_weight="0.6" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -177,13 +182,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:paddingRight="18dp">
 
                     <TextView
                         android:id="@+id/short_stop_order"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -193,8 +200,9 @@
                         android:id="@+id/short_stop"
                         android:layout_width="100sp"
                         android:layout_height="32sp"
-                        android:gravity="center"
                         android:background="@drawable/infielder_name_background"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -209,9 +217,10 @@
 
                     <TextView
                         android:id="@+id/second_order"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -221,9 +230,10 @@
                         android:id="@+id/second"
                         android:layout_width="100sp"
                         android:layout_height="32sp"
-                        android:gravity="center"
                         android:layout_marginRight="18dp"
                         android:background="@drawable/infielder_name_background"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -234,7 +244,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.05" />
+                android:layout_weight="0.5" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -245,14 +255,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="start"
-                    android:paddingLeft="1dp">
+                    android:gravity="start">
 
                     <TextView
                         android:id="@+id/third_order"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -262,8 +272,9 @@
                         android:id="@+id/third"
                         android:layout_width="100sp"
                         android:layout_height="32sp"
-                        android:gravity="center"
                         android:background="@drawable/infielder_name_background"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -274,14 +285,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:paddingRight="15dp"
-                    android:gravity="end">
+                    android:gravity="end"
+                    android:paddingRight="14dp">
 
                     <TextView
                         android:id="@+id/first_order"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -291,14 +303,20 @@
                         android:id="@+id/first"
                         android:layout_width="100sp"
                         android:layout_height="32sp"
-                        android:gravity="center"
-                        android:text="@string/hyphen_5"
                         android:background="@drawable/infielder_name_background"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -308,9 +326,10 @@
 
                 <TextView
                     android:id="@+id/pitcher_order"
-                    android:layout_width="wrap_content"
+                    android:layout_width="30sp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="1dp"
+                    android:gravity="center"
+                    android:maxLines="1"
                     android:text="@string/no_order"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -320,9 +339,10 @@
                     android:id="@+id/pitcher"
                     android:layout_width="100sp"
                     android:layout_height="32sp"
-                    android:gravity="center"
                     android:layout_marginRight="13dp"
                     android:background="@drawable/pitcher_name_background"
+                    android:gravity="center"
+                    android:maxLines="1"
                     android:text="@string/hyphen_5"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -333,7 +353,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.07" />
+                android:layout_weight="0.6" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -344,14 +364,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="start"
-                    android:paddingLeft="3dp">
+                    android:gravity="start">
 
                     <TextView
                         android:id="@+id/dh4_order"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -361,8 +381,9 @@
                         android:id="@+id/dh4"
                         android:layout_width="100sp"
                         android:layout_height="32sp"
-                        android:gravity="center"
                         android:background="@drawable/dh_name_background"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -373,14 +394,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:paddingRight="1dp"
-                    android:gravity="end">
+                    android:gravity="end"
+                    android:paddingRight="10dp">
 
                     <TextView
                         android:id="@+id/dh1_order"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -390,14 +412,20 @@
                         android:id="@+id/dh1"
                         android:layout_width="100sp"
                         android:layout_height="32sp"
-                        android:gravity="center"
                         android:background="@drawable/dh_name_background"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.01" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -408,14 +436,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="start"
-                    android:paddingLeft="3dp">
+                    android:gravity="start">
 
                     <TextView
                         android:id="@+id/dh5_order"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -425,8 +453,9 @@
                         android:id="@+id/dh5"
                         android:layout_width="100sp"
                         android:layout_height="32sp"
-                        android:gravity="center"
                         android:background="@drawable/dh_name_background"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -437,14 +466,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:paddingRight="1dp"
-                    android:gravity="end">
+                    android:gravity="end"
+                    android:paddingRight="10dp">
 
                     <TextView
                         android:id="@+id/dh2_order"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -454,14 +484,20 @@
                         android:id="@+id/dh2"
                         android:layout_width="100sp"
                         android:layout_height="32sp"
-                        android:gravity="center"
                         android:background="@drawable/dh_name_background"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.01" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -472,14 +508,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="start"
-                    android:paddingLeft="3dp">
+                    android:gravity="start">
 
                     <TextView
                         android:id="@+id/dh6_order"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -489,8 +525,9 @@
                         android:id="@+id/dh6"
                         android:layout_width="100sp"
                         android:layout_height="32sp"
-                        android:gravity="center"
                         android:background="@drawable/dh_name_background"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -501,14 +538,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:paddingRight="1dp"
-                    android:gravity="end">
+                    android:gravity="end"
+                    android:paddingRight="10dp">
 
                     <TextView
                         android:id="@+id/dh3_order"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30sp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/no_order"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -518,14 +556,20 @@
                         android:id="@+id/dh3"
                         android:layout_width="100sp"
                         android:layout_height="32sp"
-                        android:gravity="center"
                         android:background="@drawable/dh_name_background"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:text="@string/hyphen_5"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.15" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -535,9 +579,10 @@
 
                 <TextView
                     android:id="@+id/catcher_order"
-                    android:layout_width="wrap_content"
+                    android:layout_width="30sp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="1dp"
+                    android:gravity="center"
+                    android:maxLines="1"
                     android:text="@string/no_order"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -547,9 +592,10 @@
                     android:id="@+id/catcher"
                     android:layout_width="100sp"
                     android:layout_height="32sp"
-                    android:gravity="center"
                     android:layout_marginRight="13dp"
                     android:background="@drawable/catcher_name_background"
+                    android:gravity="center"
+                    android:maxLines="1"
                     android:text="@string/hyphen_5"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -560,7 +606,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.06" />
+                android:layout_weight="0.53" />
         </LinearLayout>
 
     </FrameLayout>
