@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">野球スタメンアプリ</string>
     <string name="app_title1">野球スタメン</string>
-    <string name="app_title2">作成アプリ 202010134</string>
+    <string name="app_title2">作成アプリ 202010182</string>
     <string name="non_dh_version">DHなし</string>
     <string name="dh_version">DHあり</string>
     <string name="special_version">特別ルール</string>
@@ -11,9 +11,12 @@
     <string name="reloaded_purchase">購入を復元しました。</string>
     <string name="ask_purchase_experience">同Googleアカウントで、当アプリでの購入履歴がありますか？</string>
     <string name="no_purchase">購入履歴を取得できませんでした。</string>
-    <string name="purchase">購入</string>
+    <string name="purchase">￥購入</string>
     <string name="ask_purchase">購入手続きに移りますか？</string>
-    <string name="confirm_connection">アプリのご利用の際は、通信環境があることをご確認ください。</string>
+    <string name="require_connection">インターネット接続が確認できません。</string>
+    <string name="confirm_connection">ご購入の際は、通信環境があることをご確認ください。</string>
+    <string name="failed_play_store_connection">Google play storeとの接続に失敗しました。</string>
+    <string name="play_store_disconnected">Google play storeとの接続が切断されました。購入手続きの際はアプリを開き直しください。</string>
     <string name="first">１番</string>
     <string name="second">２番</string>
     <string name="third">３番</string>

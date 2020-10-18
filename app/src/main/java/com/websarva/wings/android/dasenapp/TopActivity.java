@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -52,6 +53,8 @@ public class TopActivity extends BaseActivity
     private ProgressDialog progressDialog;
 
     private BillingClient billingClient;
+    boolean billingClientConnected = false;
+    boolean isPurchasingProcess = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,21 +67,28 @@ public class TopActivity extends BaseActivity
     }
 
     private void connectBillingClient() {
+        if (!isOnline()) {
+            progressDialog.dismiss();
+            return;
+        }
         billingClient = BillingClient.newBuilder(this).setListener(this).enablePendingPurchases().build();
         billingClient.startConnection(new BillingClientStateListener() {
             @Override
             public void onBillingSetupFinished(BillingResult billingResult) {
                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    billingClientConnected = true;
                     reloadPurchaseHistory();
+                } else {
+                    if (isPurchasingProcess) {
+                        isPurchasingProcess = false;
+                        showToastMessage(getResources().getString(R.string.failed_play_store_connection));
+                    }
                 }
             }
 
             @Override
             public void onBillingServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
-                // TODO
-                showToastMessage("BillingService was Disconnected");
+                billingClientConnected = false;
                 progressDialog.dismiss();
             }
         });
@@ -96,7 +106,6 @@ public class TopActivity extends BaseActivity
                     @Override
                     public void onSkuDetailsResponse(BillingResult billingResult,
                                                      List<SkuDetails> skuDetailsList) {
-                        showToastMessage("onSkuDetailsResponse");
                         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && skuDetailsList != null) {
                             for (SkuDetails skuDetails : skuDetailsList) {
                                 launchBillingFlow(skuDetails);
@@ -106,8 +115,6 @@ public class TopActivity extends BaseActivity
                         progressDialog.dismiss();
                     }
                 });
-
-        /* TODO if no response, show "通信環境をお確かめください"*/
     }
 
     /**
@@ -127,7 +134,6 @@ public class TopActivity extends BaseActivity
         specialOrderButton = findViewById(R.id.special_order_button);
         purchaseButton = findViewById(R.id.purchase_button);
         explanationText = findViewById(R.id.explanation_special);
-//        reloadHistoryText = findViewById(R.id.reload_history);
     }
 
     private boolean isSpecialOrderPurchased() {
@@ -146,7 +152,6 @@ public class TopActivity extends BaseActivity
 
             progressDialog.show();
             connectBillingClient();
-
         }
     }
 
@@ -163,7 +168,6 @@ public class TopActivity extends BaseActivity
     private void dismissPurchasingViews() {
         purchaseButton.setVisibility(View.GONE);
         explanationText.setVisibility(View.GONE);
-//        reloadHistoryText.setVisibility(View.GONE);
     }
 
     public void onClickPurchase(View view) {
@@ -171,8 +175,18 @@ public class TopActivity extends BaseActivity
         builder.setMessage(getResources().getString(R.string.ask_purchase));
         builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                progressDialog.show();
-                getItemDetail();
+                if (!isOnline()) {
+                    showToastMessage(getResources().getString(R.string.require_connection));
+                    return;
+                }
+                if (billingClientConnected) {
+                    progressDialog.show();
+                    getItemDetail();
+                } else {
+                    isPurchasingProcess = true;
+                    connectBillingClient();
+                }
+
             }
         });
         builder.setNegativeButton(getResources().getString(R.string.cancel), null);
@@ -263,6 +277,9 @@ public class TopActivity extends BaseActivity
         }
     }
 
+    /**
+     * after acknowledgePurchase, onAcknowledgePurchaseResponse method will be called
+     */
     private void handlePurchase(Purchase purchase) {
         if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
             if (!purchase.isAcknowledged()) {
@@ -271,8 +288,6 @@ public class TopActivity extends BaseActivity
                                 .setPurchaseToken(purchase.getPurchaseToken())
                                 .build();
                 billingClient.acknowledgePurchase(acknowledgePurchaseParams, this);
-            } else {
-                showToastMessage("already acknowledged");
             }
         }
     }
@@ -281,7 +296,6 @@ public class TopActivity extends BaseActivity
     public void onAcknowledgePurchaseResponse(BillingResult billingResult) {
         int responseCode = billingResult.getResponseCode();
 
-        // TODO test
         String message = "nothing";
         switch (responseCode) {
             case BillingClient.BillingResponseCode.OK:
@@ -318,8 +332,7 @@ public class TopActivity extends BaseActivity
                 message = "FEATURE_NOT_SUPPORTED";
                 break;
         }
-
-        showToastMessage(message);
+        Log.d("acknowledge result", message);
     }
 
     public void onClickExplanation(View view) {
@@ -340,23 +353,25 @@ public class TopActivity extends BaseActivity
                     public void onPurchaseHistoryResponse(BillingResult billingResult, List<PurchaseHistoryRecord> purchasesList) {
                         int responseCode = billingResult.getResponseCode();
                         if (responseCode == BillingClient.BillingResponseCode.OK) {
-                            if (purchasesList == null || purchasesList.size() == 0) {
-                                showToastMessage(getResources().getString(R.string.no_purchase));
-                            } else {
+                            if (purchasesList != null && purchasesList.size() != 0) {
                                 for (PurchaseHistoryRecord purchase : purchasesList) {
-                                    // Process the result.
                                     if (purchase.getSku().equals(FixedWords.ITEM_ID_ALL_HITTER)) {
                                         savePurchaseRecord();
                                         enableSpecialOrder();
                                         showToastMessage(getResources().getString(R.string.reloaded_purchase));
+                                        progressDialog.dismiss();
+                                        if (isPurchasingProcess) isPurchasingProcess = false;
+                                        return;
                                     }
                                 }
                             }
-                        } else {
-                            // TODO dismiss(for test)
-                            showToastMessage(getResources().getString(R.string.no_purchase));
                         }
                         progressDialog.dismiss();
+                        if (isPurchasingProcess) {
+                            isPurchasingProcess = false;
+                            progressDialog.show();
+                            getItemDetail();
+                        }
                     }
                 });
     }
