@@ -50,6 +50,7 @@ public class TopActivity extends BaseActivity
     private Button specialOrderButton;
     private Button purchaseButton;
     private TextView explanationText;
+    private TextView checkInternetText;
     private ProgressDialog progressDialog;
 
     private BillingClient billingClient;
@@ -134,6 +135,7 @@ public class TopActivity extends BaseActivity
         specialOrderButton = findViewById(R.id.special_order_button);
         purchaseButton = findViewById(R.id.purchase_button);
         explanationText = findViewById(R.id.explanation_special);
+        checkInternetText = findViewById(R.id.check_internet_text);
     }
 
     private boolean isSpecialOrderPurchased() {
@@ -168,6 +170,7 @@ public class TopActivity extends BaseActivity
     private void dismissPurchasingViews() {
         purchaseButton.setVisibility(View.GONE);
         explanationText.setVisibility(View.GONE);
+        checkInternetText.setVisibility(View.GONE);
     }
 
     public void onClickPurchase(View view) {

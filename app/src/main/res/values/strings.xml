@@ -14,7 +14,7 @@
     <string name="purchase">￥購入</string>
     <string name="ask_purchase">購入手続きに移りますか？</string>
     <string name="require_connection">インターネット接続が確認できません。</string>
-    <string name="confirm_connection">ご購入の際は、通信環境があることをご確認ください。</string>
+    <string name="confirm_connection">ご購入の際は、インターネット接続があることをご確認ください。</string>
     <string name="failed_play_store_connection">Google play storeとの接続に失敗しました。</string>
     <string name="play_store_disconnected">Google play storeとの接続が切断されました。購入手続きの際はアプリを開き直しください。</string>
     <string name="first">１番</string>
