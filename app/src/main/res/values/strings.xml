@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">野球スタメンアプリ</string>
     <string name="app_title1">野球スタメン</string>
-    <string name="app_title2">作成アプリ 202010182</string>
+    <string name="app_title2">作成アプリ</string>
     <string name="non_dh_version">DHなし</string>
     <string name="dh_version">DHあり</string>
     <string name="special_version">特別ルール</string>
