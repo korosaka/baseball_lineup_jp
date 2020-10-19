@@ -196,6 +196,9 @@ public class FieldActivity extends BaseAdActivity {
             case 7:
                 textSize = 12;
                 break;
+            case 8:
+                textSize = 10;
+                break;
             default:
                 textSize = 16;
                 break;
