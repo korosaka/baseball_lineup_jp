@@ -336,7 +336,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="200dp">
 
                 <Button
@@ -349,7 +349,7 @@
                     android:onClick="onClickBackToTop"
                     android:text="@string/back"
                     android:textColor="#000000"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Button
@@ -362,7 +362,7 @@
                     android:onClick="onClickField"
                     android:text="@string/field"
                     android:textColor="#000000"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Button
@@ -374,9 +374,10 @@
                     android:background="@drawable/share_button_background"
                     android:onClick="onClickShareOrder"
                     android:text="@string/share"
+                    android:maxLines="1"
                     android:textAllCaps="false"
                     android:textColor="#000000"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
