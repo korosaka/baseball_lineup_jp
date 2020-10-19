@@ -595,6 +595,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
                 orderType, false, false, false, false, FixedWords.EMPTY_NAME);
         databaseUsing.putSubPlayersInCache(orderType);
         subMembersFragment.updatePlayerListView();
+        resetTitle();
     }
 
     private boolean isSubLimit() {
