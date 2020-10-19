@@ -431,9 +431,9 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         resetTitle();
         if (orderType == FixedWords.SPECIAL_ORDER) {
             addStarting.setEnabled(true);
-            addStarting.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
+            addStarting.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.add_member_button_background, null));
             deleteStarting.setEnabled(true);
-            deleteStarting.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
+            deleteStarting.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.delete_member_button_background, null));
         }
 
         setLayoutDefaultForSub();
@@ -443,9 +443,9 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         resetRoles();
         rolesBox.setVisibility(View.GONE);
         deleteSub.setEnabled(true);
-        deleteSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
+        deleteSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.delete_member_button_background, null));
         addSub.setEnabled(true);
-        addSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
+        addSub.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.add_member_button_background, null));
         isDeleting = false;
     }
 
