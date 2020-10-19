@@ -80,6 +80,7 @@ public class TopActivity extends BaseActivity
                     billingClientConnected = true;
                     reloadPurchaseHistory();
                 } else {
+                    progressDialog.dismiss();
                     if (isPurchasingProcess) {
                         isPurchasingProcess = false;
                         showToastMessage(getResources().getString(R.string.failed_play_store_connection));
