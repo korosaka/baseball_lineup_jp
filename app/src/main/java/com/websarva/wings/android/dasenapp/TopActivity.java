@@ -209,7 +209,8 @@ public class TopActivity extends BaseActivity
     }
 
     private void startOrderActivity(int orderType) {
-        showProgress();
+        preventDoubleTap();
+        progressDialog.show();
         Intent intent = new Intent(TopActivity.this, MakingOrderActivity.class);
         intent.putExtra(FixedWords.ORDER_TYPE, orderType);
         startActivity(intent);
@@ -221,12 +222,10 @@ public class TopActivity extends BaseActivity
         progressDialog.setCancelable(false);
     }
 
-    private void showProgress() {
-        // prevent double tap
+    private void preventDoubleTap() {
         normalOrderButton.setEnabled(false);
         dhOrderButton.setEnabled(false);
         if (isSpecialOrderPurchased()) specialOrderButton.setEnabled(false);
-        progressDialog.show();
     }
 
     @Override
