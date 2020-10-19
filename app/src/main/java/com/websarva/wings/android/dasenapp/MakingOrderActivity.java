@@ -427,7 +427,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         exchange.setEnabled(true);
         exchange.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
         orderSwitch.setEnabled(true);
-        orderSwitch.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.exchange_button_background, null));
+        orderSwitch.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.switch_button_background, null));
         resetTitle();
         if (orderType == FixedWords.SPECIAL_ORDER) {
             addStarting.setEnabled(true);
