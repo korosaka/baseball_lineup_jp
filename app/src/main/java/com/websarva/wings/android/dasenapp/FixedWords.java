@@ -39,6 +39,8 @@ public class FixedWords {
     public static final String AGREE = "agree";
     public static final String CLOSE = "close";
 
+    public static final String PURCHASE_SPECIAL_ORDER = "purchaseSpecialOrder";
+
     public static final String DATA_STORE = "dataStore";
 
     public static final int MIN_NUM_SPECIAL_PLAYER = 9;
@@ -82,4 +84,6 @@ public class FixedWords {
 
     public static final String ERROR_LOG_TAG = "errorTag";
     public static final String ERROR_LOG_MESSAGE = "error happened!";
+
+    public static final String ITEM_ID_ALL_HITTER = "baseball_order_all_hitter";
 }

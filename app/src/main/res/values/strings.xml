@@ -6,6 +6,16 @@
     <string name="dh_version">DHあり</string>
     <string name="special_version">特別ルール</string>
     <string name="special_version_disable">特別ルール(有料)</string>
+    <string name="what_is_special"><u>特別ルールとは？</u></string>
+    <string name="about_special">いわゆる”全員打ち”です。\nDH枠を増やし、9人以上(最大15人)でスタメンを組むことができます。\n例: スタメン13人の場合、\n打順は1〜13番、DHが4人になります。\n\n<u>価格: 440円(税込)</u></string>
+    <string name="reloaded_purchase">購入を復元しました。</string>
+    <string name="no_purchase">購入履歴を取得できませんでした。</string>
+    <string name="purchase">￥購入</string>
+    <string name="ask_purchase">購入手続きに移りますか？</string>
+    <string name="require_connection">インターネット接続が確認できません。</string>
+    <string name="confirm_connection">ご購入の際は、インターネット接続があることをご確認ください。</string>
+    <string name="failed_play_store_connection">Google play storeとの接続に失敗しました。</string>
+    <string name="play_store_disconnected">Google play storeとの接続が切断されました。購入手続きの際はアプリを開き直しください。</string>
     <string name="first">１番</string>
     <string name="second">２番</string>
     <string name="third">３番</string>
