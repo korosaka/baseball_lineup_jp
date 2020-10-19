@@ -2,59 +2,45 @@ package com.websarva.wings.android.dasenapp;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
 import java.util.List;
 
-public class StartingPlayerListAdapter extends ArrayAdapter<StartingPlayerListItemData> {
+public class StartingPlayerListAdapter extends BasePlayerListAdapter {
 
     private List<StartingPlayerListItemData> playerItems;
-    private int mResource;
-    private LayoutInflater mInflater;
     private StartingPlayerListAdapterListener mListener;
+    private int orderType;
 
-    public StartingPlayerListAdapter(Context context, int resource, List<StartingPlayerListItemData> items, StartingPlayerListAdapterListener listener) {
-        super(context, resource, items);
+    public StartingPlayerListAdapter(
+            Context context,
+            int resource,
+            List<? extends BasePlayerListItemData> items,
+            StartingPlayerListAdapterListener listener,
+            int orderType) {
+        super(context, resource, (List<BasePlayerListItemData>) items);
 
-        playerItems = items;
-        mResource = resource;
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mListener = listener;
+        this.playerItems = (List<StartingPlayerListItemData>) items;
+        this.mListener = listener;
+        this.orderType = orderType;
     }
 
-
-    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view;
-
-        if (convertView != null) {
-            view = convertView;
-        } else {
-            view = mInflater.inflate(mResource, null);
-        }
-
+    void customView(int position, View view) {
         Button orderButton = view.findViewById(R.id.order_button);
         TextView positionText = view.findViewById(R.id.position_text);
         TextView nameText = view.findViewById(R.id.name_text);
 
         preparePlayerItemView(playerItems.get(position), orderButton, positionText, nameText);
-
-        return view;
     }
 
     private void preparePlayerItemView(
             StartingPlayerListItemData playerItem, Button orderButton, TextView positionText, TextView nameText) {
-        int orderNum = playerItem.getItemOrderNumber();
+        int orderNum = playerItem.getOrderNum();
 
-        if (orderNum == FixedWords.DH_PITCHER_ORDER) {
+        if (isDhPitcher(orderNum)) {
             orderButton.setText(FixedWords.PITCHER_INITIAL);
             positionText.setTextColor(Color.parseColor(FixedWords.COLOR_PITCHER_TEXT));
         } else {
@@ -67,37 +53,13 @@ public class StartingPlayerListAdapter extends ArrayAdapter<StartingPlayerListIt
             }
         });
 
-        positionText.setText(playerItem.getItemPosition());
-        nameText.setText(customNameSpace(playerItem.getItemName()));
+        positionText.setText(playerItem.getPosition());
+        nameText.setText(customNameSpace(playerItem.getName()));
         changeTextSize(nameText);
     }
 
-    private void changeTextSize(TextView textView) {
-        int lengthOfText = textView.length();
-        int textSize;
-        switch (lengthOfText) {
-            case 6:
-                textSize = 24;
-                break;
-            case 7:
-                textSize = 20;
-                break;
-            default:
-                textSize = 28;
-                break;
-        }
-        textView.setTextSize(textSize);
-    }
-
-    private String customNameSpace(String playerName) {
-        switch (playerName.length()) {
-            case 2:
-                return playerName.charAt(0) + FixedWords.SPACE + FixedWords.SPACE + FixedWords.SPACE + playerName.charAt(1);
-            case 3:
-                return playerName.charAt(0) + FixedWords.SPACE + playerName.charAt(1) + FixedWords.SPACE + playerName.charAt(2);
-            default:
-                return playerName;
-        }
+    private boolean isDhPitcher(int orderNum) {
+        return (orderType == FixedWords.DH_ORDER) && (orderNum == FixedWords.DH_PITCHER_ORDER);
     }
 
 }

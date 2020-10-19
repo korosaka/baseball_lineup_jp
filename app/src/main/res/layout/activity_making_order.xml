@@ -49,7 +49,7 @@
                         android:id="@+id/position"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:entries="@array/positions" />
+                        android:entries="@array/positions_normal" />
 
                     <TextView
                         android:id="@+id/sub"
@@ -69,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.0"
                         android:inputType="text"
-                        android:maxLength="7"
+                        android:maxLength="8"
                         android:maxLines="1"
                         android:textColor="#000000"
                         android:textSize="24sp" />
@@ -102,54 +102,54 @@
                         android:textStyle="bold" />
 
                     <Button
-                        android:id="@+id/use_pitcher_button"
+                        android:id="@+id/role_pitcher_button"
                         android:layout_width="0dp"
                         android:layout_height="36sp"
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
                         android:background="@drawable/role_off_background"
-                        android:textColor="#696969"
-                        android:onClick="onClickRolePitcher"
+                        android:onClick="onClickRoleButton"
                         android:text="@string/role_pitcher"
+                        android:textColor="#696969"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <Button
-                        android:id="@+id/use_batter_button"
+                        android:id="@+id/role_batter_button"
                         android:layout_width="0dp"
                         android:layout_height="36sp"
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
                         android:background="@drawable/role_off_background"
-                        android:textColor="#696969"
-                        android:onClick="onClickRoleBatter"
+                        android:onClick="onClickRoleButton"
                         android:text="@string/role_batter"
+                        android:textColor="#696969"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <Button
-                        android:id="@+id/use_runner_button"
+                        android:id="@+id/role_runner_button"
                         android:layout_width="0dp"
                         android:layout_height="36sp"
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
                         android:background="@drawable/role_off_background"
-                        android:textColor="#696969"
-                        android:onClick="onClickRoleRunner"
+                        android:onClick="onClickRoleButton"
                         android:text="@string/role_runner"
+                        android:textColor="#696969"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <Button
-                        android:id="@+id/use_fielder_button"
+                        android:id="@+id/role_fielder_button"
                         android:layout_width="0dp"
                         android:layout_height="36sp"
                         android:layout_marginRight="3dp"
                         android:layout_weight="1.0"
                         android:background="@drawable/role_off_background"
-                        android:textColor="#696969"
-                        android:onClick="onClickRoleFielder"
+                        android:onClick="onClickRoleButton"
                         android:text="@string/role_fielder"
+                        android:textColor="#696969"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -265,7 +265,8 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:layout_weight="1.0"
-                    android:background="@drawable/exchange_button_background"
+                    android:background="@drawable/switch_button_background"
+                    android:textColor="#fff"
                     android:onClick="onClickSwitchOrder"
                     android:text="@string/display_sub"
                     android:textSize="18sp"
@@ -278,7 +279,8 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:layout_weight="1.0"
-                    android:background="@drawable/exchange_button_background"
+                    android:background="@drawable/add_member_button_background"
+                    android:textColor="#fff"
                     android:onClick="onClickAddSub"
                     android:text="@string/add_sub"
                     android:textSize="18sp"
@@ -291,18 +293,50 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:layout_weight="1.0"
-                    android:background="@drawable/exchange_button_background"
+                    android:background="@drawable/delete_member_button_background"
+                    android:textColor="#fff"
                     android:onClick="onClickDeleteSub"
                     android:text="@string/delete_sub"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/add_special_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/add_member_button_background"
+                    android:textColor="#fff"
+                    android:onClick="onClickAddStarting"
+                    android:text="@string/add_starting"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/delete_special_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/delete_member_button_background"
+                    android:textColor="#fff"
+                    android:onClick="onClickDeleteStarting"
+                    android:text="@string/delete_starting"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="200dp">
 
                 <Button
@@ -315,7 +349,7 @@
                     android:onClick="onClickBackToTop"
                     android:text="@string/back"
                     android:textColor="#000000"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Button
@@ -328,7 +362,7 @@
                     android:onClick="onClickField"
                     android:text="@string/field"
                     android:textColor="#000000"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Button
@@ -340,9 +374,10 @@
                     android:background="@drawable/share_button_background"
                     android:onClick="onClickShareOrder"
                     android:text="@string/share"
+                    android:maxLines="1"
                     android:textAllCaps="false"
                     android:textColor="#000000"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
             </LinearLayout>

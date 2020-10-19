@@ -2,6 +2,7 @@ package com.websarva.wings.android.dasenapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
@@ -14,7 +15,11 @@ public class DatabaseUsing {
         helper = new DatabaseHelper(context);
     }
 
-    public void getPlayersInfo(int orderType) {
+    public void getPlayersFromDB(int orderType) {
+
+        if (orderType == FixedWords.SPECIAL_ORDER) {
+            if (!isSpecialLineupDBFilled()) initSpecialLineupDB();
+        }
 
         int numberOfPlayers = FixedWords.NUMBER_OF_LINEUP_NORMAL;
         switch (orderType) {
@@ -23,18 +28,23 @@ public class DatabaseUsing {
             case FixedWords.DH_ORDER:
                 numberOfPlayers = FixedWords.NUMBER_OF_LINEUP_DH;
                 break;
+            case FixedWords.SPECIAL_ORDER:
+                numberOfPlayers = countSpecialLineupPlayers();
+                break;
         }
 
+        CachedPlayersInfo.instance.clearStartingArray(orderType);
         for (int orderNum = 1; orderNum <= numberOfPlayers; orderNum++) {
             putStartingPlayersInCache(orderType, orderNum);
         }
 
+        putSubPlayersInCache(orderType);
     }
 
     public void putSubPlayersInCache(int orderType) {
 
         CachedPlayersInfo.instance.clearSubArray(orderType);
-        String selectQuery = "SELECT * FROM " + getSubTableName(orderType);
+        String selectQuery = "SELECT * FROM " + helper.getSubTableName(orderType);
         SQLiteDatabase dbR = helper.getReadableDatabase();
         Cursor cursor = null;
 
@@ -80,12 +90,12 @@ public class DatabaseUsing {
             cursor = dbR.rawQuery(sqlSelect, new String[]{String.valueOf(orderNum)});
             // if there isn't any data, return false
             if (cursor.moveToNext()) {
-                playerName = cursor.getString(getNameIndex(cursor));
-                playerPosition = cursor.getString(getPositionIndex(cursor));
-                if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.HYPHEN_5;
+                playerName = cursor.getString(getColumnIndex(cursor, FixedWords.COLUMN_NAME));
+                playerPosition = cursor.getString(getColumnIndex(cursor, FixedWords.COLUMN_POSITION));
+                if (playerName.equals(FixedWords.EMPTY)) playerName = FixedWords.EMPTY_NAME;
             } else {
-                playerName = FixedWords.HYPHEN_5;
-                playerPosition = FixedWords.HYPHEN_4;
+                playerName = FixedWords.EMPTY_NAME;
+                playerPosition = FixedWords.EMPTY_POSITION;
             }
             CachedPlayersInfo.instance.setPlayerInfoToCache(orderType, orderNum, playerPosition, playerName);
         } catch (Exception e) {
@@ -98,18 +108,8 @@ public class DatabaseUsing {
 
     private String makeSelectQuery(int orderType) {
         return "SELECT " + FixedWords.COLUMN_NAME + ", " + FixedWords.COLUMN_POSITION +
-                " FROM " + getStartingTableName(orderType) +
+                " FROM " + helper.getStartingTableName(orderType) +
                 " WHERE " + FixedWords.COLUMN_ORDER_NUMBER + " = ?";
-    }
-
-    // TODO refactor (use getColumnIndex)
-    private int getNameIndex(Cursor cursor) {
-        return cursor.getColumnIndex(FixedWords.COLUMN_NAME);
-    }
-
-    // TODO refactor (use getColumnIndex)
-    private int getPositionIndex(Cursor cursor) {
-        return cursor.getColumnIndex(FixedWords.COLUMN_POSITION);
     }
 
     private int getColumnIndex(Cursor cursor, String columnName) {
@@ -157,7 +157,7 @@ public class DatabaseUsing {
     }
 
     private String makeUpdateSubQuery(int orderType) {
-        return "UPDATE " + getSubTableName(orderType) +
+        return "UPDATE " + helper.getSubTableName(orderType) +
                 " SET " + FixedWords.COLUMN_IS_PITCHER + " = ?, " +
                 FixedWords.COLUMN_IS_BATTER + " = ?, " +
                 FixedWords.COLUMN_IS_RUNNER + " = ?, " +
@@ -197,7 +197,7 @@ public class DatabaseUsing {
 
     private String makeSubInsertQuery(int orderType) {
         return "INSERT INTO " +
-                getSubTableName(orderType) + "(" +
+                helper.getSubTableName(orderType) + "(" +
                 FixedWords.COLUMN_IS_PITCHER + ", " +
                 FixedWords.COLUMN_IS_BATTER + ", " +
                 FixedWords.COLUMN_IS_RUNNER + ", " +
@@ -225,7 +225,7 @@ public class DatabaseUsing {
 
     public void deleteSubPlayer(int orderType, int playerId) {
         SQLiteDatabase dbW = helper.getWritableDatabase();
-        String deleteQuery = "DELETE FROM " + getSubTableName(orderType) + " WHERE " + FixedWords.COLUMN_PLAYER_ID + " = ?";
+        String deleteQuery = "DELETE FROM " + helper.getSubTableName(orderType) + " WHERE " + FixedWords.COLUMN_PLAYER_ID + " = ?";
         try {
             SQLiteStatement stmt = dbW.compileStatement(deleteQuery);
             stmt.bindLong(1, playerId);
@@ -237,37 +237,23 @@ public class DatabaseUsing {
         }
     }
 
+    public void deleteStartingPlayerOnSpecial(int orderNum) {
+        SQLiteDatabase dbW = helper.getWritableDatabase();
+        try {
+            deleteStartingPlayer(FixedWords.SPECIAL_ORDER, orderNum, dbW);
+        } catch (Exception e) {
+            Log.e(FixedWords.ERROR_LOG_TAG, FixedWords.ERROR_LOG_MESSAGE, e);
+        } finally {
+            dbW.close();
+        }
+    }
+
     private void deleteStartingPlayer(int orderType, int orderNum, SQLiteDatabase dbW) {
-        String sqlDelete = "DELETE FROM " + getStartingTableName(orderType) + " WHERE " + FixedWords.COLUMN_ORDER_NUMBER + " = ?";
+        String sqlDelete = "DELETE FROM " + helper.getStartingTableName(orderType) + " WHERE " + FixedWords.COLUMN_ORDER_NUMBER + " = ?";
         SQLiteStatement stmt = dbW.compileStatement(sqlDelete);
         stmt.bindLong(1, orderNum);
         stmt.executeUpdateDelete();
     }
-
-    private String getStartingTableName(int orderType) {
-        String tableName = FixedWords.NORMAL_ORDER_TABLE;
-        switch (orderType) {
-            case FixedWords.NORMAL_ORDER:
-                break;
-            case FixedWords.DH_ORDER:
-                tableName = FixedWords.DH_ORDER_TABLE;
-                break;
-        }
-        return tableName;
-    }
-
-    private String getSubTableName(int orderType) {
-        String tableName = FixedWords.NORMAL_SUB_TABLE;
-        switch (orderType) {
-            case FixedWords.NORMAL_ORDER:
-                break;
-            case FixedWords.DH_ORDER:
-                tableName = FixedWords.DH_SUB_TABLE;
-                break;
-        }
-        return tableName;
-    }
-
 
     private void insertSqlData(int orderType, int orderNum, SQLiteDatabase dbW, String name, String position) {
         String sqlInsert = makeInsertQuery(orderType);
@@ -285,11 +271,29 @@ public class DatabaseUsing {
 
     private String makeInsertQuery(int orderType) {
         return "INSERT INTO " +
-                getStartingTableName(orderType) + "(" +
+                helper.getStartingTableName(orderType) + "(" +
                 FixedWords.COLUMN_ORDER_NUMBER + ", " +
                 FixedWords.COLUMN_NAME + ", " +
                 FixedWords.COLUMN_POSITION +
                 ") VALUES(?,?,?)";
+    }
+
+    public int countSpecialLineupPlayers() {
+        SQLiteDatabase dbR = helper.getReadableDatabase();
+        int count = (int) DatabaseUtils.queryNumEntries(dbR, FixedWords.SPECIAL_ORDER_TABLE);
+        CachedPlayersInfo.instance.setCurrentNumOfSpecialLineupDB(count);
+        dbR.close();
+        return count;
+    }
+
+    public boolean isSpecialLineupDBFilled() {
+        return countSpecialLineupPlayers() >= FixedWords.MIN_NUM_SPECIAL_PLAYER;
+    }
+
+    public void initSpecialLineupDB() {
+        for (int orderNum = 1; orderNum <= FixedWords.MIN_NUM_SPECIAL_PLAYER; orderNum++) {
+            registerStartingPlayer(orderNum, FixedWords.EMPTY_NAME, FixedWords.EMPTY_POSITION, FixedWords.SPECIAL_ORDER);
+        }
     }
 
 

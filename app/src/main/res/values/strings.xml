@@ -4,6 +4,18 @@
     <string name="app_title2">作成アプリ</string>
     <string name="non_dh_version">DHなし</string>
     <string name="dh_version">DHあり</string>
+    <string name="special_version">特別ルール</string>
+    <string name="special_version_disable">特別ルール(有料)</string>
+    <string name="what_is_special"><u>特別ルールとは？</u></string>
+    <string name="about_special">いわゆる”全員打ち”です。\nDH枠を増やし、9人以上(最大15人)でスタメンを組むことができます。\n例: スタメン13人の場合、\n打順は1〜13番、DHが4人になります。\n\n<u>価格: 440円(税込)</u>\n※こちらは「買い切り」ですので、お支払いは一度のみです。\n月額ではありませんのでご安心ください。</string>
+    <string name="reloaded_purchase">購入を復元しました。</string>
+    <string name="no_purchase">購入履歴を取得できませんでした。</string>
+    <string name="purchase">￥購入</string>
+    <string name="ask_purchase">購入手続きに移りますか？</string>
+    <string name="require_connection">インターネット接続が確認できません。</string>
+    <string name="confirm_connection">ご購入の際は、インターネット接続があることをご確認ください。</string>
+    <string name="failed_play_store_connection">Google play storeとの接続に失敗しました。</string>
+    <string name="play_store_disconnected">Google play storeとの接続が切断されました。購入手続きの際はアプリを開き直しください。</string>
     <string name="first">１番</string>
     <string name="second">２番</string>
     <string name="third">３番</string>
@@ -32,7 +44,9 @@
     <string name="display_sub">控え表示</string>
     <string name="add_sub">控え追加</string>
     <string name="delete_sub">控え削除</string>
-    <string-array name="positions">
+    <string name="add_starting">先発追加</string>
+    <string name="delete_starting">先発削除</string>
+    <string-array name="positions_normal">
         <item>----</item>
         <item>(投)</item>
         <item>(捕)</item>
@@ -85,9 +99,11 @@
     <string name="back">戻る</string>
     <string name="cancel">キャンセル</string>
     <string name="exchange">入れ替え</string>
-    <string name="require_exchange_title">入れ替える２つの打順を選んでください</string>
+    <string name="require_exchange_title">入れ替える選手を選んでください</string>
     <string name="require_delete_title">削除する選手を選んでください</string>
     <string name="announce_limit_sub">控え登録が上限です。</string>
+    <string name="announce_max_limit_special">先発登録が上限です。</string>
+    <string name="announce_min_limit_special">9人が下限人数です。</string>
     <string name="share">LINE/Twitter</string>
     <string name="no_order">[-]</string>
     <!-- TODO: Remove or change this placeholder text -->
