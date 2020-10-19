@@ -5,8 +5,6 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.widget.FrameLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -102,5 +100,6 @@ abstract class BaseAdActivity extends BaseActivity {
 
     protected void showInterstitialAd() {
         if (mInterstitialAd.isLoaded()) mInterstitialAd.show();
+        else finish();
     }
 }
