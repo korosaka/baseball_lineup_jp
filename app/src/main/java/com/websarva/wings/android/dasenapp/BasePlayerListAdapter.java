@@ -48,6 +48,9 @@ abstract class BasePlayerListAdapter extends ArrayAdapter<BasePlayerListItemData
             case 7:
                 textSize = 20;
                 break;
+            case 8:
+                textSize = 18;
+                break;
             default:
                 textSize = 28;
                 break;
