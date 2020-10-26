@@ -41,6 +41,8 @@ public class FixedWords {
 
     public static final String PURCHASE_SPECIAL_ORDER = "purchaseSpecialOrder";
 
+    public static final String READ_INTRODUCTION = "readIntroduction";
+
     public static final String DATA_STORE = "dataStore";
 
     public static final int MIN_NUM_SPECIAL_PLAYER = 9;
