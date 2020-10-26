@@ -1,6 +1,7 @@
 package com.websarva.wings.android.dasenapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -77,6 +79,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         setEdit();
         setOrderFragment();
         setPositionsSpinner();
+        if (!isIntroductionRead()) showIntroductionDialog();
     }
 
     @Override
@@ -150,7 +153,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     private void setSpinnerForSpecial() {
-        if(CachedPlayersInfo.instance.getStartingMembers(FixedWords.SPECIAL_ORDER).size() == FixedWords.NUMBER_OF_LINEUP_NORMAL) {
+        if (CachedPlayersInfo.instance.getStartingMembers(FixedWords.SPECIAL_ORDER).size() == FixedWords.NUMBER_OF_LINEUP_NORMAL) {
             setSpinnerResource(getResources().getStringArray(R.array.positions_normal));
             return;
         }
@@ -739,6 +742,25 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         currentSubListIndex = listPosition;
         currentSubId = subMember.getId();
         readyInputtingSubPlayer(subMember);
+    }
+
+    private boolean isIntroductionRead() {
+        return new MySharedPreferences(this).getBoolean(FixedWords.READ_INTRODUCTION);
+    }
+
+    private void doneReadingIntroduction() {
+        new MySharedPreferences(this).storeBoolean(true, FixedWords.READ_INTRODUCTION);
+    }
+
+    private void showIntroductionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_CustomButtonDialog);
+        builder.setMessage(getResources().getString(R.string.order_introduction));
+        builder.setPositiveButton(getResources().getString(R.string.understand), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                doneReadingIntroduction();
+            }
+        });
+        builder.show();
     }
 
 
