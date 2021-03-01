@@ -7,4 +7,4 @@ Operability is simple and users can easily handle this app.
 # Why I created this app
 I created it for Japanese because in Japan, baseball is the most famouse sport.
 Not only professional players, but also many amatures are playing baseball in thier holiday.
-In fact, this app is used by many users. (about 10,000 users March 2021)
+In fact, this app is used by many users. (about 10,000DL March 2021)
