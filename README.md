@@ -1,4 +1,5 @@
-# [Google Play](https://play.google.com/store/apps/details?id=com.websarva.wings.android.dasenapp)
+# [Google Play (Japanese)](https://play.google.com/store/apps/details?id=com.websarva.wings.android.dasenapp)
+## [Google Play (English)](https://play.google.com/store/apps/details?id=com.websarva.wings.android.baseballstartinglineup)
 # About
 ![Screen shots](https://github.com/korosaka/source_image/blob/main/lineup_android/lineup_screenshots.png)
 Using this app, user can create baseball line-ups and share them with other people on Twitter or Line.
