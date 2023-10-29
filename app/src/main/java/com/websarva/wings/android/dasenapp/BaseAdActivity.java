@@ -2,17 +2,37 @@ package com.websarva.wings.android.dasenapp;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.widget.FrameLayout;
 
-import com.google.android.gms.ads.AdListener;
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * updated the library to 20 from 19
+ * reference: https://developers.google.com/admob/android/migration?hl=ja#migrate-to-v20
+ *
+ * however, version 20 will be sunset in 2024
+ * this is why please update this to the latest one by the end of 2023
+ * This time, there is not enough time to do it
+ * it's just the first aid
+ */
 
 abstract class BaseAdActivity extends BaseActivity {
 
@@ -71,9 +91,12 @@ abstract class BaseAdActivity extends BaseActivity {
     }
 
     protected void loadBanner() {
-        AdRequest adRequest =
-                new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                        .build();
+        List<String> testDeviceIds = Collections.singletonList(AdRequest.DEVICE_ID_EMULATOR);
+        RequestConfiguration configuration =
+                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+        MobileAds.setRequestConfiguration(configuration); // it will effect globally
+
+        AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
     }
 
@@ -82,24 +105,64 @@ abstract class BaseAdActivity extends BaseActivity {
      * https://developers.google.com/admob/android/interstitial
      */
     protected void loadInterstitialAd() {
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(INTERSTITIAL_AD_UNIT_ID);
-        mInterstitialAd.setAdListener(new AdListener() {
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        InterstitialAd.load(this,INTERSTITIAL_AD_UNIT_ID, adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until an ad is loaded.
+                        mInterstitialAd = interstitialAd;
+                        setFullScreenContentCallback();
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        Log.d("loadInterstitialAd", loadAdError.toString());
+                        mInterstitialAd = null;
+                    }
+                });
+    }
+
+    private void setFullScreenContentCallback() {
+        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
             @Override
             public void onAdClicked() {
                 finish();
             }
 
             @Override
-            public void onAdClosed() {
+            public void onAdDismissedFullScreenContent() {
+                // Called when ad is dismissed.
+                // Set the ad reference to null so you don't show the ad a second time.
+                mInterstitialAd = null;
+                finish();
+            }
+
+            @Override
+            public void onAdFailedToShowFullScreenContent(AdError adError) {
+                // Called when ad fails to show.
+                mInterstitialAd = null;
+                finish();
+            }
+
+            @Override
+            public void onAdImpression() {
+                // Called when an impression is recorded for an ad.
+            }
+
+            @Override
+            public void onAdShowedFullScreenContent() {
+                // Called when ad is shown.
                 finish();
             }
         });
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
     protected void showInterstitialAd() {
-        if (mInterstitialAd.isLoaded()) mInterstitialAd.show();
+        if (mInterstitialAd != null) mInterstitialAd.show(this);
         else finish();
     }
 }
