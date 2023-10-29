@@ -6,8 +6,8 @@ android {
         applicationId "com.websarva.wings.android.dasenapp"
         minSdkVersion 16
         targetSdkVersion 33
-        versionCode 202310281
-        versionName "2.0.2"
+        versionCode 202310282
+        versionName "2.0.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -32,5 +32,5 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation "com.android.billingclient:billing:3.0.1"
+    implementation "com.android.billingclient:billing:5.2.1"
 }

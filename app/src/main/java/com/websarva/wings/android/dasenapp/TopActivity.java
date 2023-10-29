@@ -271,7 +271,7 @@ public class TopActivity extends BaseActivity
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
                 && purchases != null) {
             for (Purchase purchase : purchases) {
-                if (purchase.getSku().equals(FixedWords.ITEM_ID_ALL_HITTER)) {
+                if (purchase.getProducts().get(0).equals(FixedWords.ITEM_ID_ALL_HITTER)) {
                     savePurchaseRecord();
                     enableSpecialOrder();
                 }
@@ -358,7 +358,7 @@ public class TopActivity extends BaseActivity
                         if (responseCode == BillingClient.BillingResponseCode.OK) {
                             if (purchasesList != null && purchasesList.size() != 0) {
                                 for (PurchaseHistoryRecord purchase : purchasesList) {
-                                    if (purchase.getSku().equals(FixedWords.ITEM_ID_ALL_HITTER)) {
+                                    if (purchase.getProducts().get(0).equals(FixedWords.ITEM_ID_ALL_HITTER)) {
                                         savePurchaseRecord();
                                         enableSpecialOrder();
                                         showToastMessage(getResources().getString(R.string.reloaded_purchase));
