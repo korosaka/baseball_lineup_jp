@@ -494,8 +494,9 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     public void onClickShareOrder(View view) {
-        Sharing mSharing = new Sharing(getApplicationContext(), this, findViewById(R.id.lineup_container));
-        mSharing.share();
+        Toast.makeText(this, R.string.share_disabled, Toast.LENGTH_LONG).show();
+//        Sharing mSharing = new Sharing(getApplicationContext(), this, findViewById(R.id.lineup_container));
+//        mSharing.share();
     }
 
 
