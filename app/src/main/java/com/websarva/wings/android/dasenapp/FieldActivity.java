@@ -3,6 +3,7 @@ package com.websarva.wings.android.dasenapp;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class FieldActivity extends BaseAdActivity {
@@ -59,8 +60,9 @@ public class FieldActivity extends BaseAdActivity {
     }
 
     public void onClickShareField(View view) {
-        Sharing mSharing = new Sharing(getApplicationContext(), this, findViewById(R.id.field_container));
-        mSharing.share();
+        Toast.makeText(this, R.string.share_disabled, Toast.LENGTH_LONG).show();
+//        Sharing mSharing = new Sharing(getApplicationContext(), this, findViewById(R.id.field_container));
+//        mSharing.share();
     }
 
     @Override
