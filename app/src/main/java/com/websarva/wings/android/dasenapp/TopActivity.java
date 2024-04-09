@@ -65,6 +65,26 @@ public class TopActivity extends BaseActivity
         CachedPlayersInfo.instance.initCachedArray();
         checkPurchaseStatement();
         if (!PrivacyPolicyFragment.isPolicyAgreed(this)) showPrivacyPolicy();
+        checkCountOfOpeningApp();
+    }
+
+    private void checkCountOfOpeningApp() {
+        int openCount = new MySharedPreferences(this).getInt(FixedWords.NUMBER_OF_OPEN_APP);
+        if (openCount < 1) openCount = 1;
+        final int FIRST_RECOMMENDATION_TIMING = 4;
+        final int SECOND_RECOMMENDATION_TIMING = 20;
+        final int THIRD_RECOMMENDATION_TIMING = 50;
+        final int FOURTH_RECOMMENDATION_TIMING = 100;
+
+        if (openCount == FIRST_RECOMMENDATION_TIMING
+                || openCount == SECOND_RECOMMENDATION_TIMING
+                || openCount == THIRD_RECOMMENDATION_TIMING
+                || openCount == FOURTH_RECOMMENDATION_TIMING) {
+            RecommendAppFragment recommendationFragment = RecommendAppFragment.newInstance();
+            recommendationFragment.show(getSupportFragmentManager(), null);
+        }
+
+        new MySharedPreferences(this).storeInt(openCount + 1, FixedWords.NUMBER_OF_OPEN_APP);
     }
 
     private void connectBillingClient() {

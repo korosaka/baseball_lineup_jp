@@ -85,6 +85,11 @@
         <item>(DH)</item>
     </string-array>
 
+    <string name="recommend_app">おすすめアプリ紹介</string>
+    <string name="recommendation_title">おすすめアプリ</string>
+    <string name="recommendation_message1">＜内容紹介＞</string>
+    <string name="recommendation_message2">このアプリでは、外見や性格を入力することで、その人の野球能力を某野球ゲーム風に診断できます。\n野球好きなら必ず楽しめるアプリです。\nぜひ友人やチームメイトみんなで楽しんでください。</string>
+    <string name="recommend_app_page"><a href="https://play.google.com/store/apps/details?id=com.websarva.wings.android.abiityofbaseball">野球診断 for パワプロ</a></string>
     <string name="privacy_policy">プライバシーポリシー</string>
     <string name="policy_title">個人情報保護について</string>
     <string name="policy_message1">＜広告について＞</string>

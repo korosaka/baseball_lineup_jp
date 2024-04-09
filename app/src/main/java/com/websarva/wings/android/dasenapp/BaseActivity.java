@@ -38,6 +38,9 @@ abstract class BaseActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.policy) {
             PrivacyPolicyFragment policyFragment = PrivacyPolicyFragment.newInstance(FixedWords.CLOSE);
             policyFragment.show(getSupportFragmentManager(), FixedWords.PRIVACY_POLICY);
+        } else if (item.getItemId() == R.id.recommend) {
+            RecommendAppFragment recommendationFragment = RecommendAppFragment.newInstance();
+            recommendationFragment.show(getSupportFragmentManager(), null);
         }
         return super.onOptionsItemSelected(item);
     }
