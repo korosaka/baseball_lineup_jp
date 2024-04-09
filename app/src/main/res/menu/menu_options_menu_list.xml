@@ -5,4 +5,8 @@
         android:id="@+id/policy"
         android:title="@string/privacy_policy"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/recommend"
+        android:title="@string/recommend_app"
+        app:showAsAction="never" />
 </menu>

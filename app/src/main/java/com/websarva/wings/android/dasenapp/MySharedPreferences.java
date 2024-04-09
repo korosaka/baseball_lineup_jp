@@ -20,4 +20,14 @@ public class MySharedPreferences {
     public Boolean getBoolean(String key) {
         return dataStore.getBoolean(key, false);
     }
+
+    public void storeInt(int num, String key) {
+        SharedPreferences.Editor editor = dataStore.edit();
+        editor.putInt(key, num);
+        editor.apply();
+    }
+
+    public int getInt(String key) {
+        return dataStore.getInt(key, -1);
+    }
 }

@@ -45,6 +45,8 @@ public class FixedWords {
 
     public static final String DATA_STORE = "dataStore";
 
+    public static final String NUMBER_OF_OPEN_APP = "numberOfOpenApp";
+
     public static final int MIN_NUM_SPECIAL_PLAYER = 9;
     public static final int MAX_NUM_SPECIAL_PLAYER = 15;
     public static final int NUMBER_OF_LINEUP_NORMAL = 9;
@@ -57,6 +59,7 @@ public class FixedWords {
     public static final String COLOR_BLACK = "#000000";
     public static final String COLOR_OFF_BLACK = "#696969";
     public static final String COLOR_OFF_WHITE = "#c0c0c0";
+    public static final String COLOR_BLUE = "#0000ff";
 
     public static final String DATABASE_NAME = "lineup.db";
     public static final String OLD_ORDER_TABLE = "lineup";
