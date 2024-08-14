@@ -1,5 +1,6 @@
 package com.websarva.wings.android.dasenapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -22,15 +23,15 @@ import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.PendingPurchasesParams;
+import com.android.billingclient.api.ProductDetails;
+import com.android.billingclient.api.ProductDetailsResponseListener;
 import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.PurchaseHistoryRecord;
-import com.android.billingclient.api.PurchaseHistoryResponseListener;
+import com.android.billingclient.api.PurchasesResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
-import com.android.billingclient.api.SkuDetails;
-import com.android.billingclient.api.SkuDetailsParams;
-import com.android.billingclient.api.SkuDetailsResponseListener;
-
-import java.util.ArrayList;
+import com.android.billingclient.api.QueryProductDetailsParams;
+import com.android.billingclient.api.QueryPurchasesParams;
+import com.google.common.collect.ImmutableList;
 import java.util.List;
 
 /**
@@ -92,10 +93,14 @@ public class TopActivity extends BaseActivity
             progressDialog.dismiss();
             return;
         }
-        billingClient = BillingClient.newBuilder(this).setListener(this).enablePendingPurchases().build();
+
+        billingClient = BillingClient.newBuilder(this)
+                .setListener(this)
+                .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
+                .build();
         billingClient.startConnection(new BillingClientStateListener() {
             @Override
-            public void onBillingSetupFinished(BillingResult billingResult) {
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
                     billingClientConnected = true;
                     reloadPurchaseHistory();
@@ -117,21 +122,25 @@ public class TopActivity extends BaseActivity
     }
 
     private void getItemDetail() {
-        List<String> skuList = new ArrayList<>();
-        skuList.add(FixedWords.ITEM_ID_ALL_HITTER);
+        QueryProductDetailsParams queryProductDetailsParams =
+                QueryProductDetailsParams.newBuilder()
+                        .setProductList(
+                                ImmutableList.of(
+                                        QueryProductDetailsParams.Product.newBuilder()
+                                                .setProductId(FixedWords.ITEM_ID_ALL_HITTER)
+                                                .setProductType(BillingClient.ProductType.INAPP)
+                                                .build()))
+                        .build();
 
-        SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
-        params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP);
-
-        billingClient.querySkuDetailsAsync(params.build(),
-                new SkuDetailsResponseListener() {
-                    @Override
-                    public void onSkuDetailsResponse(BillingResult billingResult,
-                                                     List<SkuDetails> skuDetailsList) {
-                        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && skuDetailsList != null) {
-                            for (SkuDetails skuDetails : skuDetailsList) {
+        billingClient.queryProductDetailsAsync(
+                queryProductDetailsParams,
+                new ProductDetailsResponseListener() {
+                    public void onProductDetailsResponse(BillingResult billingResult,
+                                                         List<ProductDetails> productDetailsList) {
+                        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && productDetailsList != null) {
+                            for (ProductDetails skuDetails : productDetailsList) {
                                 launchBillingFlow(skuDetails);
-                                // even if user has already purchased, this process is called
+                                // even if user has already purchased, this process is called => not sure on the current version(7.0.0)
                             }
                         }
                         progressDialog.dismiss();
@@ -142,11 +151,18 @@ public class TopActivity extends BaseActivity
     /**
      * after this method, onPurchasesUpdated will be called (if user purchase)
      */
-    private void launchBillingFlow(SkuDetails skuDetails) {
-        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                .setSkuDetails(skuDetails)
+    private void launchBillingFlow(ProductDetails skuDetails) {
+        ImmutableList<BillingFlowParams.ProductDetailsParams> productDetailsParamsList =
+                ImmutableList.of(
+                        BillingFlowParams.ProductDetailsParams.newBuilder()
+                                .setProductDetails(skuDetails)
+                                .build()
+                );
+
+        BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
+                .setProductDetailsParamsList(productDetailsParamsList)
                 .build();
-        billingClient.launchBillingFlow(this, flowParams);
+        billingClient.launchBillingFlow(this, billingFlowParams);
     }
 
     private void bindView() {
@@ -370,21 +386,25 @@ public class TopActivity extends BaseActivity
     }
 
     private void reloadPurchaseHistory() {
-        billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP,
-                new PurchaseHistoryResponseListener() {
-                    @Override
-                    public void onPurchaseHistoryResponse(BillingResult billingResult, List<PurchaseHistoryRecord> purchasesList) {
+        billingClient.queryPurchasesAsync(
+                QueryPurchasesParams.newBuilder()
+                        .setProductType(BillingClient.ProductType.INAPP)
+                        .build(),
+                new PurchasesResponseListener() {
+                    public void onQueryPurchasesResponse(@NonNull BillingResult billingResult, @NonNull List<Purchase> purchases) {
                         int responseCode = billingResult.getResponseCode();
                         if (responseCode == BillingClient.BillingResponseCode.OK) {
-                            if (purchasesList != null && purchasesList.size() != 0) {
-                                for (PurchaseHistoryRecord purchase : purchasesList) {
-                                    if (purchase.getProducts().get(0).equals(FixedWords.ITEM_ID_ALL_HITTER)) {
-                                        savePurchaseRecord();
-                                        enableSpecialOrder();
-                                        showToastMessage(getResources().getString(R.string.reloaded_purchase));
-                                        progressDialog.dismiss();
-                                        if (isPurchasingProcess) isPurchasingProcess = false;
-                                        return;
+                            if (!purchases.isEmpty()) {
+                                for (Purchase purchase : purchases) {
+                                    for (String purchasedItemId: purchase.getProducts()) {
+                                        if (purchasedItemId.equals(FixedWords.ITEM_ID_ALL_HITTER)) {
+                                            savePurchaseRecord();
+                                            enableSpecialOrder();
+                                            showToastMessage(getResources().getString(R.string.reloaded_purchase));
+                                            progressDialog.dismiss();
+                                            if (isPurchasingProcess) isPurchasingProcess = false;
+                                            return;
+                                        }
                                     }
                                 }
                             }
