@@ -58,6 +58,8 @@ public class TopActivity extends BaseActivity
     boolean billingClientConnected = false;
     boolean isPurchasingProcess = false;
 
+    final Handler handler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -399,10 +401,21 @@ public class TopActivity extends BaseActivity
                                     for (String purchasedItemId: purchase.getProducts()) {
                                         if (purchasedItemId.equals(FixedWords.ITEM_ID_ALL_HITTER)) {
                                             savePurchaseRecord();
-                                            enableSpecialOrder();
-                                            showToastMessage(getResources().getString(R.string.reloaded_purchase));
-                                            progressDialog.dismiss();
-                                            if (isPurchasingProcess) isPurchasingProcess = false;
+
+                                            new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    handler.post(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            progressDialog.dismiss();
+                                                            enableSpecialOrder();
+                                                            showToastMessage(getResources().getString(R.string.reloaded_purchase));
+                                                            if (isPurchasingProcess) isPurchasingProcess = false;
+                                                        }
+                                                    });
+                                                }
+                                            }).start();
                                             return;
                                         }
                                     }
