@@ -307,17 +307,7 @@ public class TopActivity extends BaseActivity
     public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
                 && purchases != null) {
-            for (Purchase purchase : purchases) {
-                for (String purchasedItemId: purchase.getProducts()) {
-                    if (purchasedItemId.equals(FixedWords.ITEM_ID_ALL_HITTER)) {
-                        //TODO: they should be done after acknowledgePurchase??
-                        savePurchaseRecord();
-                        enableSpecialOrder();
-                        break;
-                    }
-                }
-                handlePurchase(purchase);
-            }
+            for (Purchase purchase : purchases) handlePurchase(purchase);
         }
     }
 
@@ -326,6 +316,14 @@ public class TopActivity extends BaseActivity
      */
     private void handlePurchase(Purchase purchase) {
         if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+            for (String purchasedItemId : purchase.getProducts()) {
+                if (purchasedItemId.equals(FixedWords.ITEM_ID_ALL_HITTER)) {
+                    savePurchaseRecord();
+                    enableSpecialOrder();
+                    break;
+                }
+            }
+
             if (!purchase.isAcknowledged()) {
                 AcknowledgePurchaseParams acknowledgePurchaseParams =
                         AcknowledgePurchaseParams.newBuilder()
@@ -401,6 +399,7 @@ public class TopActivity extends BaseActivity
                         if (responseCode == BillingClient.BillingResponseCode.OK) {
                             if (!purchases.isEmpty()) {
                                 for (Purchase purchase : purchases) {
+                                    if (purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED) continue;
                                     for (String purchasedItemId: purchase.getProducts()) {
                                         if (purchasedItemId.equals(FixedWords.ITEM_ID_ALL_HITTER)) {
                                             savePurchaseRecord();
