@@ -305,13 +305,16 @@ public class TopActivity extends BaseActivity
 
     @Override
     public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {
-
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
                 && purchases != null) {
             for (Purchase purchase : purchases) {
-                if (purchase.getProducts().get(0).equals(FixedWords.ITEM_ID_ALL_HITTER)) {
-                    savePurchaseRecord();
-                    enableSpecialOrder();
+                for (String purchasedItemId: purchase.getProducts()) {
+                    if (purchasedItemId.equals(FixedWords.ITEM_ID_ALL_HITTER)) {
+                        //TODO: they should be done after acknowledgePurchase??
+                        savePurchaseRecord();
+                        enableSpecialOrder();
+                        break;
+                    }
                 }
                 handlePurchase(purchase);
             }
