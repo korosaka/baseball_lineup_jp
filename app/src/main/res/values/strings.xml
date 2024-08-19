@@ -12,8 +12,10 @@
     <string name="about_special_1">いわゆる”全員打ち”です。</string>
     <string name="about_special_2">こちらは「買い切り」ですので、お支払いは一度のみです。\n月額ではありませんのでご安心ください。</string>
     <string name="reloaded_purchase">購入を復元しました。</string>
+    <string name="no_purchase_record">購入履歴はありません</string>
     <string name="no_purchase">購入履歴を取得できませんでした。</string>
     <string name="purchase">￥購入</string>
+    <string name="restore">購入復元</string>
     <string name="ask_purchase">購入手続きに移りますか？</string>
     <string name="require_connection">インターネット接続が確認できません。</string>
     <string name="confirm_connection">ご購入の際は、インターネット接続があることをご確認ください。</string>

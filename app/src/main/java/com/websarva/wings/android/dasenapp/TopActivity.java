@@ -51,6 +51,7 @@ public class TopActivity extends BaseActivity
     private Button dhOrderButton;
     private Button specialOrderButton;
     private Button purchaseButton;
+    private Button restoreButton;
     private TextView explanationText;
     private TextView checkInternetText;
     private MyProgressDialog myProgressDialog;
@@ -176,6 +177,7 @@ public class TopActivity extends BaseActivity
         dhOrderButton = findViewById(R.id.dh_order_button);
         specialOrderButton = findViewById(R.id.special_order_button);
         purchaseButton = findViewById(R.id.purchase_button);
+        restoreButton = findViewById(R.id.restore_button);
         explanationText = findViewById(R.id.explanation_special);
         checkInternetText = findViewById(R.id.check_internet_text);
     }
@@ -211,6 +213,7 @@ public class TopActivity extends BaseActivity
 
     private void dismissPurchasingViews() {
         purchaseButton.setVisibility(View.GONE);
+        restoreButton.setVisibility(View.GONE);
         explanationText.setVisibility(View.GONE);
         checkInternetText.setVisibility(View.GONE);
     }
@@ -236,6 +239,11 @@ public class TopActivity extends BaseActivity
         });
         builder.setNegativeButton(getResources().getString(R.string.cancel), null);
         builder.show();
+    }
+
+    public void onClickRestore(View view) {
+        showProgressDialog();
+        connectBillingClient();
     }
 
     public void onClickNonDH(View view) {
@@ -471,12 +479,18 @@ public class TopActivity extends BaseActivity
                                 }
                             }
                         }
-                        myProgressDialog.dismiss();
-                        if (isPurchasingProcess) {
-                            isPurchasingProcess = false;
-                            showProgressDialog();
-                            startPurchaseFlow();
-                        }
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                myProgressDialog.dismiss();
+                                showToastMessage(getResources().getString(R.string.no_purchase_record));
+                                if (isPurchasingProcess) {
+                                    isPurchasingProcess = false;
+                                    showProgressDialog();
+                                    startPurchaseFlow();
+                                }
+                            }
+                        });
                     }
                 });
     }
