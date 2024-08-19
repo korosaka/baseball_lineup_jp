@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,7 +59,7 @@ public class TopActivity extends BaseActivity
     boolean billingClientConnected = false;
     boolean isPurchasingProcess = false;
 
-    final Handler handler = new Handler();
+    final Handler mHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +94,7 @@ public class TopActivity extends BaseActivity
     private void connectBillingClient() {
         if (!isOnline()) {
             progressDialog.dismiss();
+            showToastMessage(getResources().getString(R.string.require_connection));
             return;
         }
 
@@ -123,19 +125,9 @@ public class TopActivity extends BaseActivity
         });
     }
 
-    private void getItemDetail() {
-        QueryProductDetailsParams queryProductDetailsParams =
-                QueryProductDetailsParams.newBuilder()
-                        .setProductList(
-                                ImmutableList.of(
-                                        QueryProductDetailsParams.Product.newBuilder()
-                                                .setProductId(FixedWords.ITEM_ID_ALL_HITTER)
-                                                .setProductType(BillingClient.ProductType.INAPP)
-                                                .build()))
-                        .build();
-
+    private void startPurchaseFlow() {
         billingClient.queryProductDetailsAsync(
-                queryProductDetailsParams,
+                createAllHitterParams(),
                 new ProductDetailsResponseListener() {
                     public void onProductDetailsResponse(BillingResult billingResult,
                                                          List<ProductDetails> productDetailsList) {
@@ -148,6 +140,17 @@ public class TopActivity extends BaseActivity
                         progressDialog.dismiss();
                     }
                 });
+    }
+
+    private QueryProductDetailsParams createAllHitterParams() {
+        return QueryProductDetailsParams.newBuilder()
+                .setProductList(
+                        ImmutableList.of(
+                                QueryProductDetailsParams.Product.newBuilder()
+                                        .setProductId(FixedWords.ITEM_ID_ALL_HITTER)
+                                        .setProductType(BillingClient.ProductType.INAPP)
+                                        .build()))
+                .build();
     }
 
     /**
@@ -223,7 +226,7 @@ public class TopActivity extends BaseActivity
                 }
                 if (billingClientConnected) {
                     progressDialog.show();
-                    getItemDetail();
+                    startPurchaseFlow();
                 } else {
                     isPurchasingProcess = true;
                     connectBillingClient();
@@ -378,14 +381,58 @@ public class TopActivity extends BaseActivity
     }
 
     public void onClickExplanation(View view) {
-        explainSpecial();
+        explainSpecial(this);
     }
 
-    private void explainSpecial() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_CustomButtonDialog);
-        builder.setMessage(getResources().getString(R.string.about_special));
-        builder.setNegativeButton(getResources().getString(R.string.close), null);
-        builder.show();
+    private void explainSpecial(Activity context) {
+        if (billingClient == null) {
+            showToastMessage(getResources().getString(R.string.failed_play_store_connection));
+            connectBillingClient();
+            return;
+        }
+
+        progressDialog.show();
+        billingClient.queryProductDetailsAsync(
+                createAllHitterParams(),
+                new ProductDetailsResponseListener() {
+                    public void onProductDetailsResponse(BillingResult billingResult,
+                                                         List<ProductDetails> productDetailsList) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressDialog.dismiss();
+                                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                                    for (ProductDetails productDetails : productDetailsList) {
+                                        if (!productDetails.getProductId().equals(FixedWords.ITEM_ID_ALL_HITTER))
+                                            continue;
+                                        ProductDetails.OneTimePurchaseOfferDetails offerDetails = productDetails.getOneTimePurchaseOfferDetails();
+                                        if (offerDetails == null) continue;
+                                        String descriptionMessage =
+                                                getResources().getString(R.string.about_special_1)
+                                                        + getString(R.string.line_break)
+                                                        + productDetails.getDescription()
+                                                        + getString(R.string.line_break)
+                                                        + getString(R.string.line_break)
+                                                        + getString(R.string.price)
+                                                        + getString(R.string.line_break)
+                                                        + offerDetails.getFormattedPrice()
+                                                        + getString(R.string.line_break)
+                                                        + getString(R.string.line_break)
+                                                        + getResources().getString(R.string.about_special_2);
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.Theme_CustomButtonDialog);
+                                        builder.setMessage(descriptionMessage);
+                                        builder.setNegativeButton(getResources().getString(R.string.close), null);
+                                        builder.show();
+                                        break;
+                                    }
+                                } else {
+                                    showToastMessage(getResources().getString(R.string.failed_play_store_connection));
+                                }
+                            }
+                        });
+                    }
+                });
     }
 
     private void reloadPurchaseHistory() {
@@ -403,21 +450,15 @@ public class TopActivity extends BaseActivity
                                     for (String purchasedItemId: purchase.getProducts()) {
                                         if (purchasedItemId.equals(FixedWords.ITEM_ID_ALL_HITTER)) {
                                             savePurchaseRecord();
-
-                                            new Thread(new Runnable() {
+                                            mHandler.post(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    handler.post(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            progressDialog.dismiss();
-                                                            enableSpecialOrder();
-                                                            showToastMessage(getResources().getString(R.string.reloaded_purchase));
-                                                            if (isPurchasingProcess) isPurchasingProcess = false;
-                                                        }
-                                                    });
+                                                    progressDialog.dismiss();
+                                                    enableSpecialOrder();
+                                                    showToastMessage(getResources().getString(R.string.reloaded_purchase));
+                                                    if (isPurchasingProcess) isPurchasingProcess = false;
                                                 }
-                                            }).start();
+                                            });
                                             return;
                                         }
                                     }
@@ -428,7 +469,7 @@ public class TopActivity extends BaseActivity
                         if (isPurchasingProcess) {
                             isPurchasingProcess = false;
                             progressDialog.show();
-                            getItemDetail();
+                            startPurchaseFlow();
                         }
                     }
                 });
