@@ -274,6 +274,7 @@ public class TopActivity extends BaseActivity
 
     @Override
     protected void onPause() {
+        myProgressDialog.dismiss();
         super.onPause();
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
@@ -281,7 +282,6 @@ public class TopActivity extends BaseActivity
                 normalOrderButton.setEnabled(true);
                 dhOrderButton.setEnabled(true);
                 if (isSpecialOrderPurchased()) specialOrderButton.setEnabled(true);
-                myProgressDialog.dismiss();
             }
         }, 1000);
     }
