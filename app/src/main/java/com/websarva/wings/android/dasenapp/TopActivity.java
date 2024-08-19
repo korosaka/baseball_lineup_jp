@@ -328,14 +328,7 @@ public class TopActivity extends BaseActivity
                     break;
                 }
             }
-
-            if (!purchase.isAcknowledged()) {
-                AcknowledgePurchaseParams acknowledgePurchaseParams =
-                        AcknowledgePurchaseParams.newBuilder()
-                                .setPurchaseToken(purchase.getPurchaseToken())
-                                .build();
-                billingClient.acknowledgePurchase(acknowledgePurchaseParams, this);
-            }
+            acknowledgePurchase(purchase);
         }
     }
 
@@ -437,6 +430,16 @@ public class TopActivity extends BaseActivity
                 });
     }
 
+    private void acknowledgePurchase(Purchase purchase) {
+        if (!purchase.isAcknowledged() && billingClient != null) {
+            AcknowledgePurchaseParams acknowledgePurchaseParams =
+                    AcknowledgePurchaseParams.newBuilder()
+                            .setPurchaseToken(purchase.getPurchaseToken())
+                            .build();
+            billingClient.acknowledgePurchase(acknowledgePurchaseParams, this);
+        }
+    }
+
     private void reloadPurchaseHistory() {
         billingClient.queryPurchasesAsync(
                 QueryPurchasesParams.newBuilder()
@@ -452,6 +455,7 @@ public class TopActivity extends BaseActivity
                                     for (String purchasedItemId: purchase.getProducts()) {
                                         if (purchasedItemId.equals(FixedWords.ITEM_ID_ALL_HITTER)) {
                                             savePurchaseRecord();
+                                            acknowledgePurchase(purchase);
                                             mHandler.post(new Runnable() {
                                                 @Override
                                                 public void run() {
