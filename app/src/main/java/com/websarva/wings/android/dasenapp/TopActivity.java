@@ -53,7 +53,7 @@ public class TopActivity extends BaseActivity
     private Button purchaseButton;
     private TextView explanationText;
     private TextView checkInternetText;
-    private ProgressDialog progressDialog;
+    private MyProgressDialog myProgressDialog;
 
     private BillingClient billingClient;
     boolean billingClientConnected = false;
@@ -93,7 +93,7 @@ public class TopActivity extends BaseActivity
 
     private void connectBillingClient() {
         if (!isOnline()) {
-            progressDialog.dismiss();
+            myProgressDialog.dismiss();
             showToastMessage(getResources().getString(R.string.require_connection));
             return;
         }
@@ -109,7 +109,7 @@ public class TopActivity extends BaseActivity
                     billingClientConnected = true;
                     reloadPurchaseHistory();
                 } else {
-                    progressDialog.dismiss();
+                    myProgressDialog.dismiss();
                     if (isPurchasingProcess) {
                         isPurchasingProcess = false;
                         showToastMessage(getResources().getString(R.string.failed_play_store_connection));
@@ -120,7 +120,7 @@ public class TopActivity extends BaseActivity
             @Override
             public void onBillingServiceDisconnected() {
                 billingClientConnected = false;
-                progressDialog.dismiss();
+                myProgressDialog.dismiss();
             }
         });
     }
@@ -137,7 +137,7 @@ public class TopActivity extends BaseActivity
                                 // even if user has already purchased, this process is called => not sure on the current version(7.0.0)
                             }
                         }
-                        progressDialog.dismiss();
+                        myProgressDialog.dismiss();
                     }
                 });
     }
@@ -194,7 +194,7 @@ public class TopActivity extends BaseActivity
             specialOrderButton
                     .setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.disable_button_background, null));
 
-            progressDialog.show();
+            showProgressDialog();
             connectBillingClient();
         }
     }
@@ -225,7 +225,7 @@ public class TopActivity extends BaseActivity
                     return;
                 }
                 if (billingClientConnected) {
-                    progressDialog.show();
+                    showProgressDialog();
                     startPurchaseFlow();
                 } else {
                     isPurchasingProcess = true;
@@ -252,16 +252,18 @@ public class TopActivity extends BaseActivity
 
     private void startOrderActivity(int orderType) {
         preventDoubleTap();
-        progressDialog.show();
+        showProgressDialog();
         Intent intent = new Intent(TopActivity.this, MakingOrderActivity.class);
         intent.putExtra(FixedWords.ORDER_TYPE, orderType);
         startActivity(intent);
     }
 
     private void initProgressDialog() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
+        myProgressDialog = MyProgressDialog.newInstance(getResources().getString(R.string.in_progress));
+    }
+
+    private void showProgressDialog() {
+        myProgressDialog.show(getSupportFragmentManager(), FixedWords.PROGRESS_DIALOG);
     }
 
     private void preventDoubleTap() {
@@ -279,7 +281,7 @@ public class TopActivity extends BaseActivity
                 normalOrderButton.setEnabled(true);
                 dhOrderButton.setEnabled(true);
                 if (isSpecialOrderPurchased()) specialOrderButton.setEnabled(true);
-                progressDialog.dismiss();
+                myProgressDialog.dismiss();
             }
         }, 1000);
     }
@@ -391,7 +393,7 @@ public class TopActivity extends BaseActivity
             return;
         }
 
-        progressDialog.show();
+        showProgressDialog();
         billingClient.queryProductDetailsAsync(
                 createAllHitterParams(),
                 new ProductDetailsResponseListener() {
@@ -400,7 +402,7 @@ public class TopActivity extends BaseActivity
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                progressDialog.dismiss();
+                                myProgressDialog.dismiss();
                                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
                                     for (ProductDetails productDetails : productDetailsList) {
                                         if (!productDetails.getProductId().equals(FixedWords.ITEM_ID_ALL_HITTER))
@@ -453,7 +455,7 @@ public class TopActivity extends BaseActivity
                                             mHandler.post(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    progressDialog.dismiss();
+                                                    myProgressDialog.dismiss();
                                                     enableSpecialOrder();
                                                     showToastMessage(getResources().getString(R.string.reloaded_purchase));
                                                     if (isPurchasingProcess) isPurchasingProcess = false;
@@ -465,10 +467,10 @@ public class TopActivity extends BaseActivity
                                 }
                             }
                         }
-                        progressDialog.dismiss();
+                        myProgressDialog.dismiss();
                         if (isPurchasingProcess) {
                             isPurchasingProcess = false;
-                            progressDialog.show();
+                            showProgressDialog();
                             startPurchaseFlow();
                         }
                     }

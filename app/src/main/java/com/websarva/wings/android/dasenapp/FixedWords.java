@@ -33,6 +33,7 @@ public class FixedWords {
     public static final String RIGHT = "(右)";
     public static final String DH = "(DH)";
 
+    public static final String PROGRESS_DIALOG = "progressDialog";
 
     public static final String PRIVACY_POLICY = "privacyPolicy";
     public static final String BUTTON_TYPE = "buttonType";
