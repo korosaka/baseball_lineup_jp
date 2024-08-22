@@ -515,19 +515,15 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     }
 
     public void onClickRoleButton(View view) {
-        switch (view.getId()) {
-            case R.id.role_pitcher_button:
-                setRole(!isRolePitcher, FixedWords.ROLE_PITCHER);
-                break;
-            case R.id.role_batter_button:
-                setRole(!isRoleBatter, FixedWords.ROLE_BATTER);
-                break;
-            case R.id.role_runner_button:
-                setRole(!isRoleRunner, FixedWords.ROLE_RUNNER);
-                break;
-            case R.id.role_fielder_button:
-                setRole(!isRoleFielder, FixedWords.ROLE_FIELDER);
-                break;
+        int id = view.getId();
+        if (id == R.id.role_pitcher_button) {
+            setRole(!isRolePitcher, FixedWords.ROLE_PITCHER);
+        } else if (id == R.id.role_batter_button) {
+            setRole(!isRoleBatter, FixedWords.ROLE_BATTER);
+        } else if (id == R.id.role_runner_button) {
+            setRole(!isRoleRunner, FixedWords.ROLE_RUNNER);
+        } else if (id == R.id.role_fielder_button) {
+            setRole(!isRoleFielder, FixedWords.ROLE_FIELDER);
         }
     }
 
