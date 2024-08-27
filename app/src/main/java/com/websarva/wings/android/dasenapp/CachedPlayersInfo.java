@@ -6,15 +6,19 @@ public class CachedPlayersInfo {
 
     public static CachedPlayersInfo instance = new CachedPlayersInfo();
 
-    private ArrayList<StartingPlayerListItemData> startingMembersNormal = new ArrayList<>();
-    private ArrayList<StartingPlayerListItemData> startingMembersDh = new ArrayList<>();
-    private ArrayList<StartingPlayerListItemData> startingMembersSpecial = new ArrayList<>();
-    private ArrayList<ArrayList<StartingPlayerListItemData>> startingMembersArray = new ArrayList<>();
+    private final ArrayList<StartingPlayerListItemData> startingMembersNormal = new ArrayList<>();
+    private final ArrayList<StartingPlayerListItemData> startingMembersDh = new ArrayList<>();
+    private final ArrayList<StartingPlayerListItemData> startingMembersSpecial = new ArrayList<>();
+    private final ArrayList<ArrayList<StartingPlayerListItemData>> startingMembersArray = new ArrayList<>();
 
-    private ArrayList<SubPlayerListItemData> subMembersNormal = new ArrayList<>();
-    private ArrayList<SubPlayerListItemData> subMembersDh = new ArrayList<>();
-    private ArrayList<SubPlayerListItemData> subMembersSpecial = new ArrayList<>();
-    private ArrayList<ArrayList<SubPlayerListItemData>> subMembersArray = new ArrayList<>();
+    private final ArrayList<SubPlayerListItemData> subMembersNormal = new ArrayList<>();
+    private final ArrayList<SubPlayerListItemData> subMembersDh = new ArrayList<>();
+    private final ArrayList<SubPlayerListItemData> subMembersSpecial = new ArrayList<>();
+    private final ArrayList<ArrayList<SubPlayerListItemData>> subMembersArray = new ArrayList<>();
+
+    {
+        initCachedArray();
+    }
 
     /**
      * index
@@ -22,7 +26,7 @@ public class CachedPlayersInfo {
      * 1: DH Order
      * 2: Special Order
      */
-    public void initCachedArray() {
+    private void initCachedArray() {
         startingMembersArray.add(startingMembersNormal);
         startingMembersArray.add(startingMembersDh);
         startingMembersArray.add(startingMembersSpecial);

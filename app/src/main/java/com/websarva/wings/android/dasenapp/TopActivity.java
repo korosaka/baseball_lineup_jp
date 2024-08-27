@@ -67,7 +67,6 @@ public class TopActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         bindView();
         initProgressDialog();
-        CachedPlayersInfo.instance.initCachedArray();
         checkPurchaseStatement();
         if (!PrivacyPolicyFragment.isPolicyAgreed(this)) showPrivacyPolicy();
         checkCountOfOpeningApp();
