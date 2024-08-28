@@ -7,8 +7,8 @@ android {
         applicationId "com.websarva.wings.android.dasenapp"
         minSdkVersion 21
         targetSdkVersion 34
-        versionCode 202408221
-        versionName "2.1.0"
+        versionCode 202408281
+        versionName "2.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     namespace "com.websarva.wings.android.dasenapp"
