@@ -67,7 +67,6 @@ public class TopActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         bindView();
         initProgressDialog();
-        CachedPlayersInfo.instance.initCachedArray();
         checkPurchaseStatement();
         if (!PrivacyPolicyFragment.isPolicyAgreed(this)) showPrivacyPolicy();
         checkCountOfOpeningApp();
@@ -282,7 +281,7 @@ public class TopActivity extends BaseActivity
 
     @Override
     protected void onPause() {
-        myProgressDialog.dismiss();
+        myProgressDialog.dismiss(); //TODO: keep paying close attention (causing the small number of clash). If possible, make sure not to call dismiss() after onSaveInstanceState()
         super.onPause();
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
