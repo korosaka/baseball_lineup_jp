@@ -113,7 +113,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         int requestFrequencyUnder100 = 20;
         int requestFrequencyUnder200 = 30;
         int requestFrequencyUnder500 = 50;
-        int requestFrequencyOver500 = 100;
+        int requestFrequencyOver500 = 70;
         int appUseCount = new MySharedPreferences(this).getInt(FixedWords.NUMBER_OF_OPEN_APP);
         if (appUseCount < 1) appUseCount = 1;
         if (appUseCount < 50) {
