@@ -6,6 +6,10 @@
         android:title="@string/privacy_policy"
         app:showAsAction="never" />
     <item
+        android:id="@+id/review_app"
+        android:title="@string/review_app"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/recommend"
         android:title="@string/recommend_app"
         app:showAsAction="never" />
