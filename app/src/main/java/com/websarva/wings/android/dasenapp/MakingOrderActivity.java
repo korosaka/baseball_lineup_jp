@@ -20,11 +20,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.tasks.Task;
-import com.google.android.play.core.review.ReviewInfo;
-import com.google.android.play.core.review.ReviewManager;
-import com.google.android.play.core.review.ReviewManagerFactory;
-
 /**
  * To use this Activity's method in PlayerListAdapter, implementing PlayerListAdapterListener
  */
@@ -68,8 +63,6 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private boolean isRoleBatter;
     private boolean isRoleRunner;
     private boolean isRoleFielder;
-
-    private boolean isReviewRequested = false;
 
     //ここからmain
     @Override
@@ -127,25 +120,6 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         } else {
             return appUseCount % requestFrequencyOver500 == 0;
         }
-    }
-
-    //ref: https://developer.android.com/guide/playcore/in-app-review/kotlin-java?hl=ja#java
-    private void requestReview() {
-        ReviewManager manager = ReviewManagerFactory.create(this);
-        Task<ReviewInfo> request = manager.requestReviewFlow();
-        request.addOnCompleteListener(reviewInfoTask -> {
-            if (reviewInfoTask.isSuccessful()) {
-                // We can get the ReviewInfo object
-                ReviewInfo reviewInfo = reviewInfoTask.getResult();
-                Task<Void> flow = manager.launchReviewFlow(this, reviewInfo);
-                flow.addOnCompleteListener(taskOfLaunch -> {
-                    isReviewRequested = true;
-                    // The flow has finished. The API does not indicate whether the user
-                    // reviewed or not, or even whether the review dialog was shown. Thus, no
-                    // matter the result, we continue our app flow.
-                });
-            }
-        });
     }
 
     private void bindLayout() {
