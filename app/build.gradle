@@ -37,4 +37,7 @@ dependencies {
     implementation "com.android.billingclient:billing:7.0.0"
     //for ImmutableList
     implementation "com.google.guava:guava:30.1-jre"
+    //Request Review
+    implementation 'com.google.android.play:review:2.0.1'
+    implementation 'com.google.android.play:review-ktx:2.0.1'
 }

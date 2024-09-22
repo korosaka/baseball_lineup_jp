@@ -20,6 +20,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+
 /**
  * To use this Activity's method in PlayerListAdapter, implementing PlayerListAdapterListener
  */
@@ -64,6 +69,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private boolean isRoleRunner;
     private boolean isRoleFielder;
 
+    private boolean isReviewRequested = false;
 
     //ここからmain
     @Override
@@ -80,6 +86,13 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         setOrderFragment();
         setPositionsSpinner();
         if (!isIntroductionRead()) showIntroductionDialog();
+        countAppUse();
+    }
+
+    private void countAppUse() {
+        int openCount = new MySharedPreferences(this).getInt(FixedWords.NUMBER_OF_OPEN_APP);
+        if (openCount < 1) openCount = 0;
+        new MySharedPreferences(this).storeInt(openCount + 1, FixedWords.NUMBER_OF_OPEN_APP);
     }
 
     @Override
@@ -88,6 +101,52 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         loadBanner();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (shouldRequestReview()) requestReview();
+    }
+
+    private boolean shouldRequestReview() {
+        if (isReviewRequested) return false;
+        int requestFrequencyUnder50 = 10;
+        int requestFrequencyUnder100 = 20;
+        int requestFrequencyUnder200 = 30;
+        int requestFrequencyUnder500 = 50;
+        int requestFrequencyOver500 = 100;
+        int appUseCount = new MySharedPreferences(this).getInt(FixedWords.NUMBER_OF_OPEN_APP);
+        if (appUseCount < 1) appUseCount = 1;
+        if (appUseCount < 50) {
+            return appUseCount % requestFrequencyUnder50 == 0;
+        } else if (appUseCount < 100) {
+            return appUseCount % requestFrequencyUnder100 == 0;
+        } else if (appUseCount < 200) {
+            return appUseCount % requestFrequencyUnder200 == 0;
+        } else if (appUseCount < 500) {
+            return appUseCount % requestFrequencyUnder500 == 0;
+        } else {
+            return appUseCount % requestFrequencyOver500 == 0;
+        }
+    }
+
+    //ref: https://developer.android.com/guide/playcore/in-app-review/kotlin-java?hl=ja#java
+    private void requestReview() {
+        ReviewManager manager = ReviewManagerFactory.create(this);
+        Task<ReviewInfo> request = manager.requestReviewFlow();
+        request.addOnCompleteListener(reviewInfoTask -> {
+            if (reviewInfoTask.isSuccessful()) {
+                // We can get the ReviewInfo object
+                ReviewInfo reviewInfo = reviewInfoTask.getResult();
+                Task<Void> flow = manager.launchReviewFlow(this, reviewInfo);
+                flow.addOnCompleteListener(taskOfLaunch -> {
+                    isReviewRequested = true;
+                    // The flow has finished. The API does not indicate whether the user
+                    // reviewed or not, or even whether the review dialog was shown. Thus, no
+                    // matter the result, we continue our app flow.
+                });
+            }
+        });
+    }
 
     private void bindLayout() {
         tvSelectNum = findViewById(R.id.selectNum);

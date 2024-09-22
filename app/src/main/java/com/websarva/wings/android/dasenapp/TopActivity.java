@@ -87,8 +87,6 @@ public class TopActivity extends BaseActivity
             RecommendAppFragment recommendationFragment = RecommendAppFragment.newInstance();
             recommendationFragment.show(getSupportFragmentManager(), null);
         }
-
-        new MySharedPreferences(this).storeInt(openCount + 1, FixedWords.NUMBER_OF_OPEN_APP);
     }
 
     private void connectBillingClient() {
