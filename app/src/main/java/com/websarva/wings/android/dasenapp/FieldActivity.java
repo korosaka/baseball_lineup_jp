@@ -5,6 +5,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.OnLifecycleEvent;
+
 
 public class FieldActivity extends BaseAdActivity {
     //各ポジションのテキスト
@@ -217,5 +220,10 @@ public class FieldActivity extends BaseAdActivity {
             default:
                 return playerName;
         }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    public void onApplicationPause() {
+        finish();
     }
 }

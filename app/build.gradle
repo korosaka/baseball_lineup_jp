@@ -40,4 +40,6 @@ dependencies {
     //Request Review
     implementation 'com.google.android.play:review:2.0.1'
     implementation 'com.google.android.play:review-ktx:2.0.1'
+    //App Lifecycle
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 }

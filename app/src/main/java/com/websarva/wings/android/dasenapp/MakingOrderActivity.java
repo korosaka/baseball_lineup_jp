@@ -19,6 +19,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.OnLifecycleEvent;
 
 /**
  * To use this Activity's method in PlayerListAdapter, implementing PlayerListAdapterListener
@@ -799,4 +801,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         finish();
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    public void onApplicationPause() {
+        finish();
+    }
 }
