@@ -257,7 +257,6 @@ public class TopActivity extends BaseActivity
 
     private void startOrderActivity(int orderType) {
         preventDoubleTap();
-        showProgressDialog();
         Intent intent = new Intent(TopActivity.this, MakingOrderActivity.class);
         intent.putExtra(FixedWords.ORDER_TYPE, orderType);
         startActivity(intent);
@@ -279,7 +278,7 @@ public class TopActivity extends BaseActivity
 
     @Override
     protected void onPause() {
-        myProgressDialog.dismiss(); //TODO: keep paying close attention (causing the small number of clash). If possible, make sure not to call dismiss() after onSaveInstanceState()
+        if (myProgressDialog.isVisible()) myProgressDialog.dismiss();
         super.onPause();
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
