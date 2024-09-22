@@ -92,6 +92,10 @@
     </string-array>
 
     <string name="review_app">アプリを評価する</string>
+    <string name="baseball_blog">打線組んだブログ</string>
+    <string name="baseball_blog_url">https://enjoy-baseball-app.com/</string>
+    <string name="contact_us">問題報告・クレーム</string>
+    <string name="contact_us_url">https://enjoy-baseball-app.com/contact-us/</string>
     <string name="recommend_app">おすすめアプリ紹介</string>
     <string name="recommendation_title">おすすめアプリ紹介</string>
     <string name="recommendation_message1">＜内容紹介＞</string>

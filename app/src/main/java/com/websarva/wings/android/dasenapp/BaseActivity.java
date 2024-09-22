@@ -1,9 +1,11 @@
 package com.websarva.wings.android.dasenapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -50,15 +52,31 @@ abstract class BaseActivity extends AppCompatActivity {
         } else if (item.getItemId() == R.id.recommend) {
             RecommendAppFragment recommendationFragment = RecommendAppFragment.newInstance();
             recommendationFragment.show(getSupportFragmentManager(), null);
+        } else if (item.getItemId() == R.id.baseball_blog) {
+            openBaseballBlog();
+        } else if (item.getItemId() == R.id.contact_us) {
+            openContactUs();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openBaseballBlog() {
+        String url = getResources().getString(R.string.baseball_blog_url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
+    }
+
+    private void openContactUs() {
+        String url = getResources().getString(R.string.contact_us_url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
     }
 
     protected boolean isOnline() {
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return isOnlineNew(connMgr);
         } else {
             return isOnlineOld(connMgr);
