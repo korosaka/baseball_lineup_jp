@@ -19,6 +19,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.OnLifecycleEvent;
 
 /**
  * To use this Activity's method in PlayerListAdapter, implementing PlayerListAdapterListener
@@ -64,13 +66,13 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
     private boolean isRoleRunner;
     private boolean isRoleFielder;
 
-
     //ここからmain
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_making_order);
         setAdView(findViewById(R.id.ad_view_container_on_order));
         super.onCreate(savedInstanceState);
+        showBanner();
 
         orderType = getIntent().getIntExtra(FixedWords.ORDER_TYPE, FixedWords.NORMAL_ORDER);
         databaseUsing = new DatabaseUsing(this);
@@ -80,6 +82,13 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         setOrderFragment();
         setPositionsSpinner();
         if (!isIntroductionRead()) showIntroductionDialog();
+        countAppUse();
+    }
+
+    private void countAppUse() {
+        int openCount = new MySharedPreferences(this).getInt(FixedWords.NUMBER_OF_OPEN_APP);
+        if (openCount < 1) openCount = 0;
+        new MySharedPreferences(this).storeInt(openCount + 1, FixedWords.NUMBER_OF_OPEN_APP);
     }
 
     @Override
@@ -88,6 +97,33 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         loadBanner();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (shouldRequestReview()) requestReview();
+    }
+
+    private boolean shouldRequestReview() {
+        if (isReviewRequested) return false;
+        int requestFrequencyUnder50 = 10;
+        int requestFrequencyUnder100 = 20;
+        int requestFrequencyUnder200 = 30;
+        int requestFrequencyUnder500 = 50;
+        int requestFrequencyOver500 = 70;
+        int appUseCount = new MySharedPreferences(this).getInt(FixedWords.NUMBER_OF_OPEN_APP);
+        if (appUseCount < 1) appUseCount = 1;
+        if (appUseCount < 50) {
+            return appUseCount % requestFrequencyUnder50 == 0;
+        } else if (appUseCount < 100) {
+            return appUseCount % requestFrequencyUnder100 == 0;
+        } else if (appUseCount < 200) {
+            return appUseCount % requestFrequencyUnder200 == 0;
+        } else if (appUseCount < 500) {
+            return appUseCount % requestFrequencyUnder500 == 0;
+        } else {
+            return appUseCount % requestFrequencyOver500 == 0;
+        }
+    }
 
     private void bindLayout() {
         tvSelectNum = findViewById(R.id.selectNum);
@@ -396,6 +432,26 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         return (orderType == FixedWords.DH_ORDER) && (currentStartingNum == FixedWords.DH_PITCHER_ORDER);
     }
 
+    private void showDialogForAllClear() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.all_clear_title))
+                .setMessage(R.string.all_clear_message)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        clearStartingMembers();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void clearStartingMembers() {
+        databaseUsing.allClearStartingLineup(orderType);
+        databaseUsing.getPlayersFromDB(orderType);
+        lineupFragment.updatePlayerListView();
+    }
+
     private void overWritePlayer(String playerName) {
         if (showingOrder.equals(FixedWords.Starting_ORDER)) overWriteStarting(playerName);
         else overWriteSub(playerName);
@@ -493,12 +549,9 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         finish();
     }
 
-    public void onClickShareOrder(View view) {
-        Toast.makeText(this, R.string.share_disabled, Toast.LENGTH_LONG).show();
-//        Sharing mSharing = new Sharing(getApplicationContext(), this, findViewById(R.id.lineup_container));
-//        mSharing.share();
+    public void onClickAllClear(View view) {
+        showDialogForAllClear();
     }
-
 
     private void cancelExchanging() {
         if (isFirstExchangeClicked) cancelFirstClick(firstClickedButton);
@@ -766,4 +819,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         finish();
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    public void onApplicationPause() {
+        finish();
+    }
 }

@@ -1,10 +1,13 @@
 package com.websarva.wings.android.dasenapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,9 +15,24 @@ import android.view.MenuItem;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.ProcessLifecycleOwner;
 
-abstract class BaseActivity extends AppCompatActivity {
+import com.google.android.gms.tasks.Task;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
 
+abstract class BaseActivity extends AppCompatActivity implements LifecycleObserver {
+
+    protected boolean isReviewRequested = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //ref: https://qiita.com/shinya-tk/items/9751402aead7fa2fe708
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
+    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -38,18 +56,36 @@ abstract class BaseActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.policy) {
             PrivacyPolicyFragment policyFragment = PrivacyPolicyFragment.newInstance(FixedWords.CLOSE);
             policyFragment.show(getSupportFragmentManager(), FixedWords.PRIVACY_POLICY);
+        } else if (item.getItemId() == R.id.review_app) {
+            requestReview();
         } else if (item.getItemId() == R.id.recommend) {
             RecommendAppFragment recommendationFragment = RecommendAppFragment.newInstance();
             recommendationFragment.show(getSupportFragmentManager(), null);
+        } else if (item.getItemId() == R.id.baseball_blog) {
+            openBaseballBlog();
+        } else if (item.getItemId() == R.id.contact_us) {
+            openContactUs();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openBaseballBlog() {
+        String url = getResources().getString(R.string.baseball_blog_url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
+    }
+
+    private void openContactUs() {
+        String url = getResources().getString(R.string.contact_us_url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
     }
 
     protected boolean isOnline() {
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return isOnlineNew(connMgr);
         } else {
             return isOnlineOld(connMgr);
@@ -73,6 +109,25 @@ abstract class BaseActivity extends AppCompatActivity {
             if (nc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) return true;
         }
         return false;
+    }
+
+    //ref: https://developer.android.com/guide/playcore/in-app-review/kotlin-java?hl=ja#java
+    protected void requestReview() {
+        ReviewManager manager = ReviewManagerFactory.create(this);
+        Task<ReviewInfo> request = manager.requestReviewFlow();
+        request.addOnCompleteListener(reviewInfoTask -> {
+            if (reviewInfoTask.isSuccessful()) {
+                // We can get the ReviewInfo object
+                ReviewInfo reviewInfo = reviewInfoTask.getResult();
+                Task<Void> flow = manager.launchReviewFlow(this, reviewInfo);
+                flow.addOnCompleteListener(taskOfLaunch -> {
+                    isReviewRequested = true;
+                    // The flow has finished. The API does not indicate whether the user
+                    // reviewed or not, or even whether the review dialog was shown. Thus, no
+                    // matter the result, we continue our app flow.
+                });
+            }
+        });
     }
 
 }

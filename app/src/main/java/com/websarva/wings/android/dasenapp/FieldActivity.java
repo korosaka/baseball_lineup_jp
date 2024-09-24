@@ -3,7 +3,9 @@ package com.websarva.wings.android.dasenapp;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.OnLifecycleEvent;
 
 
 public class FieldActivity extends BaseAdActivity {
@@ -31,8 +33,6 @@ public class FieldActivity extends BaseAdActivity {
 
     private int playerNumber = 0;
     private int maxDh = 0;
-    private static int displayCount = 0;
-    private static final int INTERSTITIAL_AD_FREQUENCY = 2;
     private int orderType;
 
     @Override
@@ -40,29 +40,18 @@ public class FieldActivity extends BaseAdActivity {
         setContentView(R.layout.activity_field);
         setAdView(findViewById(R.id.ad_view_container_on_field));
         super.onCreate(savedInstanceState);
+        showBanner();
 
         orderType = getIntent().getIntExtra(FixedWords.ORDER_TYPE, FixedWords.NORMAL_ORDER);
-        prepareInterstitialAd();
         bindLayout();
         setPlayerCount();
         hideDh();
         setPlayers();
     }
 
-    private void prepareInterstitialAd() {
-        displayCount++;
-        if (shouldShowInterstitial()) loadInterstitialAd();
-    }
-
     //戻るボタン
     public void onClickBack(View view) {
         backToOrder();
-    }
-
-    public void onClickShareField(View view) {
-        Toast.makeText(this, R.string.share_disabled, Toast.LENGTH_LONG).show();
-//        Sharing mSharing = new Sharing(getApplicationContext(), this, findViewById(R.id.field_container));
-//        mSharing.share();
     }
 
     @Override
@@ -71,12 +60,7 @@ public class FieldActivity extends BaseAdActivity {
     }
 
     private void backToOrder() {
-        if (shouldShowInterstitial()) showInterstitialAd();
-        else finish();
-    }
-
-    private boolean shouldShowInterstitial() {
-        return (displayCount % INTERSTITIAL_AD_FREQUENCY == 1);
+        finish();
     }
 
     private void bindLayout() {
@@ -189,21 +173,12 @@ public class FieldActivity extends BaseAdActivity {
         if (dhPitcher) order.setText(("[" + FixedWords.PITCHER_INITIAL + "]"));
         else order.setText(("[" + orderNum + "]"));
 
-
-        int textSize;
-        switch (playerName.length()) {
-            case 6:
-                textSize = 14;
-                break;
-            case 7:
-                textSize = 12;
-                break;
-            case 8:
-                textSize = 10;
-                break;
-            default:
-                textSize = 16;
-                break;
+        final int lengthOfText = playerName.length();
+        final int defaultTextSize = 16;
+        final int defaultTextLength = 5;
+        int textSize = defaultTextSize;
+        if (lengthOfText > defaultTextLength) {
+            textSize = (defaultTextSize*defaultTextLength) / lengthOfText;
         }
         name.setTextSize(textSize);
     }
@@ -217,5 +192,10 @@ public class FieldActivity extends BaseAdActivity {
             default:
                 return playerName;
         }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    public void onApplicationPause() {
+        finish();
     }
 }

@@ -7,8 +7,8 @@ android {
         applicationId "com.websarva.wings.android.dasenapp"
         minSdkVersion 21
         targetSdkVersion 34
-        versionCode 202408281
-        versionName "2.1.1"
+        versionCode 202409241
+        versionName "2.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     namespace "com.websarva.wings.android.dasenapp"
@@ -37,4 +37,9 @@ dependencies {
     implementation "com.android.billingclient:billing:7.0.0"
     //for ImmutableList
     implementation "com.google.guava:guava:30.1-jre"
+    //Request Review
+    implementation 'com.google.android.play:review:2.0.1'
+    implementation 'com.google.android.play:review-ktx:2.0.1'
+    //App Lifecycle
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 }

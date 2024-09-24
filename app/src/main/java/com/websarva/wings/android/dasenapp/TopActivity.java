@@ -5,7 +5,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -32,6 +31,12 @@ import com.android.billingclient.api.PurchasesResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.QueryProductDetailsParams;
 import com.android.billingclient.api.QueryPurchasesParams;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 
@@ -44,7 +49,7 @@ import java.util.List;
  * https://qiita.com/watanaby0/items/deb60166753533fb00b1
  * https://qiita.com/takahirom/items/ed2cf675e91309b649c0
  */
-public class TopActivity extends BaseActivity
+public class TopActivity extends BaseAdActivity
         implements PurchasesUpdatedListener, AcknowledgePurchaseResponseListener {
 
     private Button normalOrderButton;
@@ -55,6 +60,8 @@ public class TopActivity extends BaseActivity
     private TextView explanationText;
     private TextView checkInternetText;
     private MyProgressDialog myProgressDialog;
+    private int cachedButtonType = FixedWords.INVALID_ORDER;
+    private int orderButtonTapCount = 0;
 
     private BillingClient billingClient;
     boolean billingClientConnected = false;
@@ -68,13 +75,23 @@ public class TopActivity extends BaseActivity
         bindView();
         initProgressDialog();
         checkPurchaseStatement();
-        if (!PrivacyPolicyFragment.isPolicyAgreed(this)) showPrivacyPolicy();
+        //skip showing Interstitial when the initial use for good user experience and show it only after policy has been agreed
+        checkPolicyAgreed();
+    }
+
+    private void checkPolicyAgreed() {
+        if (PrivacyPolicyFragment.isPolicyAgreed(this)) loadInterstitialAd();
+        else showPrivacyPolicy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         checkCountOfOpeningApp();
     }
 
     private void checkCountOfOpeningApp() {
         int openCount = new MySharedPreferences(this).getInt(FixedWords.NUMBER_OF_OPEN_APP);
-        if (openCount < 1) openCount = 1;
         final int FIRST_RECOMMENDATION_TIMING = 4;
         final int SECOND_RECOMMENDATION_TIMING = 20;
         final int THIRD_RECOMMENDATION_TIMING = 50;
@@ -87,8 +104,6 @@ public class TopActivity extends BaseActivity
             RecommendAppFragment recommendationFragment = RecommendAppFragment.newInstance();
             recommendationFragment.show(getSupportFragmentManager(), null);
         }
-
-        new MySharedPreferences(this).storeInt(openCount + 1, FixedWords.NUMBER_OF_OPEN_APP);
     }
 
     private void connectBillingClient() {
@@ -246,23 +261,42 @@ public class TopActivity extends BaseActivity
     }
 
     public void onClickNonDH(View view) {
-        startOrderActivity(FixedWords.NORMAL_ORDER);
+        onClickOrderButton(FixedWords.NORMAL_ORDER);
     }
 
     public void onClickDH(View view) {
-        startOrderActivity(FixedWords.DH_ORDER);
+        onClickOrderButton(FixedWords.DH_ORDER);
     }
 
     public void onClickSpecial(View view) {
-        startOrderActivity(FixedWords.SPECIAL_ORDER);
+        onClickOrderButton(FixedWords.SPECIAL_ORDER);
+    }
+
+    private void onClickOrderButton(int orderType) {
+        preventDoubleTap();
+        if (shouldShowInterstitial()) {
+            cachedButtonType = orderType;
+            showInterstitialAd();
+        } else {
+            startOrderActivity(orderType);
+        }
+        orderButtonTapCount++;
     }
 
     private void startOrderActivity(int orderType) {
-        preventDoubleTap();
-        showProgressDialog();
+        if (orderType == FixedWords.INVALID_ORDER) return;
         Intent intent = new Intent(TopActivity.this, MakingOrderActivity.class);
         intent.putExtra(FixedWords.ORDER_TYPE, orderType);
         startActivity(intent);
+    }
+
+    private boolean shouldShowInterstitial() {
+        if (mInterstitialAd == null) {
+            loadInterstitialAd();
+            return false;
+        }
+        final int INTERSTITIAL_AD_FREQUENCY = 2;
+        return orderButtonTapCount % INTERSTITIAL_AD_FREQUENCY == 0;
     }
 
     private void initProgressDialog() {
@@ -274,23 +308,25 @@ public class TopActivity extends BaseActivity
     }
 
     private void preventDoubleTap() {
-        normalOrderButton.setEnabled(false);
-        dhOrderButton.setEnabled(false);
-        if (isSpecialOrderPurchased()) specialOrderButton.setEnabled(false);
+        setEnableOfOrderButtons(false);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setEnableOfOrderButtons(true);
+            }
+        }, 1000);
+    }
+
+    private void setEnableOfOrderButtons(boolean enabled) {
+        normalOrderButton.setEnabled(enabled);
+        dhOrderButton.setEnabled(enabled);
+        if (isSpecialOrderPurchased()) specialOrderButton.setEnabled(enabled);
     }
 
     @Override
     protected void onPause() {
-        myProgressDialog.dismiss(); //TODO: keep paying close attention (causing the small number of clash). If possible, make sure not to call dismiss() after onSaveInstanceState()
+        if (myProgressDialog.isVisible()) myProgressDialog.dismiss();
         super.onPause();
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                normalOrderButton.setEnabled(true);
-                dhOrderButton.setEnabled(true);
-                if (isSpecialOrderPurchased()) specialOrderButton.setEnabled(true);
-            }
-        }, 1000);
     }
 
     private void showPrivacyPolicy() {
@@ -458,8 +494,9 @@ public class TopActivity extends BaseActivity
                         if (responseCode == BillingClient.BillingResponseCode.OK) {
                             if (!purchases.isEmpty()) {
                                 for (Purchase purchase : purchases) {
-                                    if (purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED) continue;
-                                    for (String purchasedItemId: purchase.getProducts()) {
+                                    if (purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED)
+                                        continue;
+                                    for (String purchasedItemId : purchase.getProducts()) {
                                         if (purchasedItemId.equals(FixedWords.ITEM_ID_ALL_HITTER)) {
                                             savePurchaseRecord();
                                             acknowledgePurchase(purchase);
@@ -469,7 +506,8 @@ public class TopActivity extends BaseActivity
                                                     myProgressDialog.dismiss();
                                                     enableSpecialOrder();
                                                     showToastMessage(getResources().getString(R.string.reloaded_purchase));
-                                                    if (isPurchasingProcess) isPurchasingProcess = false;
+                                                    if (isPurchasingProcess)
+                                                        isPurchasingProcess = false;
                                                 }
                                             });
                                             return;
@@ -500,6 +538,59 @@ public class TopActivity extends BaseActivity
 
     private void showToastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * reference
+     * https://developers.google.com/admob/android/interstitial
+     */
+    private void loadInterstitialAd() {
+        setEnableOfOrderButtons(false);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        InterstitialAd.load(this, INTERSTITIAL_AD_UNIT_ID, adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        mInterstitialAd = interstitialAd;
+                        setFullScreenContentCallback();
+                        setEnableOfOrderButtons(true);
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        mInterstitialAd = null;
+                        setEnableOfOrderButtons(true);
+                    }
+                });
+    }
+
+    private void showInterstitialAd() {
+        if (mInterstitialAd != null) mInterstitialAd.show(this);
+        else loadInterstitialAd();
+    }
+
+    private void setFullScreenContentCallback() {
+        if (mInterstitialAd == null) return;
+        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+            @Override
+            public void onAdDismissedFullScreenContent() {
+                // Called when ad is dismissed.
+                interstitialAdCompleted();
+            }
+
+            @Override
+            public void onAdFailedToShowFullScreenContent(AdError adError) {
+                // Called when ad fails to show.
+                interstitialAdCompleted();
+            }
+        });
+    }
+
+    private void interstitialAdCompleted() {
+        mInterstitialAd = null;
+        loadInterstitialAd();
+        startOrderActivity(cachedButtonType);
+        cachedButtonType = FixedWords.INVALID_ORDER;
     }
 
 }

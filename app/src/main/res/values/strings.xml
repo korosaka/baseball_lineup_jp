@@ -91,6 +91,11 @@
         <item>(DH)</item>
     </string-array>
 
+    <string name="review_app">アプリを評価する</string>
+    <string name="baseball_blog">打線組んだブログ</string>
+    <string name="baseball_blog_url">https://enjoy-baseball-app.com/</string>
+    <string name="contact_us">問題報告・クレーム</string>
+    <string name="contact_us_url">https://enjoy-baseball-app.com/contact-us/</string>
     <string name="recommend_app">おすすめアプリ紹介</string>
     <string name="recommendation_title">おすすめアプリ紹介</string>
     <string name="recommendation_message1">＜内容紹介＞</string>
@@ -118,6 +123,9 @@
     <string name="announce_max_limit_special">先発登録が上限です。</string>
     <string name="announce_min_limit_special">9人が下限人数です。</string>
     <string name="share">LINE/Twitter</string>
+    <string name="all_clear">白紙に戻す</string>
+    <string name="all_clear_title">オールクリア</string>
+    <string name="all_clear_message">スタメンを白紙に戻してよろしいですか？</string>
     <string name="no_order">[-]</string>
     <string name="share_disabled">現在利用不可です。スクリーンショットで画像化お願いします。</string>
     <!-- TODO: Remove or change this placeholder text -->

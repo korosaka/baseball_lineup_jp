@@ -40,8 +40,8 @@ abstract class BaseAdActivity extends BaseActivity {
     private FrameLayout adViewContainer;
     private static final String BANNER_AD_UNIT_ID = "ca-app-pub-6298264304843789/6273376185";
 
-    private InterstitialAd mInterstitialAd;
-    private static final String INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-6298264304843789/1536477833";
+    protected InterstitialAd mInterstitialAd;
+    protected static final String INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-6298264304843789/1536477833";
 
     protected void setAdView(FrameLayout container) {
         adViewContainer = container;
@@ -64,6 +64,9 @@ abstract class BaseAdActivity extends BaseActivity {
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
+    }
+
+    protected void showBanner() {
         customAdView();
         loadBanner();
     }
@@ -98,71 +101,5 @@ abstract class BaseAdActivity extends BaseActivity {
 
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
-    }
-
-    /**
-     * reference
-     * https://developers.google.com/admob/android/interstitial
-     */
-    protected void loadInterstitialAd() {
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-
-        InterstitialAd.load(this,INTERSTITIAL_AD_UNIT_ID, adRequest,
-                new InterstitialAdLoadCallback() {
-                    @Override
-                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                        // The mInterstitialAd reference will be null until an ad is loaded.
-                        mInterstitialAd = interstitialAd;
-                        setFullScreenContentCallback();
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        // Handle the error
-                        Log.d("loadInterstitialAd", loadAdError.toString());
-                        mInterstitialAd = null;
-                    }
-                });
-    }
-
-    private void setFullScreenContentCallback() {
-        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
-            @Override
-            public void onAdClicked() {
-                finish();
-            }
-
-            @Override
-            public void onAdDismissedFullScreenContent() {
-                // Called when ad is dismissed.
-                // Set the ad reference to null so you don't show the ad a second time.
-                mInterstitialAd = null;
-                finish();
-            }
-
-            @Override
-            public void onAdFailedToShowFullScreenContent(AdError adError) {
-                // Called when ad fails to show.
-                mInterstitialAd = null;
-                finish();
-            }
-
-            @Override
-            public void onAdImpression() {
-                // Called when an impression is recorded for an ad.
-            }
-
-            @Override
-            public void onAdShowedFullScreenContent() {
-                // Called when ad is shown.
-                finish();
-            }
-        });
-    }
-
-    protected void showInterstitialAd() {
-        if (mInterstitialAd != null) mInterstitialAd.show(this);
-        else finish();
     }
 }
