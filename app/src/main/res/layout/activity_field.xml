@@ -17,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.3"
             android:background="@drawable/back_button_background"
             android:onClick="onClickBack"
             android:text="@string/back"
@@ -25,18 +25,10 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <Button
+        <View
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:layout_weight="0.5"
-            android:background="@drawable/share_button_background"
-            android:onClick="onClickShareField"
-            android:text="@string/share"
-            android:textAllCaps="false"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_height="0dp"
+            android:layout_weight="0.7" />
 
     </LinearLayout>
 

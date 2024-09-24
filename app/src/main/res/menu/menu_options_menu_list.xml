@@ -21,4 +21,8 @@
         android:id="@+id/policy"
         android:title="@string/privacy_policy"
         app:showAsAction="never" />
+
+    <item
+        android:title="@string/close"
+        app:showAsAction="never" />
 </menu>
