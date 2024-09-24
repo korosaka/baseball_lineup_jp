@@ -5,6 +5,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.OnLifecycleEvent;
+
 
 public class FieldActivity extends BaseAdActivity {
     //各ポジションのテキスト
@@ -31,8 +34,6 @@ public class FieldActivity extends BaseAdActivity {
 
     private int playerNumber = 0;
     private int maxDh = 0;
-    private static int displayCount = 0;
-    private static final int INTERSTITIAL_AD_FREQUENCY = 2;
     private int orderType;
 
     @Override
@@ -40,18 +41,13 @@ public class FieldActivity extends BaseAdActivity {
         setContentView(R.layout.activity_field);
         setAdView(findViewById(R.id.ad_view_container_on_field));
         super.onCreate(savedInstanceState);
+        showBanner();
 
         orderType = getIntent().getIntExtra(FixedWords.ORDER_TYPE, FixedWords.NORMAL_ORDER);
-        prepareInterstitialAd();
         bindLayout();
         setPlayerCount();
         hideDh();
         setPlayers();
-    }
-
-    private void prepareInterstitialAd() {
-        displayCount++;
-        if (shouldShowInterstitial()) loadInterstitialAd();
     }
 
     //戻るボタン
@@ -71,12 +67,7 @@ public class FieldActivity extends BaseAdActivity {
     }
 
     private void backToOrder() {
-        if (shouldShowInterstitial()) showInterstitialAd();
-        else finish();
-    }
-
-    private boolean shouldShowInterstitial() {
-        return (displayCount % INTERSTITIAL_AD_FREQUENCY == 1);
+        finish();
     }
 
     private void bindLayout() {
@@ -217,5 +208,10 @@ public class FieldActivity extends BaseAdActivity {
             default:
                 return playerName;
         }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    public void onApplicationPause() {
+        finish();
     }
 }

@@ -19,6 +19,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.OnLifecycleEvent;
 
 /**
  * To use this Activity's method in PlayerListAdapter, implementing PlayerListAdapterListener
@@ -70,6 +72,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         setContentView(R.layout.activity_making_order);
         setAdView(findViewById(R.id.ad_view_container_on_order));
         super.onCreate(savedInstanceState);
+        showBanner();
 
         orderType = getIntent().getIntExtra(FixedWords.ORDER_TYPE, FixedWords.NORMAL_ORDER);
         databaseUsing = new DatabaseUsing(this);
@@ -799,4 +802,8 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         finish();
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    public void onApplicationPause() {
+        finish();
+    }
 }
