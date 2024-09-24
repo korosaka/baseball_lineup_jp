@@ -12,6 +12,7 @@ public class FixedWords {
     /**
      * these numbers will be also used for ArrayList's index
      */
+    public static final int INVALID_ORDER = -1;
     public static final int NORMAL_ORDER = 0;
     public static final int DH_ORDER = 1;
     public static final int SPECIAL_ORDER = 2;

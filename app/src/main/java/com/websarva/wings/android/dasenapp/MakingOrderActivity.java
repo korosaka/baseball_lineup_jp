@@ -72,6 +72,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         setContentView(R.layout.activity_making_order);
         setAdView(findViewById(R.id.ad_view_container_on_order));
         super.onCreate(savedInstanceState);
+        showBanner();
 
         orderType = getIntent().getIntExtra(FixedWords.ORDER_TYPE, FixedWords.NORMAL_ORDER);
         databaseUsing = new DatabaseUsing(this);
