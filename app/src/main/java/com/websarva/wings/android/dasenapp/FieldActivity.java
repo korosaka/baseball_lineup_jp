@@ -173,21 +173,12 @@ public class FieldActivity extends BaseAdActivity {
         if (dhPitcher) order.setText(("[" + FixedWords.PITCHER_INITIAL + "]"));
         else order.setText(("[" + orderNum + "]"));
 
-
-        int textSize;
-        switch (playerName.length()) {
-            case 6:
-                textSize = 14;
-                break;
-            case 7:
-                textSize = 12;
-                break;
-            case 8:
-                textSize = 10;
-                break;
-            default:
-                textSize = 16;
-                break;
+        final int lengthOfText = playerName.length();
+        final int defaultTextSize = 16;
+        final int defaultTextLength = 5;
+        int textSize = defaultTextSize;
+        if (lengthOfText > defaultTextLength) {
+            textSize = (defaultTextSize*defaultTextLength) / lengthOfText;
         }
         name.setTextSize(textSize);
     }
