@@ -39,21 +39,12 @@ abstract class BasePlayerListAdapter extends ArrayAdapter<BasePlayerListItemData
     }
 
     protected void changeTextSize(TextView textView) {
-        int lengthOfText = textView.length();
-        int textSize;
-        switch (lengthOfText) {
-            case 6:
-                textSize = 24;
-                break;
-            case 7:
-                textSize = 20;
-                break;
-            case 8:
-                textSize = 18;
-                break;
-            default:
-                textSize = 28;
-                break;
+        final int lengthOfText = textView.length();
+        final int defaultTextSize = 28;
+        final int defaultTextLength = 5;
+        int textSize = defaultTextSize;
+        if (lengthOfText > defaultTextLength) {
+            textSize = (defaultTextSize*defaultTextLength) / lengthOfText;
         }
         textView.setTextSize(textSize);
     }
