@@ -223,6 +223,13 @@ public class DatabaseUsing {
         }
     }
 
+    public void allClearStartingLineup(int orderType) {
+        final int playersCount = CachedPlayersInfo.instance.getStartingMembers(orderType).size();
+        for (int orderNum = 1; orderNum <= playersCount; orderNum++) {
+            registerStartingPlayer(orderNum, FixedWords.EMPTY_NAME, FixedWords.EMPTY_POSITION, orderType);
+        }
+    }
+
     public void deleteSubPlayer(int orderType, int playerId) {
         SQLiteDatabase dbW = helper.getWritableDatabase();
         String deleteQuery = "DELETE FROM " + helper.getSubTableName(orderType) + " WHERE " + FixedWords.COLUMN_PLAYER_ID + " = ?";

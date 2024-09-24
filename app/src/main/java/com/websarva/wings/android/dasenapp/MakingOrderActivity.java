@@ -432,6 +432,26 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         return (orderType == FixedWords.DH_ORDER) && (currentStartingNum == FixedWords.DH_PITCHER_ORDER);
     }
 
+    private void showDialogForAllClear() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.all_clear_title))
+                .setMessage(R.string.all_clear_message)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        clearStartingMembers();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void clearStartingMembers() {
+        databaseUsing.allClearStartingLineup(orderType);
+        databaseUsing.getPlayersFromDB(orderType);
+        lineupFragment.updatePlayerListView();
+    }
+
     private void overWritePlayer(String playerName) {
         if (showingOrder.equals(FixedWords.Starting_ORDER)) overWriteStarting(playerName);
         else overWriteSub(playerName);
@@ -529,12 +549,9 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
         finish();
     }
 
-    public void onClickShareOrder(View view) {
-        Toast.makeText(this, R.string.share_disabled, Toast.LENGTH_LONG).show();
-//        Sharing mSharing = new Sharing(getApplicationContext(), this, findViewById(R.id.lineup_container));
-//        mSharing.share();
+    public void onClickAllClear(View view) {
+        showDialogForAllClear();
     }
-
 
     private void cancelExchanging() {
         if (isFirstExchangeClicked) cancelFirstClick(firstClickedButton);
