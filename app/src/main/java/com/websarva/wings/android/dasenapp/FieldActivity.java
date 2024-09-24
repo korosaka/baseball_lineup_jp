@@ -3,7 +3,6 @@ package com.websarva.wings.android.dasenapp;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.OnLifecycleEvent;
@@ -53,12 +52,6 @@ public class FieldActivity extends BaseAdActivity {
     //戻るボタン
     public void onClickBack(View view) {
         backToOrder();
-    }
-
-    public void onClickShareField(View view) {
-        Toast.makeText(this, R.string.share_disabled, Toast.LENGTH_LONG).show();
-//        Sharing mSharing = new Sharing(getApplicationContext(), this, findViewById(R.id.field_container));
-//        mSharing.share();
     }
 
     @Override
