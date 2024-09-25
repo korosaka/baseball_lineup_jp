@@ -30,4 +30,14 @@ public class MySharedPreferences {
     public int getInt(String key) {
         return dataStore.getInt(key, -1);
     }
+
+    public void storeLong(long time, String key) {
+        SharedPreferences.Editor editor = dataStore.edit();
+        editor.putLong(key, time);
+        editor.apply();
+    }
+
+    public long getLong(String key) {
+        return dataStore.getLong(key, -1);
+    }
 }

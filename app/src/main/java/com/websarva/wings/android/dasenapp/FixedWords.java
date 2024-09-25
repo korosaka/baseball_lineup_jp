@@ -48,6 +48,7 @@ public class FixedWords {
     public static final String DATA_STORE = "dataStore";
 
     public static final String NUMBER_OF_OPEN_APP = "numberOfOpenApp";
+    public static final String SAVED_INTERSTITIAL_TIME = "savedInterstitialTime";
 
     public static final int MIN_NUM_SPECIAL_PLAYER = 9;
     public static final int MAX_NUM_SPECIAL_PLAYER = 15;
