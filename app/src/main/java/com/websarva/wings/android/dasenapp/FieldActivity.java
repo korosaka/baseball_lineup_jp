@@ -196,6 +196,7 @@ public class FieldActivity extends BaseAdActivity {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     public void onApplicationPause() {
+        if (BackgroundState.preventFromGoingBackToTop) return;
         finish();
     }
 }
