@@ -72,6 +72,7 @@ abstract class BaseActivity extends AppCompatActivity implements LifecycleObserv
     private void openBaseballBlog() {
         String url = getResources().getString(R.string.baseball_blog_url);
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        BackgroundState.temporaryPrevent();
         startActivity(intent);
     }
 
@@ -119,6 +120,7 @@ abstract class BaseActivity extends AppCompatActivity implements LifecycleObserv
             if (reviewInfoTask.isSuccessful()) {
                 // We can get the ReviewInfo object
                 ReviewInfo reviewInfo = reviewInfoTask.getResult();
+                BackgroundState.temporaryPrevent();
                 Task<Void> flow = manager.launchReviewFlow(this, reviewInfo);
                 flow.addOnCompleteListener(taskOfLaunch -> {
                     isReviewRequested = true;
