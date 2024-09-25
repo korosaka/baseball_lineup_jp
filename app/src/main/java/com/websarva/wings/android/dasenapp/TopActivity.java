@@ -61,7 +61,6 @@ public class TopActivity extends BaseAdActivity
     private TextView checkInternetText;
     private MyProgressDialog myProgressDialog;
     private int cachedButtonType = FixedWords.INVALID_ORDER;
-    private int orderButtonTapCount = 0;
 
     private BillingClient billingClient;
     boolean billingClientConnected = false;
@@ -280,7 +279,6 @@ public class TopActivity extends BaseAdActivity
         } else {
             startOrderActivity(orderType);
         }
-        orderButtonTapCount++;
     }
 
     private void startOrderActivity(int orderType) {
@@ -295,8 +293,14 @@ public class TopActivity extends BaseAdActivity
             loadInterstitialAd();
             return false;
         }
-        final int INTERSTITIAL_AD_FREQUENCY = 2;
-        return orderButtonTapCount % INTERSTITIAL_AD_FREQUENCY == 0;
+
+        final long previousAdTime = new MySharedPreferences(this).getLong(FixedWords.SAVED_INTERSTITIAL_TIME);
+        if (previousAdTime > 0) {
+            final long currentTime = System.currentTimeMillis();
+            final long timeDifference = currentTime - previousAdTime;
+            final long ONE_HOUR_MILLIS = 3600000;
+            return timeDifference > ONE_HOUR_MILLIS;
+        } else return true;
     }
 
     private void initProgressDialog() {
@@ -565,8 +569,16 @@ public class TopActivity extends BaseAdActivity
     }
 
     private void showInterstitialAd() {
-        if (mInterstitialAd != null) mInterstitialAd.show(this);
+        if (mInterstitialAd != null) {
+            saveInterstitialTime();
+            mInterstitialAd.show(this);
+        }
         else loadInterstitialAd();
+    }
+
+    private void saveInterstitialTime() {
+        final long currentTimeMillis = System.currentTimeMillis();
+        new MySharedPreferences(this).storeLong(currentTimeMillis, FixedWords.SAVED_INTERSTITIAL_TIME);
     }
 
     private void setFullScreenContentCallback() {
