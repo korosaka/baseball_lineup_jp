@@ -821,6 +821,7 @@ public class MakingOrderActivity extends BaseAdActivity implements StartingPlaye
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     public void onApplicationPause() {
+        if (BackgroundState.preventFromGoingBackToTop) return;
         finish();
     }
 }
